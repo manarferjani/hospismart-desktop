@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hospismart.hospismartdesktop.controllers.EvenementFrontController"
+      spacing="0">
+
+    <!-- ── Header bar ────────────────────────────────────────────── -->
+    <HBox styleClass="app-header" spacing="10">
+        <Button text="←  Retour" onAction="#onRetour" styleClass="btn-retour"/>
+        <Label text="🏥  HospiSmart" styleClass="app-title"/>
+        <Label text="— Espace Public" styleClass="app-subtitle" style="-fx-padding: 2 0 0 6;"/>
+    </HBox>
+
+    <!-- ── Filter bar ────────────────────────────────────────────── -->
+    <HBox styleClass="toolbar-area" spacing="12">
+        <Label text="📅  Tous les Événements" styleClass="section-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <TextField fx:id="searchField"
+                   promptText="🔍  Rechercher un événement..."
+                   styleClass="search-field"
+                   onAction="#onSearch"/>
+
+        <ComboBox fx:id="typeFilter" styleClass="combo-filter" promptText="Type"/>
+
+        <Button text="Filtrer"      onAction="#onSearch"  styleClass="btn-secondary"/>
+        <Button text="↺  Actualiser" onAction="#onRefresh" styleClass="btn-secondary"/>
+
+        <Label fx:id="totalLabel" text="0 événement(s)" styleClass="count-label"/>
+    </HBox>
+
+    <!-- ── Scrollable card grid ──────────────────────────────────── -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane">
+        <FlowPane fx:id="cardsContainer" hgap="20" vgap="20">
+            <padding>
+                <Insets top="24" right="24" bottom="24" left="24"/>
+            </padding>
+        </FlowPane>
+    </ScrollPane>
+
+</VBox>

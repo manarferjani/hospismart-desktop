@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.hospismart.hospismartdesktop.controllers.WelcomeController"
+           styleClass="welcome-root">
+
+    <VBox alignment="CENTER" spacing="40" maxWidth="700">
+        <padding>
+            <Insets top="60" right="40" bottom="60" left="40"/>
+        </padding>
+
+        <!-- ── Logo / Title ── -->
+        <VBox alignment="CENTER" spacing="8">
+            <Label text="🏥" style="-fx-font-size: 56px;"/>
+            <Label text="HospiSmart" styleClass="welcome-title"/>
+            <Label text="Gestion des Événements Hospitaliers" styleClass="welcome-subtitle"/>
+        </VBox>
+
+        <!-- ── Separator ── -->
+        <Region styleClass="welcome-divider" maxWidth="120" prefHeight="3"/>
+
+        <!-- ── Instruction ── -->
+        <Label text="Choisissez votre espace de travail" styleClass="welcome-instruction"/>
+
+        <!-- ── Choice Cards ── -->
+        <HBox alignment="CENTER" spacing="30">
+
+            <!-- Back Office Card -->
+            <VBox styleClass="welcome-card, welcome-card-back" alignment="CENTER" spacing="14"
+                  onMouseClicked="#onBackOffice" prefWidth="280" prefHeight="240">
+                <Label text="⚙" style="-fx-font-size: 42px;"/>
+                <Label text="Administration" styleClass="welcome-card-title"/>
+                <Label text="Back Office" styleClass="welcome-card-badge-back"/>
+                <Label text="Gérer, créer, modifier et supprimer les événements" 
+                       styleClass="welcome-card-desc" wrapText="true" textAlignment="CENTER"/>
+            </VBox>
+
+            <!-- Front Office Card -->
+            <VBox styleClass="welcome-card, welcome-card-front" alignment="CENTER" spacing="14"
+                  onMouseClicked="#onFrontOffice" prefWidth="280" prefHeight="240">
+                <Label text="🌐" style="-fx-font-size: 42px;"/>
+                <Label text="Espace Public" styleClass="welcome-card-title"/>
+                <Label text="Front Office" styleClass="welcome-card-badge-front"/>
+                <Label text="Consulter les événements et s'inscrire"
+                       styleClass="welcome-card-desc" wrapText="true" textAlignment="CENTER"/>
+            </VBox>
+
+        </HBox>
+
+        <!-- Footer -->
+        <Label text="© 2026 HospiSmart — Tous droits réservés" styleClass="welcome-footer"/>
+    </VBox>
+
+</StackPane>

@@ -1,0 +1,455 @@
+/* ================================================================
+   HospiSmart — JavaFX Desktop  |  Matching Web Project Design
+   ================================================================ */
+
+/* ── Global ───────────────────────────────────────────────────── */
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-background-color: #f4f6f8;
+}
+
+/* ── App Header  (sidebar colour from web: #2C3E50) ───────────── */
+.app-header {
+    -fx-background-color: #2C3E50;
+    -fx-padding: 14 24 14 24;
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 8, 0, 0, 2);
+}
+.app-title {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+.app-subtitle {
+    -fx-text-fill: #bdc3c7;
+    -fx-font-size: 13px;
+    -fx-font-style: italic;
+}
+
+/* ── Tab Pane  (matching #2C3E50 / #34495E) ──────────────────── */
+.tab-pane {
+    -fx-background-color: #f4f6f8;
+    -fx-tab-min-height: 40px;
+}
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: #2C3E50;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-color: transparent;
+    -fx-padding: 10 26;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab .tab-label {
+    -fx-text-fill: #bdc3c7;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: #34495E;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab:selected .tab-label {
+    -fx-text-fill: white;
+}
+.tab-pane > .tab-header-area > .headers-region > .tab:hover {
+    -fx-background-color: #34495E;
+}
+
+/* ── Toolbar / Filter bar ─────────────────────────────────────── */
+.toolbar-area {
+    -fx-background-color: white;
+    -fx-padding: 12 16 12 16;
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 4, 0, 0, 2);
+}
+
+/* ── Buttons (matching web colours) ──────────────────────────── */
+
+/* Primary — Bootstrap blue */
+.btn-primary {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 7 18;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+}
+.btn-primary:hover  { -fx-background-color: #2980b9; }
+.btn-primary:pressed { -fx-background-color: #1f6fa3; }
+
+/* Secondary (filter/reset) */
+.btn-secondary {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 7 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+}
+.btn-secondary:hover { -fx-background-color: #7f8c8d; }
+
+/* Save – green */
+.btn-save {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 22;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+}
+.btn-save:hover { -fx-background-color: #219a52; }
+
+/* Cancel – grey */
+.btn-cancel {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 20;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+}
+.btn-cancel:hover { -fx-background-color: #7f8c8d; }
+
+/* Table action buttons — text labels with coloured backgrounds */
+.btn-view {
+    -fx-background-color: #eff6ff;
+    -fx-text-fill: #2563eb;
+    -fx-padding: 5 14;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.btn-view:hover { -fx-background-color: #dbeafe; }
+
+.btn-edit {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #d97706;
+    -fx-padding: 5 14;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.btn-edit:hover { -fx-background-color: #fde68a; }
+
+.btn-delete {
+    -fx-background-color: #fef2f2;
+    -fx-text-fill: #dc2626;
+    -fx-padding: 5 14;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.btn-delete:hover { -fx-background-color: #fee2e2; }
+
+/* ── Search & Filter inputs ───────────────────────────────────── */
+.search-field {
+    -fx-background-color: white;
+    -fx-border-color: #dde1e7;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 7 12;
+    -fx-font-size: 13px;
+    -fx-pref-width: 230px;
+}
+.search-field:focused { -fx-border-color: #3498db; }
+
+.combo-filter {
+    -fx-background-color: white;
+    -fx-border-color: #dde1e7;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-font-size: 12px;
+    -fx-pref-width: 130px;
+}
+
+/* ── Count / info labels ──────────────────────────────────────── */
+.count-label {
+    -fx-text-fill: #7f8c8d;
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
+}
+.section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #2c3e50;
+}
+
+/* ── Table View  (matching web .back-table) ───────────────────── */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+    -fx-background-radius: 10;
+    -fx-table-cell-border-color: transparent;
+}
+/* Header row — light grey like web: background #ecf0f1 */
+.table-view > .column-header-background {
+    -fx-background-color: #ecf0f1;
+}
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.table-view .column-header .label {
+    -fx-text-fill: #7f8c8d;
+    -fx-font-weight: 600;
+    -fx-font-size: 11px;
+    -fx-alignment: center-left;
+}
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #ecf0f1 transparent;
+    -fx-cell-size: 48px;
+    -fx-font-size: 13px;
+    -fx-text-fill: #2c3e50;
+}
+.table-row-cell:odd  { -fx-background-color: #fafafa; }
+.table-row-cell:hover { -fx-background-color: #f4f6f8; }
+.table-row-cell:selected { -fx-background-color: #dbeafe; }
+.table-row-cell:selected .text { -fx-fill: #1e40af; }
+.table-view .placeholder .label {
+    -fx-text-fill: #95a5a6;
+    -fx-font-size: 14px;
+}
+
+/* ── Form Card ────────────────────────────────────────────────── */
+.form-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0, 0, 2);
+}
+.events-card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);
+}
+
+/* ── Form Fields ──────────────────────────────────────────────── */
+.form-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #2c3e50;
+}
+.form-field {
+    -fx-background-color: white;
+    -fx-border-color: #dde1e7;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 7 10;
+    -fx-font-size: 13px;
+}
+.form-field:focused {
+    -fx-border-color: #3498db;
+    -fx-background-color: white;
+}
+
+/* ── Error label ──────────────────────────────────────────────── */
+.error-label {
+    -fx-text-fill: #991b1b;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-color: #fee2e2;
+    -fx-background-radius: 6;
+    -fx-padding: 8 14;
+}
+
+/* ── Scroll Pane ──────────────────────────────────────────────── */
+.scroll-pane {
+    -fx-background-color: #f4f6f8;
+    -fx-background: #f4f6f8;
+    -fx-border-color: transparent;
+}
+.scroll-pane > .viewport { -fx-background-color: #f4f6f8; }
+
+/* ── Front Event Cards  (matching Bootstrap .card + shadow-sm) ── */
+.event-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-border-color: rgba(0,0,0,0.1);
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+.event-card:hover {
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 8);
+    -fx-translate-y: -4;
+}
+.card-body {
+    -fx-padding: 16 16 16 16;
+    -fx-spacing: 6;
+}
+.card-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e293b;
+    -fx-wrap-text: true;
+}
+.card-type-text {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 12px;
+}
+.card-description {
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+.card-divider {
+    -fx-border-color: transparent transparent #e2e8f0 transparent;
+    -fx-border-width: 1;
+    -fx-pref-height: 1;
+    -fx-min-height: 1;
+}
+.card-info-row  { -fx-spacing: 6; -fx-alignment: center-left; }
+.card-icon      { -fx-font-size: 12px; -fx-pref-width: 16; }
+.card-info-text { -fx-text-fill: #475569; -fx-font-size: 12px; }
+
+/* Status badges (colour set inline per value) */
+.card-status-badge {
+    -fx-padding: 3 10;
+    -fx-background-radius: 20;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+/* DatePicker */
+.date-picker .text-field {
+    -fx-background-color: white;
+    -fx-border-color: #dde1e7;
+    -fx-border-radius: 6 0 0 6;
+    -fx-background-radius: 6 0 0 6;
+    -fx-padding: 7 10;
+    -fx-font-size: 13px;
+}
+
+/* ================================================================
+   Welcome Screen
+   ================================================================ */
+.welcome-root {
+    -fx-background-color: linear-gradient(to bottom right, #1a2332, #2C3E50, #34495E);
+}
+
+.welcome-title {
+    -fx-text-fill: white;
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+}
+.welcome-subtitle {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 15px;
+    -fx-font-style: italic;
+}
+.welcome-divider {
+    -fx-background-color: linear-gradient(to right, transparent, #3498db, transparent);
+    -fx-background-radius: 2;
+}
+.welcome-instruction {
+    -fx-text-fill: #bdc3c7;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+}
+
+/* ── Choice Cards ─────────────────────────────────── */
+.welcome-card {
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-radius: 16;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-padding: 30 24;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 4);
+}
+.welcome-card:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-translate-y: -6;
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.3), 20, 0, 0, 8);
+}
+.welcome-card-title {
+    -fx-text-fill: white;
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+}
+.welcome-card-badge-back {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 14;
+    -fx-background-radius: 20;
+}
+.welcome-card-badge-front {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-padding: 4 14;
+    -fx-background-radius: 20;
+}
+.welcome-card-desc {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+.welcome-footer {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+    -fx-font-style: italic;
+}
+
+/* ================================================================
+   Navigation — Retour Button
+   ================================================================ */
+.btn-retour {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 6 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-radius: 8;
+}
+.btn-retour:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ================================================================
+   Inscription Button (on front cards)
+   ================================================================ */
+.btn-inscrire {
+    -fx-background-color: linear-gradient(to right, #27ae60, #2ecc71);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 9 20;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.3), 6, 0, 0, 2);
+}
+.btn-inscrire:hover {
+    -fx-background-color: linear-gradient(to right, #219a52, #27ae60);
+    -fx-effect: dropshadow(gaussian, rgba(39, 174, 96, 0.5), 10, 0, 0, 4);
+    -fx-translate-y: -1;
+}
+.btn-inscrire:disabled {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: #ecf0f1;
+    -fx-effect: none;
+    -fx-cursor: default;
+    -fx-opacity: 0.7;
+}
+
