@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #f4f6f9;" stylesheets="@style-admin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.LoginController">
+   <children>
+      <AnchorPane layoutX="100.0" layoutY="50.0" prefHeight="400.0" prefWidth="400.0" styleClass="card-pane">
+         <children>
+            <Label layoutX="120.0" layoutY="40.0" text="HospiSmart" textFill="#1565C0">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="145.0" layoutY="80.0" text="Connexion" textFill="#424242">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            
+            <TextField fx:id="emailField" layoutX="50.0" layoutY="140.0" prefHeight="40.0" prefWidth="300.0" promptText="Adresse e-mail" styleClass="text-input" />
+            <PasswordField fx:id="passwordField" layoutX="50.0" layoutY="200.0" prefHeight="40.0" prefWidth="300.0" promptText="Mot de passe" styleClass="text-input" />
+            
+            <Button layoutX="50.0" layoutY="270.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="40.0" prefWidth="300.0" styleClass="btn-primary" text="Se connecter" />
+            
+            <Hyperlink layoutX="100.0" layoutY="330.0" onAction="#handleGoRegister" text="Pas de compte ? S'inscrire ici" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

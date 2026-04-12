@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.collections.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #f4f6f9;" stylesheets="@style-admin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.BackOfficeUsersController">
+   <children>
+      <!-- Top Navbar -->
+      <AnchorPane prefHeight="60.0" prefWidth="1000.0" styleClass="top-navbar">
+         <children>
+            <Label layoutX="20.0" layoutY="15.0" styleClass="navbar-title" text="HospiSmart - Administration" />
+            <Button layoutX="850.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleLogout" style="-fx-background-color: #F44336; -fx-text-fill: white;" text="Se Déconnecter" />
+         </children>
+      </AnchorPane>
+
+      <!-- Action Bar -->
+      <AnchorPane layoutX="20.0" layoutY="80.0" prefHeight="60.0" prefWidth="960.0" styleClass="card-pane">
+         <children>
+            <TextField fx:id="searchField" layoutX="15.0" layoutY="15.0" prefHeight="30.0" prefWidth="250.0" promptText="Rechercher par nom, email..." styleClass="text-input" />
+            
+            <ComboBox fx:id="filterComboBox" layoutX="280.0" layoutY="15.0" prefWidth="150.0" promptText="Tous">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="TOUS" />
+                     <String fx:value="ADMIN" />
+                     <String fx:value="PATIENT" />
+                     <String fx:value="MEDECIN" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+            
+            <Button layoutX="440.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleSearch" style="-fx-background-color: #607D8B; -fx-text-fill: white;" text="Filtrer" />
+            
+            <Button layoutX="600.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleExportPDF" styleClass="btn-primary" text="Export PDF" />
+            <Button layoutX="690.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleShowStats" style="-fx-background-color: #FF9800; -fx-text-fill: white;" text="Statistiques" />
+            
+            <Button layoutX="800.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleOpenAddDialog" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" text="+ Nouvel Utilisateur" />
+         </children>
+      </AnchorPane>
+
+      <!-- Table View -->
+      <TableView fx:id="usersTable" layoutX="20.0" layoutY="160.0" prefHeight="500.0" prefWidth="960.0" styleClass="table-view">
+        <columns>
+          <TableColumn fx:id="colId" prefWidth="50.0" text="ID" />
+          <TableColumn fx:id="colNom" prefWidth="150.0" text="Nom Complet" />
+            <TableColumn fx:id="colEmail" prefWidth="200.0" text="Email" />
+            <TableColumn fx:id="colType" prefWidth="100.0" text="Type" />
+            <TableColumn fx:id="colStatut" prefWidth="80.0" text="Statut" />
+            <TableColumn fx:id="colActions" prefWidth="350.0" text="Actions" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

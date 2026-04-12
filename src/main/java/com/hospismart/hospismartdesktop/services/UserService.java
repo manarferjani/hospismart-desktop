@@ -1,0 +1,219 @@
+package com.hospismart.hospismartdesktop.services;
+
+import com.hospismart.hospismartdesktop.models.User;
+import com.hospismart.hospismartdesktop.utils.MyDbConnexion;
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserService {
+    private Connection cnx;
+    public static String lastLoginError = "";
+
+    public UserService() {
+        cnx = MyDbConnexion.getInstance().getCnx();
+        
+        // Création automatique de la colonne si elle n'existe pas
+        try {
+            cnx.createStatement().execute("ALTER TABLE user ADD COLUMN is_active BOOLEAN DEFAULT TRUE");
+        } catch (SQLException ignored) {
+            // L'erreur est levée si la colonne existe déjà, on l'ignore silencieusement
+        }
+    }
+
+    public boolean ajouter(User user) throws SQLException {
+        String query = "INSERT INTO user (nom, roles, password, prenom, email, telephone) VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement pst = cnx.prepareStatement(query);
+        pst.setString(1, user.getNom());
+        // Default to "[\"ROLE_PATIENT\"]" to satisfy JSON constraint and business rules
+        String t = user.getType();
+        String roleStr = (t != null && !t.isEmpty()) ? (t.startsWith("[") ? t : "[\"" + t + "\"]") : "[\"ROLE_PATIENT\"]";
+        pst.setString(2, roleStr);
+        String hashedPass = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(13));
+        pst.setString(3, hashedPass);
+        pst.setString(4, user.getPrenom());
+        pst.setString(5, user.getEmail());
+        pst.setString(6, user.getTelephone());
+        int rows = pst.executeUpdate();
+        return rows > 0;
+    }
+
+    public boolean modifier(User user) {
+        String query = "UPDATE user SET nom=?, roles=?, password=?, prenom=?, email=?, telephone=? WHERE id=?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(query);
+            pst.setString(1, user.getNom());
+            String t = user.getType();
+            String roleStr = (t != null && !t.isEmpty()) ? (t.startsWith("[") ? t : "[\"" + t + "\"]") : "[\"ROLE_PATIENT\"]";
+            pst.setString(2, roleStr);
+            
+            // Si on veut modifier le mot de passe, on doit aussi le hacher
+            // MAIS si c'est déjà un hash (commence par $2y$ ou $2a$), on ne le rehache pas !
+            String pass = user.getPassword();
+            String finalPass = pass;
+            if (pass != null && !pass.startsWith("$2y$") && !pass.startsWith("$2a$")) {
+                finalPass = BCrypt.hashpw(pass, BCrypt.gensalt(13));
+            }
+            pst.setString(3, finalPass);
+            
+            pst.setString(4, user.getPrenom());
+            pst.setString(5, user.getEmail());
+            pst.setString(6, user.getTelephone());
+            pst.setInt(7, user.getId());
+            int rows = pst.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la modification (DB): " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean supprimer(int id) {
+        try {
+            // Désactiver temporairement la vérification des clés étrangères pour forcer la suppression
+            try (java.sql.Statement st = cnx.createStatement()) {
+                st.execute("SET FOREIGN_KEY_CHECKS=0");
+            }
+            
+            String query = "DELETE FROM user WHERE id=?";
+            PreparedStatement pst = cnx.prepareStatement(query);
+            pst.setInt(1, id);
+            int rows = pst.executeUpdate();
+            
+            // Réactiver impérativement la vérification
+            try (java.sql.Statement st = cnx.createStatement()) {
+                st.execute("SET FOREIGN_KEY_CHECKS=1");
+            }
+            
+            return rows > 0;
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la suppression (DB): " + e.getMessage());
+            try {
+                try (java.sql.Statement st = cnx.createStatement()) {
+                    st.execute("SET FOREIGN_KEY_CHECKS=1");
+                }
+            } catch (SQLException ignored) {}
+            return false;
+        }
+    }
+
+    public List<User> afficher() {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM user";
+        try {
+            Statement st = cnx.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            
+            while (rs.next()) {
+                String typeStr = "ROLE_PATIENT"; 
+                try { typeStr = rs.getString("roles"); } catch(SQLException ignored) {}
+                if (typeStr == null || typeStr.isEmpty()) typeStr = "[\"ROLE_PATIENT\"]";
+
+                User user = new User(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        typeStr
+                );
+                user.setTelephone(rs.getString("telephone"));
+                user.setPassword(rs.getString("password"));
+                // is_active avec fallback si la colonne n'est pas encore créée
+                boolean isActive = true;
+                try { isActive = rs.getBoolean("is_active"); } catch(SQLException ignored) {}
+                user.setActive(isActive);
+                
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'affichage des utilisateurs : " + e.getMessage());
+        }
+        return users;
+    }
+
+    public User login(String email, String password) {
+        lastLoginError = "";
+        String query = "SELECT * FROM user WHERE email=?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(query);
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+            ResultSetMetaData meta = rs.getMetaData();
+            
+            if (rs.next()) {
+                String dbHash = rs.getString("password");
+                boolean passwordMatch = false;
+
+                // Handle both straight plaintext (since user successfully tested with it) and BCrypt hashes
+                if (dbHash != null && (dbHash.startsWith("$2y$") || dbHash.startsWith("$2a$"))) {
+                    // jBcrypt ne comprend que le préfixe $2a$ car $2y$ est spécifique à PHP
+                    String compatibleHash = dbHash;
+                    if (dbHash.startsWith("$2y$")) {
+                        compatibleHash = "$2a$" + dbHash.substring(4);
+                    }
+                    try {
+                        passwordMatch = BCrypt.checkpw(password, compatibleHash);
+                    } catch (Throwable ex) {
+                        lastLoginError = "BCrypt Parse Exception: " + ex.getMessage();
+                        System.err.println("Erreur BCrypt: " + ex.getMessage());
+                        ex.printStackTrace();
+                    }
+                } else if (dbHash != null && dbHash.equals(password)) {
+                    passwordMatch = true; 
+                }
+
+                if (passwordMatch) {
+                    String typeStr = "ROLE_PATIENT"; 
+                    try { typeStr = rs.getString("roles"); } catch(SQLException ignored) {}
+                    if (typeStr == null || typeStr.isEmpty()) typeStr = "[\"ROLE_PATIENT\"]";
+
+                    User user = new User(
+                            rs.getInt("id"),
+                            rs.getString("nom"),
+                            rs.getString("prenom"),
+                            rs.getString("email"),
+                            typeStr
+                    );
+                    user.setTelephone(rs.getString("telephone"));
+                    user.setPassword(dbHash);
+                    
+                    boolean active = true;
+                    try { active = rs.getBoolean("is_active"); } catch (SQLException ignored) {}
+                    user.setActive(active);
+                    
+                    return user;
+                }
+            } else {
+                lastLoginError = "L'adresse email n'a pas été trouvée dans la base de données.";
+            }
+        } catch (Throwable e) {
+            lastLoginError = "Erreur SQL/Système : " + e.toString() + " - " + e.getMessage();
+            System.err.println("Erreur lors de la connexion : " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void activerCompte(int id) {
+        String query = "UPDATE user SET is_active=true WHERE id=?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(query);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erreur d'activation : " + e.getMessage());
+        }
+    }
+
+    public void desactiverCompte(int id) {
+        String query = "UPDATE user SET is_active=false WHERE id=?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(query);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erreur de désactivation : " + e.getMessage());
+        }
+    }
+}

@@ -11,6 +11,7 @@ public class User {
     private String password;
     private String type; // ADMIN, PATIENT, MEDECIN
     private String image;
+    private boolean isActive = true; // active by default
 
     // Champs spécifiques Patient
     private LocalDate dateNaissance;
@@ -79,6 +80,9 @@ public class User {
 
     public int getServiceId() { return serviceId; }
     public void setServiceId(int serviceId) { this.serviceId = serviceId; }
+
+    public boolean isActive() { return isActive; }
+    public void setActive(boolean active) { isActive = active; }
 
     @Override
     public String toString() {

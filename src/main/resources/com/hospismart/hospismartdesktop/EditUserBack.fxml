@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="650.0" prefWidth="600.0" style="-fx-background-color: #f4f6f9;" stylesheets="@style-admin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.EditUserBackController">
+   <children>
+      <AnchorPane layoutX="100.0" layoutY="30.0" prefHeight="580.0" prefWidth="400.0" styleClass="card-pane">
+         <children>
+            <Label layoutX="100.0" layoutY="20.0" text="Éditer l'Utilisateur" textFill="#1565C0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            
+            <TextField fx:id="nomField" layoutX="50.0" layoutY="80.0" prefHeight="40.0" prefWidth="300.0" promptText="Nom" styleClass="text-input" />
+            <TextField fx:id="prenomField" layoutX="50.0" layoutY="140.0" prefHeight="40.0" prefWidth="300.0" promptText="Prénom" styleClass="text-input" />
+            <TextField fx:id="emailField" layoutX="50.0" layoutY="200.0" prefHeight="40.0" prefWidth="300.0" promptText="Adresse e-mail" styleClass="text-input" />
+            <TextField fx:id="telephoneField" layoutX="50.0" layoutY="260.0" prefHeight="40.0" prefWidth="300.0" promptText="Téléphone" styleClass="text-input" />
+            <PasswordField fx:id="passwordField" layoutX="50.0" layoutY="320.0" prefHeight="40.0" prefWidth="300.0" promptText="Nouveau Mot de passe (optionnel)" styleClass="text-input" />
+            
+            <ComboBox fx:id="roleComboBox" layoutX="50.0" layoutY="380.0" prefHeight="40.0" prefWidth="300.0" promptText="Type d'utilisateur">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="ROLE_PATIENT" />
+                     <String fx:value="ROLE_MEDECIN" />
+                     <String fx:value="ROLE_ADMIN" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+
+            <Button layoutX="50.0" layoutY="440.0" mnemonicParsing="false" onAction="#handleUpdate" prefHeight="40.0" prefWidth="300.0" styleClass="btn-primary" text="Sauvegarder les modifications" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

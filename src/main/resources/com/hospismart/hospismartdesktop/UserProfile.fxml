@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f4f6f9;" stylesheets="@style-admin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.UserProfileController">
+   <children>
+      <!-- En-tête (Navbar simulée) -->
+      <AnchorPane prefHeight="60.0" prefWidth="800.0" style="-fx-background-color: #1a2a3a;">
+         <children>
+            <Label layoutX="20.0" layoutY="15.0" text="HospiSmart - Espace Utilisateur" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Button layoutX="680.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleLogout" styleClass="btn-supprimer" text="Se Déconnecter" />
+         </children>
+      </AnchorPane>
+
+      <AnchorPane layoutX="100.0" layoutY="100.0" prefHeight="450.0" prefWidth="600.0" styleClass="card-pane">
+         <children>
+            <Label layoutX="40.0" layoutY="30.0" text="Mon Profil" textFill="#1565C0">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            
+            <Label layoutX="40.0" layoutY="90.0" text="Nom :" />
+            <TextField fx:id="nomField" layoutX="150.0" layoutY="85.0" prefHeight="30.0" prefWidth="200.0" styleClass="text-input" />
+            
+            <Label layoutX="40.0" layoutY="140.0" text="Prénom :" />
+            <TextField fx:id="prenomField" layoutX="150.0" layoutY="135.0" prefHeight="30.0" prefWidth="200.0" styleClass="text-input" />
+            
+            <Label layoutX="40.0" layoutY="190.0" text="Email :" />
+            <TextField fx:id="emailField" layoutX="150.0" layoutY="185.0" prefHeight="30.0" prefWidth="200.0" styleClass="text-input" />
+            
+            <Label layoutX="40.0" layoutY="240.0" text="Téléphone :" />
+            <TextField fx:id="telephoneField" layoutX="150.0" layoutY="235.0" prefHeight="30.0" prefWidth="200.0" styleClass="text-input" />
+            
+            <Label layoutX="40.0" layoutY="290.0" text="Nouveau MDP :" />
+            <PasswordField fx:id="passwordField" layoutX="150.0" layoutY="285.0" prefHeight="30.0" prefWidth="200.0" promptText="(Laisser vide si inchangé)" styleClass="text-input" />
+
+            <Button layoutX="150.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleUpdate" prefHeight="40.0" prefWidth="200.0" styleClass="btn-primary" text="Mettre à jour" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
