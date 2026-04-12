@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<!-- Vue Back Office reponses: historique, stats et edition -->
+<BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@styles.css" styleClass="app-bg" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.ReponseBackController">
+    <!-- Menu lateral de navigation -->
+    <left>
+        <VBox prefWidth="200.0" styleClass="side-menu">
+            <Label text="HOSPISMART" styleClass="side-title"/>
+            <Label text="Gestion des Stocks" styleClass="side-subtitle"/>
+            <Button text="Médicaments" styleClass="nav-btn" prefWidth="200"/>
+            <Button text="Catégories" styleClass="nav-btn" prefWidth="200"/>
+            <Button text="Réclamations" onAction="#goToReclamations" styleClass="nav-btn" prefWidth="200"/>
+            <Button text="Réponses" styleClass="nav-btn nav-btn-active" prefWidth="200"/>
+        </VBox>
+    </left>
+    <!-- Zone centrale: KPIs, recherche, chart, table et actions -->
+    <center>
+        <VBox styleClass="page-content" spacing="12.0">
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Label text="Historique des Réponses" styleClass="header-title" style="-fx-background-color: #2C3E50; -fx-padding: 10 14; -fx-background-radius: 10;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            </HBox>
+
+            <!-- Cartes KPI du dashboard des reponses -->
+            <HBox styleClass="kpi-wrap">
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblTotalReponses" text="0" styleClass="kpi-value"/>
+                    <Label text="Total réponses" styleClass="kpi-label"/>
+                </VBox>
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblAdminsActifs" text="0" styleClass="kpi-value"/>
+                    <Label text="Admins actifs" styleClass="kpi-label"/>
+                </VBox>
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblReclamationsRepondues" text="0" styleClass="kpi-value"/>
+                    <Label text="Réclamations répondues" styleClass="kpi-label"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Recherche :"/>
+                <TextField fx:id="txtRecherche" promptText="Rechercher une réponse..." prefWidth="250"/>
+            </HBox>
+
+            <!-- Camembert: repartition des reponses par administrateur -->
+            <PieChart fx:id="chartReponses" title="Répartition des réponses par admin" legendVisible="true" labelsVisible="true" prefHeight="340.0" minHeight="320.0"/>
+
+            <TableView fx:id="tableReponse" onMouseClicked="#handleTableClick" VBox.vgrow="ALWAYS" styleClass="card">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                    <TableColumn fx:id="colContenu" text="Contenu de la Réponse" prefWidth="250" />
+                    <TableColumn fx:id="colAdminNom" text="Admin" prefWidth="120" />
+                    <TableColumn fx:id="colAdminEmail" text="Email Admin" prefWidth="150" />
+                    <TableColumn fx:id="colDate" text="Date de Réponse" prefWidth="130" />
+                </columns>
+            </TableView>
+
+            <!-- Formulaire de modification/suppression d'une reponse -->
+            <TitledPane text="Modification et Suppression des Réponses" collapsible="false">
+                <VBox spacing="10" styleClass="card">
+                    <GridPane hgap="15" vgap="10">
+                        <Label text="Contenu :" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextArea fx:id="txtReponse" prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.columnSpan="3"/>
+
+                        <Label text="Nom Admin :" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="txtAdminNom" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Email Admin :" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                        <TextField fx:id="txtAdminEmail" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                    </GridPane>
+
+                    <HBox spacing="12" alignment="CENTER_LEFT" style="-fx-padding: 12 0 0 0;">
+                        <Button text="Modifier la Réponse" onAction="#modifierReponse" styleClass="btn btn-primary"/>
+                        <Button text="Supprimer la Réponse" onAction="#supprimerReponse" styleClass="btn btn-danger"/>
+                        <Button text="Rafraîchir" onAction="#actualiser" styleClass="btn btn-neutral"/>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+        </VBox>
+    </center>
+</BorderPane>
+

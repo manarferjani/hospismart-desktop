@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="768.0" prefWidth="1024.0" stylesheets="@styles.css" styleClass="front-content-area" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.ReclamationFrontController">
+    <!-- HERO HEADER -->
+    <top>
+        <VBox styleClass="front-header" alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT">
+                <VBox spacing="5">
+                    <Label text="HOSPISMART" styleClass="front-logo"/>
+                    <Label text="Espace Patient - Vos réclamations" styleClass="front-subtitle"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button text="Actualiser les données" onAction="#actualiser" styleClass="btn-outline-white"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <HBox spacing="25" styleClass="front-content-area">
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+
+            <!-- LEFT PANEL: TABLE ET KPIS -->
+            <VBox spacing="20" HBox.hgrow="ALWAYS">
+                <!-- KPIs -->
+                <HBox spacing="15">
+                    <VBox styleClass="kpi-card, kpi-blue" HBox.hgrow="ALWAYS">
+                        <Label text="Mes Réclamations" styleClass="kpi-title"/>
+                        <Label fx:id="lblTotalFront" text="0" styleClass="kpi-h1"/>
+                    </VBox>
+                    <VBox styleClass="kpi-card, kpi-orange" HBox.hgrow="ALWAYS">
+                        <Label text="En Attente" styleClass="kpi-title"/>
+                        <Label fx:id="lblFrontAttente" text="0" styleClass="kpi-h1"/>
+                    </VBox>
+                    <VBox styleClass="kpi-card, kpi-green" HBox.hgrow="ALWAYS">
+                        <Label text="Traitées" styleClass="kpi-title"/>
+                        <Label fx:id="lblFrontTraite" text="0" styleClass="kpi-h1"/>
+                    </VBox>
+                </HBox>
+
+                <!-- TABLE -->
+                <VBox styleClass="card" VBox.vgrow="ALWAYS">
+                    <Label text="Historique récent" styleClass="card-title"/>
+                    <TableView fx:id="tableReclamation" onMouseClicked="#handleTableClick" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colTitre" text="Sujet" prefWidth="220" />
+                            <TableColumn fx:id="colCategorie" text="Catégorie" prefWidth="120" />
+                            <TableColumn fx:id="colStatut" text="Statut" prefWidth="120" />
+                            <TableColumn fx:id="colDate" text="Date de soumission" prefWidth="150" />
+                        </columns>
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                        </columnResizePolicy>
+                    </TableView>
+                </VBox>
+            </VBox>
+
+            <!-- RIGHT PANEL: FORMULAIRE -->
+            <VBox spacing="15" prefWidth="420" minWidth="400" styleClass="premium-card">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Détails de la réclamation" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="+ Nouvelle" onAction="#viderFormulaire" styleClass="btn-link"/>
+                </HBox>
+
+                <Separator styleClass="premium-separator"/>
+
+                <ScrollPane fitToWidth="true" styleClass="form-scrollpane" VBox.vgrow="ALWAYS">
+                    <VBox spacing="12">
+                        <padding><Insets right="10" top="5" bottom="5"/></padding>
+
+                        <VBox spacing="5">
+                            <Label text="Sujet de la réclamation *" styleClass="form-label"/>
+                            <TextField fx:id="txtTitre" promptText="Ex: Retard, Propreté..." styleClass="form-field"/>
+                        </VBox>
+
+                        <HBox spacing="15">
+                            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                <Label text="Votre Nom *" styleClass="form-label"/>
+                                <TextField fx:id="txtPatient" promptText="Nom complet" styleClass="form-field"/>
+                            </VBox>
+                            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                <Label text="Votre Email *" styleClass="form-label"/>
+                                <TextField fx:id="txtEmail" promptText="email@domaine.com" styleClass="form-field"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="15">
+                            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                <Label text="Catégorie *" styleClass="form-label"/>
+                                <ComboBox fx:id="cmbCategorie" promptText="Choisir" maxWidth="Infinity" styleClass="form-field"/>
+                            </VBox>
+                            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                <Label text="Priorité *" styleClass="form-label"/>
+                                <ComboBox fx:id="cmbPriorite" promptText="Choisir" maxWidth="Infinity" styleClass="form-field"/>
+                            </VBox>
+                        </HBox>
+
+                        <VBox spacing="5">
+                            <Label text="Description du problème *" styleClass="form-label"/>
+                            <TextArea fx:id="txtDescription" promptText="Fournissez un maximum de détails..." prefRowCount="4" wrapText="true" styleClass="form-field"/>
+                        </VBox>
+
+                        <VBox spacing="5" styleClass="response-box">
+                            <Label text="Réponse de l'Administration" styleClass="form-label response-label"/>
+                            <TextArea fx:id="txtReponse" editable="false" promptText="En attente de traitement..." styleClass="form-field readonly-field" prefRowCount="3" wrapText="true"/>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+
+                <Separator styleClass="premium-separator"/>
+
+                <VBox spacing="10">
+                    <Button fx:id="btnAjouter" text="Soumettre ma réclamation" onAction="#soumettreReclamation" styleClass="btn btn-primary btn-large" maxWidth="Infinity"/>
+                    <Button fx:id="btnModifier" text="Mettre à jour ma réclamation" onAction="#modifierReclamation" styleClass="btn btn-secondary btn-large" maxWidth="Infinity"/>
+                    <HBox alignment="CENTER">
+                        <Button text="Supprimer cette réclamation" onAction="#supprimerReclamation" styleClass="btn-link text-danger"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>

@@ -1,0 +1,12 @@
+COLONNES:
+id
+titre
+description
+date_creation
+email
+nom_patient
+statut
+categorie
+priorite
+etat_mental
+reponse

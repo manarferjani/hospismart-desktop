@@ -20,6 +20,6 @@ module com.hospismart.hospismartdesktop {
     // Autoriser JavaFX à accéder aux fichiers FXML
     opens com.hospismart.hospismartdesktop.main to javafx.fxml;
     opens com.hospismart.hospismartdesktop.controllers to javafx.fxml;
-    opens com.hospismart.hospismartdesktop.models to javafx.fxml;
+    opens com.hospismart.hospismartdesktop.models to javafx.fxml, javafx.base;
     opens com.hospismart.hospismartdesktop.tests to javafx.fxml;
 }

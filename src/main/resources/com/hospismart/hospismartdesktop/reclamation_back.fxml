@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<!-- Vue Back Office reclamations: suivi, tri et traitement admin -->
+<BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@styles.css" styleClass="app-bg" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.ReclamationBackController">
+    <!-- Menu lateral de navigation -->
+    <left>
+        <VBox prefWidth="200.0" styleClass="side-menu">
+            <Label text="HOSPISMART" styleClass="side-title"/>
+            <Label text="Gestion des Stocks" styleClass="side-subtitle"/>
+            <Button text="Médicaments" styleClass="nav-btn" prefWidth="200"/>
+            <Button text="Catégories" styleClass="nav-btn" prefWidth="200"/>
+            <Button text="Réclamations" styleClass="nav-btn nav-btn-active" prefWidth="200"/>
+            <Button text="Réponses" onAction="#goToReponses" styleClass="nav-btn" prefWidth="200"/>
+        </VBox>
+    </left>
+    <!-- Zone centrale: KPIs, recherche, chart, table et formulaire admin -->
+    <center>
+        <VBox styleClass="page-content" spacing="12.0">
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Label text="Gestion des Réclamations" styleClass="header-title" style="-fx-background-color: #2C3E50; -fx-padding: 10 14; -fx-background-radius: 10;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            </HBox>
+
+            <!-- Cartes KPI du dashboard -->
+            <HBox styleClass="kpi-wrap">
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblTotalReclamations" text="0" styleClass="kpi-value"/>
+                    <Label text="Total réclamations" styleClass="kpi-label"/>
+                </VBox>
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblEnAttente" text="0" styleClass="kpi-value"/>
+                    <Label text="En attente" styleClass="kpi-label"/>
+                </VBox>
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblTraitees" text="0" styleClass="kpi-value"/>
+                    <Label text="Traitées / Fermées" styleClass="kpi-label"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Recherche :"/>
+                <TextField fx:id="txtRecherche" promptText="Rechercher par titre ou patient..." prefWidth="250"/>
+            </HBox>
+
+            <!-- Camembert de repartition des statuts -->
+            <PieChart fx:id="chartReclamations" title="Répartition des réclamations par statut" legendVisible="true" labelsVisible="true" prefHeight="340.0" minHeight="320.0"/>
+
+            <TableView fx:id="tableReclamation" onMouseClicked="#handleTableClick" VBox.vgrow="ALWAYS" styleClass="card">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                    <TableColumn fx:id="colTitre" text="Titre" prefWidth="150" />
+                    <TableColumn fx:id="colPatient" text="Patient" prefWidth="120" />
+                    <TableColumn fx:id="colEmail" text="Email" prefWidth="150" />
+                    <TableColumn fx:id="colStatut" text="Statut" prefWidth="100" />
+                    <TableColumn fx:id="colCategorie" text="Catégorie" prefWidth="100" />
+                    <TableColumn fx:id="colPriorite" text="Priorité" prefWidth="80" />
+                    <TableColumn fx:id="colDate" text="Date" prefWidth="130" />
+                </columns>
+            </TableView>
+
+            <!-- Formulaire detail + reponse admin -->
+            <TitledPane text="Détails et Résolution de la Réclamation" collapsible="false">
+                <VBox spacing="10" styleClass="card">
+                    <GridPane hgap="15" vgap="10">
+                        <Label text="Titre *" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="txtTitre" editable="false" styleClass="readonly" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Patient *" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                        <TextField fx:id="txtPatient" editable="false" styleClass="readonly" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                        <Label text="Email *" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="txtEmail" editable="false" styleClass="readonly" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Catégorie" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                        <ComboBox fx:id="cmbCategorie" disable="true" prefWidth="150" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+                        <Label text="Priorité" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <ComboBox fx:id="cmbPriorite" disable="true" prefWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Label text="Modifier le Statut" style="-fx-font-weight: bold; -fx-text-fill: #e67e22;" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                        <ComboBox fx:id="cmbStatut" prefWidth="150" style="-fx-border-color: #e67e22;" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+                        <Label text="Description du Client" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <TextArea fx:id="txtDescription" editable="false" styleClass="readonly" prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="3"/>
+
+                        <Label text="Réponse de l'Admin" style="-fx-font-weight: bold; -fx-text-fill: #27ae60;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                        <TextArea fx:id="txtReponse" promptText="Écrivez le contenu de la réponse ici..." prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.columnSpan="3"/>
+
+                        <Label text="Nom Admin" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                        <TextField fx:id="txtAdminNom" promptText="Votre nom d'admin" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                        <Label text="Email Admin" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+                        <TextField fx:id="txtAdminEmail" promptText="admin@hospismart.com" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
+                    </GridPane>
+
+                    <HBox spacing="12" alignment="CENTER_LEFT" style="-fx-padding: 12 0 0 0;">
+                        <Button text="Enregistrer la Réponse / Statut" onAction="#modifierReclamation" styleClass="btn btn-success"/>
+                        <Button text="Supprimer la Réponse" onAction="#supprimerReponse" styleClass="btn btn-warning"/>
+                        <Button text="Supprimer la Réclamation" onAction="#supprimerReclamation" styleClass="btn btn-danger"/>
+                        <Button text="Rafraîchir" onAction="#actualiser" styleClass="btn btn-neutral"/>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+        </VBox>
+    </center>
+</BorderPane>
+
+
+
+
+
+
