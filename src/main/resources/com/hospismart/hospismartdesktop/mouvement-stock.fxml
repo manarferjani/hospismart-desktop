@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="12" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.hospismart.hospismartdesktop.controllers.MouvementStockController"
+      stylesheets="@hospismart.css"
+      style="-fx-background-color: #f8fafc;">
+    <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
+
+    <!-- HEADER -->
+    <HBox styleClass="page-header-green" alignment="CENTER_LEFT" spacing="12">
+        <Label text="📦  Mouvements de Stock" styleClass="page-header-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="🟢 ENTREE  |  🔴 SORTIE"
+               style="-fx-text-fill:rgba(255,255,255,0.85);-fx-font-size:11px;"/>
+    </HBox>
+
+    <!-- ── BARRE STATISTIQUES MOUVEMENTS ────────────────────────── -->
+    <HBox spacing="12">
+        <VBox alignment="CENTER" spacing="3"
+              style="-fx-background-color:white;-fx-background-radius:10;-fx-padding:10 20;
+                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),6,0,0,2);" HBox.hgrow="ALWAYS">
+            <Label text="TOTAL MOUVEMENTS" style="-fx-text-fill:#94a3b8;-fx-font-size:10px;-fx-font-weight:bold;"/>
+            <Label fx:id="lblStatTotal" text="—"
+                   style="-fx-text-fill:#1e293b;-fx-font-size:18px;-fx-font-weight:bold;"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="3"
+              style="-fx-background-color:#d1fae5;-fx-background-radius:10;-fx-padding:10 20;
+                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),6,0,0,2);" HBox.hgrow="ALWAYS">
+            <Label text="ENTRÉES" style="-fx-text-fill:#065f46;-fx-font-size:10px;-fx-font-weight:bold;"/>
+            <Label fx:id="lblStatEntrees" text="—"
+                   style="-fx-text-fill:#198754;-fx-font-size:18px;-fx-font-weight:bold;"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="3"
+              style="-fx-background-color:#fee2e2;-fx-background-radius:10;-fx-padding:10 20;
+                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),6,0,0,2);" HBox.hgrow="ALWAYS">
+            <Label text="SORTIES" style="-fx-text-fill:#991b1b;-fx-font-size:10px;-fx-font-weight:bold;"/>
+            <Label fx:id="lblStatSorties" text="—"
+                   style="-fx-text-fill:#dc3545;-fx-font-size:18px;-fx-font-weight:bold;"/>
+        </VBox>
+    </HBox>
+
+    <!-- ── BARRE OUTILS ───────────────────────────────────────────── -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="➕  Nouveau Mouvement"
+                onAction="#handleShowAddDialog"
+                style="-fx-background-color:#198754;-fx-text-fill:white;-fx-font-weight:bold;
+                       -fx-background-radius:22;-fx-padding:8 18;-fx-cursor:hand;
+                       -fx-effect:dropshadow(gaussian,rgba(25,135,84,0.3),6,0,0,2);"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <!-- Filtre par type -->
+        <Label text="Filtrer :" style="-fx-text-fill:#475569;-fx-font-weight:bold;"/>
+        <ComboBox fx:id="cbFilterType" prefWidth="130"
+                  style="-fx-background-radius:20;-fx-border-radius:20;-fx-border-color:#cbd5e1;
+                         -fx-background-color:#f1f5f9;-fx-padding:4 10;"/>
+        <!-- Recherche médicament -->
+        <TextField fx:id="txtSearch" promptText="🔍  Médicament..."
+                   prefWidth="190"
+                   style="-fx-background-radius:20;-fx-border-radius:20;-fx-border-color:#cbd5e1;
+                          -fx-background-color:#f1f5f9;-fx-padding:6 14;"/>
+        <Button text="🔄" onAction="#handleRefresh"
+                style="-fx-background-color:#e2e8f0;-fx-text-fill:#475569;
+                       -fx-background-radius:20;-fx-padding:8 14;-fx-cursor:hand;"/>
+    </HBox>
+
+    <!-- TABLE -->
+    <TableView fx:id="mouvementTable" VBox.vgrow="ALWAYS" styleClass="table-view">
+        <columns>
+            <TableColumn fx:id="colType"        text="Type"        prefWidth="90"  sortable="true"/>
+            <TableColumn fx:id="colQuantite"    text="Quantité"    prefWidth="90"  sortable="true"/>
+            <TableColumn fx:id="colMedicament"  text="Médicament"  prefWidth="210" sortable="true"/>
+            <TableColumn fx:id="colDate"        text="Date"        prefWidth="175" sortable="true"/>
+            <TableColumn fx:id="colCommentaire" text="Commentaire" prefWidth="220" sortable="true"/>
+        </columns>
+        <placeholder><Label text="Aucun mouvement. Cliquez sur ➕ Nouveau pour commencer."
+                            style="-fx-text-fill:#94a3b8;"/></placeholder>
+    </TableView>
+
+    <!-- STATUS -->
+    <Label fx:id="lblStatus" styleClass="status-label"/>
+</VBox>

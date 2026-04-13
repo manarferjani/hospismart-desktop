@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.hospismart.hospismartdesktop.controllers.FrontofficeController"
+      stylesheets="@hospismart.css"
+      style="-fx-background-color: #eef4ff;">
+
+    <!-- ===================== NAVBAR (style front.html.twig) ===================== -->
+    <HBox alignment="CENTER_LEFT" spacing="16"
+          style="-fx-background-color: linear-gradient(to right, #0d6efd, #0a58ca);
+                 -fx-padding: 14 30 14 30;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 4);">
+
+        <!-- Brand -->
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="❤️"
+                   style="-fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 8;
+                          -fx-padding: 6 10; -fx-font-size: 16px;"/>
+            <VBox spacing="1">
+                <Label text="Hospismart OASIS"
+                       style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px;"/>
+                <Label text="Catalogue Public des Médicaments"
+                       style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 10px;"/>
+            </VBox>
+        </HBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!-- Nav links -->
+        <Label text="💊  Médicaments"
+               style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13px;
+                      -fx-border-color: transparent transparent white transparent;
+                      -fx-border-width: 0 0 2 0; -fx-padding: 0 0 3 0;"/>
+
+        <Region prefWidth="20"/>
+
+        <!-- Bouton Espace Admin -->
+        <Button text="🔒  Espace Admin"
+                onAction="#handleGoAdmin"
+                style="-fx-background-color: white; -fx-text-fill: #0d6efd;
+                       -fx-font-weight: bold; -fx-background-radius: 30;
+                       -fx-padding: 7 18; -fx-cursor: hand;
+                       -fx-border-color: white; -fx-border-radius: 30;"/>
+    </HBox>
+
+    <!-- ===================== HERO SECTION ===================== -->
+    <VBox alignment="CENTER" spacing="8"
+          style="-fx-background-color: linear-gradient(to bottom, #dbeafe, #eef4ff);
+                 -fx-padding: 30 30 22 30;">
+        <Label text="Catalogue des Médicaments"
+               style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+        <Label text="Consultez les stocks et les informations sur les médicaments disponibles"
+               style="-fx-text-fill: #64748b; -fx-font-size: 13px;"/>
+
+        <!-- Barre de recherche -->
+        <HBox alignment="CENTER" spacing="10" style="-fx-padding: 12 0 0 0;">
+            <TextField fx:id="txtSearch"
+                       promptText="🔍  Rechercher un médicament ou une catégorie..."
+                       prefWidth="420" prefHeight="40"
+                       style="-fx-background-radius: 25; -fx-border-radius: 25;
+                              -fx-border-color: #cbd5e1; -fx-border-width: 1;
+                              -fx-padding: 8 18; -fx-font-size: 13px;
+                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0, 0, 2);"/>
+            <Button text="🔄" onAction="#handleRefresh"
+                    style="-fx-background-color: #0d6efd; -fx-text-fill: white;
+                           -fx-background-radius: 25; -fx-padding: 8 16; -fx-cursor: hand;"/>
+        </HBox>
+
+        <!-- Stats -->
+        <HBox alignment="CENTER" spacing="20" style="-fx-padding: 6 0 0 0;">
+            <Label fx:id="lblTotal" style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+            <Label fx:id="lblAlerte" style="-fx-text-fill: #dc3545; -fx-font-weight: bold; -fx-font-size: 12px;"/>
+        </HBox>
+    </VBox>
+
+    <!-- ===================== GRILLE DE CARTES ===================== -->
+    <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true"
+                style="-fx-background-color: transparent; -fx-background: transparent;
+                       -fx-border-color: transparent;">
+        <FlowPane fx:id="cardsContainer"
+                  hgap="16" vgap="16"
+                  style="-fx-background-color: transparent; -fx-padding: 20 30 20 30;"/>
+    </ScrollPane>
+
+    <!-- ===================== FOOTER ===================== -->
+    <HBox alignment="CENTER" spacing="6"
+          style="-fx-background-color: white;
+                 -fx-border-color: #e2e8f0 transparent transparent transparent;
+                 -fx-border-width: 1 0 0 0;
+                 -fx-padding: 12 20;">
+        <Label text="Hospismart © 2026 — Outil d'Assistance et de Suivi Intelligent de Santé (OASIS)"
+               style="-fx-text-fill: #94a3b8; -fx-font-size: 11px;"/>
+    </HBox>
+
+</VBox>
