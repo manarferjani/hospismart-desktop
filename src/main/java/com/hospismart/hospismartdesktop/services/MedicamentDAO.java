@@ -13,10 +13,20 @@ import java.util.List;
 public class MedicamentDAO {
     private Connection connection;
 
+    /**
+     * Constructeur de MedicamentDAO.
+     * Initialise la connexion à la base de données en utilisant le Singleton MyDbConnexion.
+     */
     public MedicamentDAO() {
         this.connection = MyDbConnexion.getInstance().getCnx();
     }
 
+    /**
+     * Récupère la liste complète de tous les médicaments enregistrés dans la base de données.
+     * Effectue une jointure (LEFT JOIN) avec la table categorie pour récupérer le nom de la catégorie associée.
+     * 
+     * @return Une liste (List) contenant tous les médicaments triés par ordre alphabétique.
+     */
     public List<Medicament> findAll() {
         List<Medicament> list = new ArrayList<>();
         String sql = "SELECT m.*, c.nom AS categorie_nom " +
@@ -34,6 +44,12 @@ public class MedicamentDAO {
         return list;
     }
 
+    /**
+     * Récupère un médicament spécifique en fonction de son identifiant unique (id).
+     * 
+     * @param id L'identifiant (clé primaire) du médicament à rechercher.
+     * @return L'objet Medicament trouvé, ou null si aucun médicament ne correspond à cet ID.
+     */
     public Medicament findById(int id) {
         String sql = "SELECT * FROM medicament WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -46,6 +62,12 @@ public class MedicamentDAO {
         return null;
     }
 
+    /**
+     * Ajoute (insère) un nouveau médicament dans la base de données.
+     * 
+     * @param m L'objet Medicament contenant les données à insérer (nom, quantité, prix, etc.).
+     * @return true si l'insertion a réussi, false en cas d'erreur SQL.
+     */
     public boolean add(Medicament m) {
         String sql = "INSERT INTO medicament (nom, quantite, seuil_alerte, prix_unitaire, date_peremption, categorie_id) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -65,6 +87,12 @@ public class MedicamentDAO {
         }
     }
 
+    /**
+     * Met à jour les informations d'un médicament existant dans la base de données.
+     * 
+     * @param m L'objet Medicament mis à jour (doit contenir un ID valide).
+     * @return true si la modification a réussi, false en cas d'erreur SQL.
+     */
     public boolean update(Medicament m) {
         String sql = "UPDATE medicament SET nom=?, quantite=?, seuil_alerte=?, prix_unitaire=?, date_peremption=?, categorie_id=? WHERE id=?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -85,6 +113,14 @@ public class MedicamentDAO {
         }
     }
 
+    /**
+     * Supprime un médicament de la base de données ainsi que toutes ses dépendances.
+     * Utilise une transaction (setAutoCommit(false)) pour garantir que les mouvements de stock
+     * liés à ce médicament soient supprimés avant le médicament lui-même (principe de sécurité FK).
+     * 
+     * @param id L'identifiant du médicament à supprimer.
+     * @return true si la suppression intégrale a réussi, false en cas d'échec (rollback effectué).
+     */
     public boolean delete(int id) {
         // Supprimer d'abord les mouvements liés (contrainte FK)
         String deleteMouvements = "DELETE FROM mouvement_stock WHERE medicament_id = ?";
@@ -136,7 +172,11 @@ public class MedicamentDAO {
         }
     }
 
-    // Médicaments dont le stock est en dessous du seuil d'alerte
+    /**
+     * Récupère la liste des médicaments dont le stock actuel est inférieur ou égal à leur seuil d'alerte.
+     * 
+     * @return Une liste de médicaments nécessitant un réapprovisionnement.
+     */
     public List<Medicament> findEnAlerte() {
         List<Medicament> list = new ArrayList<>();
         String sql = "SELECT * FROM medicament WHERE quantite <= seuil_alerte ORDER BY nom";
@@ -149,6 +189,13 @@ public class MedicamentDAO {
         return list;
     }
 
+    /**
+     * Méthode utilitaire interne pour transformer une ligne de résultat SQL (ResultSet) en un objet Java Medicament.
+     * 
+     * @param rs Le ResultSet positionné sur la ligne courante.
+     * @return Une instance de Medicament complètement hydratée avec les données de la base.
+     * @throws SQLException Si une colonne demandée n'existe pas ou en cas d'erreur de lecture.
+     */
     private Medicament mapResultSet(ResultSet rs) throws SQLException {
         Medicament m = new Medicament();
         m.setId(rs.getInt("id"));
