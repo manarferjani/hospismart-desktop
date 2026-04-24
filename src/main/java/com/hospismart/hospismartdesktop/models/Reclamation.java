@@ -14,6 +14,7 @@ public class Reclamation { // Classe modele representant une reclamation client
     private String categorie; // Categorie metier de la reclamation
     private String priorite; // Priorite de traitement
     private String reponse; // Ancien champ texte reponse (si utilise)
+    private String etatMental; // Etat mental predit du client
 
     public Reclamation() { // Constructeur par defaut
         this.dateCreation = LocalDateTime.now(); // Initialise la date au moment courant
@@ -49,4 +50,7 @@ public class Reclamation { // Classe modele representant une reclamation client
 
     public String getReponse() { return reponse; } // Retourne la reponse texte
     public void setReponse(String reponse) { this.reponse = reponse; } // Met a jour la reponse texte
+
+    public String getEtatMental() { return etatMental; } // Retourne l'etat mental
+    public void setEtatMental(String etatMental) { this.etatMental = etatMental; } // Met a jour l'etat mental
 } // Fin de la classe Reclamation

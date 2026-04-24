@@ -1,115 +1,167 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 
-<!-- Vue Back Office reclamations: suivi, tri et traitement admin -->
-<BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@styles.css" styleClass="app-bg" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.ReclamationBackController">
-    <!-- Menu lateral de navigation -->
+<BorderPane prefHeight="768.0" prefWidth="1200.0" stylesheets="@styles.css" styleClass="app-bg" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.ReclamationBackController">
     <left>
-        <VBox prefWidth="200.0" styleClass="side-menu">
-            <Label text="HOSPISMART" styleClass="side-title"/>
-            <Label text="Gestion des Stocks" styleClass="side-subtitle"/>
-            <Button text="Médicaments" styleClass="nav-btn" prefWidth="200"/>
-            <Button text="Catégories" styleClass="nav-btn" prefWidth="200"/>
-            <Button text="Réclamations" styleClass="nav-btn nav-btn-active" prefWidth="200"/>
-            <Button text="Réponses" onAction="#goToReponses" styleClass="nav-btn" prefWidth="200"/>
+        <VBox prefWidth="250" style="-fx-background-color: #1a2533; -fx-padding: 20 0 20 0;" spacing="10">
+            <!-- Header Logo -->
+            <HBox alignment="CENTER" style="-fx-padding: 0 0 20 0;">
+                <Label text="HospiSmart" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label text="ADMIN" style="-fx-background-color: #1e3656; -fx-text-fill: #4da6ff; -fx-padding: 2 6; -fx-background-radius: 4; -fx-font-size: 10px; -fx-font-weight: bold; -fx-translate-x: 10;"/>
+            </HBox>
+
+            <!-- Profile Info -->
+            <VBox alignment="CENTER" spacing="5" style="-fx-padding: 0 0 20 0;">
+                <Region style="-fx-background-color: #2196f3; -fx-min-width: 70; -fx-min-height: 70; -fx-max-width: 70; -fx-max-height: 70; -fx-background-radius: 35; -fx-border-color: white; -fx-border-radius: 35; -fx-border-width: 2;"/>
+                <Label text="Admin System" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 0 0 0;"/>
+                <Label text="GESTIONNAIRE" style="-fx-text-fill: #8595a6; -fx-font-size: 11px;"/>
+            </VBox>
+
+            <Region style="-fx-border-width: 0 0 1 0; -fx-border-color: #2a3a4d; -fx-padding: 0 20 10 20;"/>
+
+            <!-- Navigation -->
+            <VBox spacing="10" VBox.vgrow="ALWAYS" style="-fx-padding: 10 15;">
+                <Label text="OVERVIEW" style="-fx-text-fill: #8595a6; -fx-font-size: 10px; -fx-padding: 0 0 5 10;"/>
+                <Button text=" Dashboard" style="-fx-alignment: CENTER_LEFT; -fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 10 15; -fx-cursor: hand;" prefWidth="220" maxWidth="Infinity"/>
+
+                <Label text="MA CLINIQUE" style="-fx-text-fill: #8595a6; -fx-font-size: 10px; -fx-padding: 15 0 5 10;"/>
+                <Button text=" Reclamations" style="-fx-alignment: CENTER_LEFT; -fx-background-color: #144b82; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 10 15; -fx-background-radius: 6; -fx-cursor: hand;" prefWidth="220" maxWidth="Infinity"/>
+                <Button text=" Réponses" onAction="#goToReponses" style="-fx-alignment: CENTER_LEFT; -fx-background-color: transparent; -fx-text-fill: #aebfd1; -fx-font-size: 13px; -fx-padding: 10 15; -fx-cursor: hand;" prefWidth="220" maxWidth="Infinity"/>
+            </VBox>
+
+            <!-- Logout -->
+            <VBox style="-fx-padding: 0 15;">
+                <Button text=" Déconnexion" style="-fx-alignment: CENTER_LEFT; -fx-background-color: transparent; -fx-text-fill: #aebfd1; -fx-font-size: 13px; -fx-padding: 10 15; -fx-cursor: hand;" prefWidth="220" maxWidth="Infinity"/>
+            </VBox>
         </VBox>
     </left>
-    <!-- Zone centrale: KPIs, recherche, chart, table et formulaire admin -->
+
     <center>
-        <VBox styleClass="page-content" spacing="12.0">
-            <HBox alignment="CENTER_LEFT" spacing="20">
-                <Label text="Gestion des Réclamations" styleClass="header-title" style="-fx-background-color: #2C3E50; -fx-padding: 10 14; -fx-background-radius: 10;" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+        <VBox styleClass="app-bg">
+            <HBox styleClass="top-bar" alignment="CENTER_LEFT">
+                <Label text="📋 Gestion des Reclamations" styleClass="top-bar-title"/>
             </HBox>
 
-            <!-- Cartes KPI du dashboard -->
-            <HBox styleClass="kpi-wrap">
-                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                    <Label fx:id="lblTotalReclamations" text="0" styleClass="kpi-value"/>
-                    <Label text="Total réclamations" styleClass="kpi-label"/>
-                </VBox>
-                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                    <Label fx:id="lblEnAttente" text="0" styleClass="kpi-value"/>
-                    <Label text="En attente" styleClass="kpi-label"/>
-                </VBox>
-                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                    <Label fx:id="lblTraitees" text="0" styleClass="kpi-value"/>
-                    <Label text="Traitées / Fermées" styleClass="kpi-label"/>
-                </VBox>
+            <HBox spacing="18" style="-fx-padding: 12 18 8 18; -fx-background-color: #f7f9fc; -fx-border-color: #dbe3ed; -fx-border-width: 0 0 1 0;">
+                <HBox spacing="8" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 8 12; -fx-background-radius: 8; -fx-border-color: #dbe3ed; -fx-border-radius: 8;">
+                    <Label text="Total:" style="-fx-text-fill: #6b7785; -fx-font-size: 13px;"/>
+                    <Label fx:id="lblTotalReclamations" text="0" style="-fx-text-fill: #2f6ecf; -fx-font-size: 16px; -fx-font-weight: 800;"/>
+                </HBox>
+                <HBox spacing="8" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 8 12; -fx-background-radius: 8; -fx-border-color: #dbe3ed; -fx-border-radius: 8;">
+                    <Label text="En attente:" style="-fx-text-fill: #6b7785; -fx-font-size: 13px;"/>
+                    <Label fx:id="lblEnAttente" text="0" style="-fx-text-fill: #d58c1f; -fx-font-size: 16px; -fx-font-weight: 800;"/>
+                </HBox>
+                <HBox spacing="8" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 8 12; -fx-background-radius: 8; -fx-border-color: #dbe3ed; -fx-border-radius: 8;">
+                    <Label text="Traitees:" style="-fx-text-fill: #6b7785; -fx-font-size: 13px;"/>
+                    <Label fx:id="lblTraitees" text="0" style="-fx-text-fill: #2e9b5f; -fx-font-size: 16px; -fx-font-weight: 800;"/>
+                </HBox>
             </HBox>
 
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Recherche :"/>
-                <TextField fx:id="txtRecherche" promptText="Rechercher par titre ou patient..." prefWidth="250"/>
+            <HBox styleClass="filter-bar" alignment="CENTER_LEFT">
+                <Label text="Recherche:" style="-fx-font-weight: 700; -fx-text-fill: #5a6b7f;"/>
+                <TextField fx:id="txtRecherche" promptText="Titre, patient ou statut..." prefWidth="260" styleClass="form-field" style="-fx-padding: 8 12; -fx-background-radius: 4;"/>
+                <Button text="↻ Rafraichir" onAction="#actualiser" styleClass="btn-filter"/>
+                <Button text="📥 Exporter PDF" onAction="#exporterPDF" styleClass="btn-filter" style="-fx-background-color: #d32f2f; -fx-text-fill: white;"/>
+                <Button text="💬 Répondre" onAction="#basculerPanneauTraitement" styleClass="btn-filter" style="-fx-background-color: #2f6ecf; -fx-text-fill: white;"/>
+                <Region HBox.hgrow="ALWAYS"/>
             </HBox>
 
-            <!-- Camembert de repartition des statuts -->
-            <PieChart fx:id="chartReclamations" title="Répartition des réclamations par statut" legendVisible="true" labelsVisible="true" prefHeight="340.0" minHeight="320.0"/>
+            <HBox spacing="18" VBox.vgrow="ALWAYS" style="-fx-padding: 18;">
+                <VBox spacing="12" HBox.hgrow="ALWAYS" styleClass="card" style="-fx-padding: 12; -fx-background-radius: 5;">
+                    <PieChart fx:id="chartReclamations" title="Repartition par statut" legendVisible="true" labelsVisible="true" prefHeight="180" minHeight="160"/>
+                    <TableView fx:id="tableReclamation" onMouseClicked="#handleTableClick" VBox.vgrow="ALWAYS" minHeight="300" styleClass="table-dark-header accessible-table" style="-fx-background-radius: 5; -fx-border-radius: 5;">
+                        <columns>
+                            <TableColumn fx:id="colId" text="ID" prefWidth="55" visible="false"/>
+                            <TableColumn fx:id="colTitre" text="Titre" prefWidth="220"/>
+                            <TableColumn fx:id="colPatient" text="Patient" prefWidth="150"/>
+                            <TableColumn fx:id="colEmail" text="Email" prefWidth="190"/>
+                            <TableColumn fx:id="colStatut" text="Statut" prefWidth="120"/>
+                            <TableColumn fx:id="colCategorie" text="Categorie" prefWidth="120"/>
+                            <TableColumn fx:id="colPriorite" text="Priorite" prefWidth="100"/>
+                            <TableColumn fx:id="colDate" text="Date" prefWidth="165"/>
+                        </columns>
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+                    </TableView>
+                </VBox>
 
-            <TableView fx:id="tableReclamation" onMouseClicked="#handleTableClick" VBox.vgrow="ALWAYS" styleClass="card">
-                <columns>
-                    <TableColumn fx:id="colId" text="ID" prefWidth="50" />
-                    <TableColumn fx:id="colTitre" text="Titre" prefWidth="150" />
-                    <TableColumn fx:id="colPatient" text="Patient" prefWidth="120" />
-                    <TableColumn fx:id="colEmail" text="Email" prefWidth="150" />
-                    <TableColumn fx:id="colStatut" text="Statut" prefWidth="100" />
-                    <TableColumn fx:id="colCategorie" text="Catégorie" prefWidth="100" />
-                    <TableColumn fx:id="colPriorite" text="Priorité" prefWidth="80" />
-                    <TableColumn fx:id="colDate" text="Date" prefWidth="130" />
-                </columns>
-            </TableView>
+                <VBox fx:id="pnlTraitement" spacing="12" prefWidth="430" minWidth="400" visible="false" managed="false" styleClass="card" style="-fx-padding: 16; -fx-background-radius: 5;">
+                    <Label text="🛠 Traitement de la reclamation" styleClass="card-title" style="-fx-padding: 0;"/>
+                    <Separator/>
 
-            <!-- Formulaire detail + reponse admin -->
-            <TitledPane text="Détails et Résolution de la Réclamation" collapsible="false">
-                <VBox spacing="10" styleClass="card">
-                    <GridPane hgap="15" vgap="10">
-                        <Label text="Titre *" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                        <TextField fx:id="txtTitre" editable="false" styleClass="readonly" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    <ScrollPane fitToWidth="true" styleClass="form-scrollpane" VBox.vgrow="ALWAYS">
+                        <VBox spacing="10">
+                            <padding><Insets right="6" top="4" bottom="4"/></padding>
 
-                        <Label text="Patient *" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-                        <TextField fx:id="txtPatient" editable="false" styleClass="readonly" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                            <Label text="Titre" styleClass="form-label"/>
+                            <TextField fx:id="txtTitre" editable="false" styleClass="form-field readonly"/>
 
-                        <Label text="Email *" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                        <TextField fx:id="txtEmail" editable="false" styleClass="readonly" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                            <HBox spacing="10">
+                                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                    <Label text="Patient" styleClass="form-label"/>
+                                    <TextField fx:id="txtPatient" editable="false" styleClass="form-field readonly"/>
+                                </VBox>
+                                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                    <Label text="Email" styleClass="form-label"/>
+                                    <TextField fx:id="txtEmail" editable="false" styleClass="form-field readonly"/>
+                                </VBox>
+                            </HBox>
 
-                        <Label text="Catégorie" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                        <ComboBox fx:id="cmbCategorie" disable="true" prefWidth="150" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                            <HBox spacing="10">
+                                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                    <Label text="Categorie" styleClass="form-label"/>
+                                    <ComboBox fx:id="cmbCategorie" disable="true" maxWidth="Infinity" styleClass="form-field"/>
+                                </VBox>
+                                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                    <Label text="Priorite" styleClass="form-label"/>
+                                    <ComboBox fx:id="cmbPriorite" disable="true" maxWidth="Infinity" styleClass="form-field"/>
+                                </VBox>
+                            </HBox>
 
-                        <Label text="Priorité" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                        <ComboBox fx:id="cmbPriorite" disable="true" prefWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            <HBox spacing="10">
+                                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                    <Label text="Statut" styleClass="form-label"/>
+                                    <ComboBox fx:id="cmbStatut" promptText="Choisir un statut" maxWidth="Infinity" styleClass="form-field"/>
+                                </VBox>
+                                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                    <Label text="Etat Mental (Pred.)" styleClass="form-label" style="-fx-text-fill: #d32f2f;"/>
+                                    <TextField fx:id="txtEtatMental" editable="false" styleClass="form-field readonly" style="-fx-text-fill: #d32f2f; -fx-font-weight: bold;"/>
+                                </VBox>
+                            </HBox>
 
-                        <Label text="Modifier le Statut" style="-fx-font-weight: bold; -fx-text-fill: #e67e22;" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                        <ComboBox fx:id="cmbStatut" prefWidth="150" style="-fx-border-color: #e67e22;" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                            <Label text="Description client" styleClass="form-label"/>
+                            <TextArea fx:id="txtDescription" editable="false" wrapText="true" prefRowCount="3" styleClass="form-field readonly"/>
 
-                        <Label text="Description du Client" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                        <TextArea fx:id="txtDescription" editable="false" styleClass="readonly" prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="3"/>
+                            <Label text="Reponse admin" styleClass="form-label response-label"/>
+                            <TextArea fx:id="txtReponse" wrapText="true" prefRowCount="3" styleClass="form-field" promptText="Saisir une reponse..."/>
 
-                        <Label text="Réponse de l'Admin" style="-fx-font-weight: bold; -fx-text-fill: #27ae60;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                        <TextArea fx:id="txtReponse" promptText="Écrivez le contenu de la réponse ici..." prefRowCount="3" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.columnSpan="3"/>
+                            <HBox spacing="10">
+                                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                    <Label text="Nom Admin" styleClass="form-label"/>
+                                    <TextField fx:id="txtAdminNom" promptText="Nom complet" styleClass="form-field"/>
+                                </VBox>
+                                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                    <Label text="Email Admin" styleClass="form-label"/>
+                                    <TextField fx:id="txtAdminEmail" promptText="admin@hospismart.com" styleClass="form-field"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </ScrollPane>
 
-                        <Label text="Nom Admin" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-                        <TextField fx:id="txtAdminNom" promptText="Votre nom d'admin" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-
-                        <Label text="Email Admin" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
-                        <TextField fx:id="txtAdminEmail" promptText="admin@hospismart.com" GridPane.columnIndex="3" GridPane.rowIndex="5"/>
-                    </GridPane>
-
-                    <HBox spacing="12" alignment="CENTER_LEFT" style="-fx-padding: 12 0 0 0;">
-                        <Button text="Enregistrer la Réponse / Statut" onAction="#modifierReclamation" styleClass="btn btn-success"/>
-                        <Button text="Supprimer la Réponse" onAction="#supprimerReponse" styleClass="btn btn-warning"/>
-                        <Button text="Supprimer la Réclamation" onAction="#supprimerReclamation" styleClass="btn btn-danger"/>
-                        <Button text="Rafraîchir" onAction="#actualiser" styleClass="btn btn-neutral"/>
+                    <Separator/>
+                    <HBox spacing="8">
+                        <Button text="💾 Enregistrer" onAction="#modifierReclamation" styleClass="btn-action-add" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Button text="🗑 Suppr. Reponse" onAction="#supprimerReponse" styleClass="btn-action-update" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Button text="🗑 Suppr. Reclamation" onAction="#supprimerReclamation" styleClass="btn-action-delete" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                     </HBox>
                 </VBox>
-            </TitledPane>
+            </HBox>
+
         </VBox>
     </center>
 </BorderPane>
-
-
-
-
-
 

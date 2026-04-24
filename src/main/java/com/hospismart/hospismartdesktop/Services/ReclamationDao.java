@@ -1,4 +1,4 @@
-package com.hospismart.hospismartdesktop.dao; // Package de la couche DAO
+package com.hospismart.hospismartdesktop.Services; // Package de la couche DAO
 
 import com.hospismart.hospismartdesktop.models.Reclamation; // Modele Reclamation
 import com.hospismart.hospismartdesktop.utils.MyDbConnexion; // Gestionnaire singleton de connexion BD
@@ -33,7 +33,7 @@ public class ReclamationDao { // DAO responsable du CRUD table reclamation
     }
 
     public void addReclamation(Reclamation r) { // Inserer une reclamation
-        String req = "INSERT INTO reclamation (titre, description, date_creation, email, nom_patient, statut, categorie, priorite, reponse) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"; // Requete SQL d'insertion
+        String req = "INSERT INTO reclamation (titre, description, date_creation, email, nom_patient, statut, categorie, priorite, reponse, etat_mental) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; // Requete SQL d'insertion
         try { // Debut bloc SQL
             PreparedStatement pst = cnx.prepareStatement(req); // Prepare la requete parametree
             pst.setString(1, r.getTitre()); // Parametre 1: titre
@@ -45,6 +45,7 @@ public class ReclamationDao { // DAO responsable du CRUD table reclamation
             pst.setString(7, r.getCategorie()); // Parametre 7: categorie
             pst.setString(8, r.getPriorite()); // Parametre 8: priorite
             pst.setString(9, r.getReponse() != null ? r.getReponse() : ""); // Parametre 9: reponse texte legacy
+            pst.setString(10, r.getEtatMental() != null ? r.getEtatMental() : ""); // Parametre 10: etat_mental
             pst.executeUpdate(); // Execute insertion
         } catch (SQLException e) { // Capture erreurs SQL
             e.printStackTrace(); // Log simple d'erreur
@@ -82,6 +83,7 @@ public class ReclamationDao { // DAO responsable du CRUD table reclamation
                         else if (colName.equals("statut")) r.setStatut(rs.getString(i)); // Map statut
                         else if (colName.equals("categorie") || colName.equals("category")) r.setCategorie(rs.getString(i)); // Map categorie (FR/EN)
                         else if (colName.equals("priorite") || colName.equals("priority")) r.setPriorite(rs.getString(i)); // Map priorite (FR/EN)
+                        else if (colName.equals("etat_mental") || colName.equals("etatmental")) r.setEtatMental(rs.getString(i)); // Map etat_mental
                         else if (colName.equals("reponse")) r.setReponse(rs.getString(i)); // Map colonne reponse legacy
                         else if (colName.equals("nompatient") || colName.equals("nom_patient")) r.setNomPatient(rs.getString(i)); // Map nom patient (formats differents)
                         else if (colName.equals("datecreation") || colName.equals("date_creation")) { // Gere variantes nom date
@@ -104,7 +106,7 @@ public class ReclamationDao { // DAO responsable du CRUD table reclamation
     }
 
     public void updateReclamation(Reclamation r) { // Mettre a jour une reclamation existante
-        String req = "UPDATE reclamation SET titre=?, description=?, email=?, nom_patient=?, statut=?, categorie=?, priorite=?, reponse=? WHERE id=?"; // Requete SQL d'update
+        String req = "UPDATE reclamation SET titre=?, description=?, email=?, nom_patient=?, statut=?, categorie=?, priorite=?, reponse=?, etat_mental=? WHERE id=?"; // Requete SQL d'update
         try { // Debut bloc SQL
             PreparedStatement pst = cnx.prepareStatement(req); // Prepare la requete
             pst.setString(1, r.getTitre()); // Parametre 1: titre
@@ -115,7 +117,8 @@ public class ReclamationDao { // DAO responsable du CRUD table reclamation
             pst.setString(6, r.getCategorie()); // Parametre 6: categorie
             pst.setString(7, r.getPriorite()); // Parametre 7: priorite
             pst.setString(8, r.getReponse() != null ? r.getReponse() : ""); // Parametre 8: reponse legacy
-            pst.setInt(9, r.getId()); // Parametre 9: id de la ligne a modifier
+            pst.setString(9, r.getEtatMental() != null ? r.getEtatMental() : ""); // Parametre 9: etat_mental
+            pst.setInt(10, r.getId()); // Parametre 10: id de la ligne a modifier
             pst.executeUpdate(); // Execute mise a jour
         } catch (SQLException e) { // Capture erreur SQL
             e.printStackTrace(); // Log simple d'erreur

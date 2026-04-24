@@ -3,6 +3,8 @@ module com.hospismart.hospismartdesktop {
     requires javafx.fxml;
     requires javafx.web;
     requires java.sql;
+    requires java.desktop;
+    requires java.net.http;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -11,6 +13,8 @@ module com.hospismart.hospismartdesktop {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    // PDF generation (Apache PDFBox)
+    requires org.apache.pdfbox;
 
     exports com.hospismart.hospismartdesktop.main;
     exports com.hospismart.hospismartdesktop.controllers;
