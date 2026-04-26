@@ -13,6 +13,10 @@ public class User {
     private String image;
     private boolean isActive = true; // active by default
 
+    // Champs pour 2FA (Double Authentification)
+    private boolean twoFactorEnabled = false;
+    private String twoFactorSecret = null;
+
     // Champs spécifiques Patient
     private LocalDate dateNaissance;
     private String genre;
@@ -83,6 +87,12 @@ public class User {
 
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+
+    public boolean isTwoFactorEnabled() { return twoFactorEnabled; }
+    public void setTwoFactorEnabled(boolean twoFactorEnabled) { this.twoFactorEnabled = twoFactorEnabled; }
+
+    public String getTwoFactorSecret() { return twoFactorSecret; }
+    public void setTwoFactorSecret(String twoFactorSecret) { this.twoFactorSecret = twoFactorSecret; }
 
     @Override
     public String toString() {

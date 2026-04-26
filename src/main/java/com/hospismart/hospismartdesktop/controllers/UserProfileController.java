@@ -80,6 +80,52 @@ public class UserProfileController {
         }
     }
 
+    @FXML
+    void handleFacialRecognition(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/FaceRegister.fxml"));
+            Scene scene = new Scene(loader.load());
+            FaceRegisterController controller = loader.getController();
+            controller.setUserToRegister(currentUser);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la page de reconnaissance faciale.");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void handleTwoFactorAuth(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/Setup2FA.fxml"));
+            Scene scene = new Scene(loader.load());
+            SetupTwoFactorController controller = loader.getController();
+            controller.setNewUserRegistration(currentUser);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la page de configuration 2FA.");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void handleVoiceHealth(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/VoiceHealth.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la page de consultation vocale.");
+            e.printStackTrace();
+        }
+    }
+
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

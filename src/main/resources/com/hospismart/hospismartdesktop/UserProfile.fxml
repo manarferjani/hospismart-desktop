@@ -18,7 +18,7 @@
          </children>
       </AnchorPane>
 
-      <AnchorPane layoutX="100.0" layoutY="100.0" prefHeight="450.0" prefWidth="600.0" styleClass="card-pane">
+      <AnchorPane layoutX="100.0" layoutY="100.0" prefHeight="580.0" prefWidth="600.0" styleClass="card-pane">
          <children>
             <Label layoutX="40.0" layoutY="30.0" text="Mon Profil" textFill="#1565C0">
                <font>
@@ -42,6 +42,21 @@
             <PasswordField fx:id="passwordField" layoutX="150.0" layoutY="285.0" prefHeight="30.0" prefWidth="200.0" promptText="(Laisser vide si inchangé)" styleClass="text-input" />
 
             <Button layoutX="150.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleUpdate" prefHeight="40.0" prefWidth="200.0" styleClass="btn-primary" text="Mettre à jour" />
+            
+            <!-- Boutons pour la sécurité et reconnaissance faciale -->
+            <Separator layoutX="40.0" layoutY="400.0" prefWidth="520.0" />
+            
+            <Label layoutX="40.0" layoutY="420.0" text="Sécurité &amp; Authentification" textFill="#1565C0">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            
+            <Button layoutX="40.0" layoutY="450.0" mnemonicParsing="false" onAction="#handleFacialRecognition" prefHeight="35.0" prefWidth="240.0" styleClass="btn-secondary" text="📷 Ajouter reconnaissance faciale" />
+            
+            <Button layoutX="320.0" layoutY="450.0" mnemonicParsing="false" onAction="#handleTwoFactorAuth" prefHeight="35.0" prefWidth="240.0" styleClass="btn-secondary" text="🔐 Configurer 2FA" />
+            
+            <Button layoutX="40.0" layoutY="490.0" mnemonicParsing="false" onAction="#handleVoiceHealth" prefHeight="35.0" prefWidth="520.0" styleClass="btn-info" text="🎤 Consultation Vocale - Bilan de Santé par IA" />
          </children>
       </AnchorPane>
    </children>

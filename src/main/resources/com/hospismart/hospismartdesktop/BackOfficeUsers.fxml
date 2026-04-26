@@ -9,19 +9,27 @@
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #f4f6f9;" stylesheets="@style-admin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.BackOfficeUsersController">
    <children>
       <!-- Top Navbar -->
-      <AnchorPane prefHeight="60.0" prefWidth="1000.0" styleClass="top-navbar">
+      <AnchorPane prefHeight="50.0" prefWidth="1000.0" styleClass="top-navbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Label layoutX="20.0" layoutY="15.0" styleClass="navbar-title" text="HospiSmart - Administration" />
-            <Button layoutX="850.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleLogout" style="-fx-background-color: #F44336; -fx-text-fill: white;" text="Se Déconnecter" />
+            <Label layoutX="20.0" layoutY="12.0" styleClass="navbar-title" text="HospiSmart — Gestion des Utilisateurs" />
+            <Button layoutX="850.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleLogout" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 4px; -fx-text-fill: white; -fx-cursor: hand;" text="Se Déconnecter" AnchorPane.rightAnchor="20.0" />
+         </children>
+      </AnchorPane>
+
+      <!-- Sub Navbar (Tabs) -->
+      <AnchorPane layoutY="50.0" prefHeight="50.0" prefWidth="1000.0" styleClass="sub-navbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button layoutX="0.0" layoutY="0.0" prefHeight="50.0" prefWidth="150.0" styleClass="tab-active" text="Administration" />
+            <Button layoutX="150.0" layoutY="0.0" prefHeight="50.0" prefWidth="150.0" styleClass="tab-inactive" text="Statistiques" onAction="#handleShowStats" />
          </children>
       </AnchorPane>
 
       <!-- Action Bar -->
-      <AnchorPane layoutX="20.0" layoutY="80.0" prefHeight="60.0" prefWidth="960.0" styleClass="card-pane">
+      <AnchorPane layoutY="100.0" prefHeight="60.0" prefWidth="1000.0" styleClass="action-bar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <TextField fx:id="searchField" layoutX="15.0" layoutY="15.0" prefHeight="30.0" prefWidth="250.0" promptText="Rechercher par nom, email..." styleClass="text-input" />
+            <TextField fx:id="searchField" layoutX="20.0" layoutY="15.0" prefHeight="30.0" prefWidth="250.0" promptText="Rechercher par nom, email..." styleClass="text-input" />
             
-            <ComboBox fx:id="filterComboBox" layoutX="280.0" layoutY="15.0" prefWidth="150.0" promptText="Tous">
+            <ComboBox fx:id="filterComboBox" layoutX="280.0" layoutY="15.0" prefHeight="30.0" prefWidth="150.0" promptText="Tous">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="TOUS" />
@@ -32,12 +40,12 @@
                </items>
             </ComboBox>
             
-            <Button layoutX="440.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleSearch" style="-fx-background-color: #607D8B; -fx-text-fill: white;" text="Filtrer" />
+            <Button layoutX="440.0" layoutY="15.0" prefHeight="30.0" mnemonicParsing="false" onAction="#handleSearch" styleClass="btn-secondary" text="Filtrer" />
+            <Button layoutX="505.0" layoutY="15.0" prefHeight="30.0" mnemonicParsing="false" onAction="#handleExportPDF" styleClass="btn-tertiary" text="Export PDF" />
             
-            <Button layoutX="600.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleExportPDF" styleClass="btn-primary" text="Export PDF" />
-            <Button layoutX="690.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleShowStats" style="-fx-background-color: #FF9800; -fx-text-fill: white;" text="Statistiques" />
+            <Label layoutX="700.0" layoutY="20.0" style="-fx-text-fill: #7f8c8d; -fx-font-style: italic;" text="Utilisateurs trouvés" AnchorPane.rightAnchor="200.0" />
             
-            <Button layoutX="800.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleOpenAddDialog" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" text="+ Nouvel Utilisateur" />
+            <Button layoutX="820.0" layoutY="15.0" prefHeight="30.0" mnemonicParsing="false" onAction="#handleOpenAddDialog" styleClass="btn-primary" text="+ Ajouter un Utilisateur" AnchorPane.rightAnchor="20.0" />
          </children>
       </AnchorPane>
 

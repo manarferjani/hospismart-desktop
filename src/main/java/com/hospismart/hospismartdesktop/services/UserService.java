@@ -15,11 +15,24 @@ public class UserService {
     public UserService() {
         cnx = MyDbConnexion.getInstance().getCnx();
         
-        // Création automatique de la colonne si elle n'existe pas
+        // Création automatique des colonnes si elles n'existent pas
         try {
             cnx.createStatement().execute("ALTER TABLE user ADD COLUMN is_active BOOLEAN DEFAULT TRUE");
         } catch (SQLException ignored) {
-            // L'erreur est levée si la colonne existe déjà, on l'ignore silencieusement
+            // L'erreur est levée si la colonne existe déjà
+        }
+        
+        // Ajouter les colonnes 2FA
+        try {
+            cnx.createStatement().execute("ALTER TABLE user ADD COLUMN two_factor_enabled BOOLEAN DEFAULT FALSE");
+        } catch (SQLException ignored) {
+            // Colonne existe déjà
+        }
+        
+        try {
+            cnx.createStatement().execute("ALTER TABLE user ADD COLUMN two_factor_secret VARCHAR(255) NULL");
+        } catch (SQLException ignored) {
+            // Colonne existe déjà
         }
     }
 
@@ -216,4 +229,173 @@ public class UserService {
             System.err.println("Erreur de désactivation : " + e.getMessage());
         }
     }
-}
+
+    public User findByEmail(String email) {
+        String query = "SELECT * FROM user WHERE email=?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(query);
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+            
+            if (rs.next()) {
+                String typeStr = "ROLE_PATIENT"; 
+                try { typeStr = rs.getString("roles"); } catch(SQLException ignored) {}
+                if (typeStr == null || typeStr.isEmpty()) typeStr = "[\"ROLE_PATIENT\"]";
+
+                User user = new User(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        typeStr
+                );
+                user.setTelephone(rs.getString("telephone"));
+                user.setPassword(rs.getString("password"));
+                
+                boolean active = true;
+                try { active = rs.getBoolean("is_active"); } catch (SQLException ignored) {}
+                user.setActive(active);
+                
+                return user;
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la recherche par email : " + e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean updatePassword(int id, String newPlainPassword) {
+        String query = "UPDATE user SET password=? WHERE id=?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(query);
+            String hashedPass = BCrypt.hashpw(newPlainPassword, BCrypt.gensalt(13));
+            pst.setString(1, hashedPass);
+            pst.setInt(2, id);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la mise à jour du mot de passe : " + e.getMessage());
+            return false;
+        }
+    }
+
+    // ==================== MÉTHODES 2FA ====================
+
+    /**
+     * Sauvegarde le secret 2FA pour un utilisateur
+     */
+    public boolean saveTwoFactorSecret(int userId, String secret) {
+        String query = "UPDATE user SET two_factor_secret=?, two_factor_enabled=true WHERE id=?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(query);
+            pst.setString(1, secret);
+            pst.setInt(2, userId);
+            boolean result = pst.executeUpdate() > 0;
+            if (result) {
+                System.out.println("[2FA] Secret 2FA sauvegardé pour l'utilisateur " + userId);
+            }
+            return result;
+        } catch (SQLException e) {
+            System.err.println("[2FA] Erreur lors de la sauvegarde du secret: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Désactive la 2FA pour un utilisateur
+     */
+    public boolean disableTwoFactor(int userId) {
+        String query = "UPDATE user SET two_factor_enabled=false, two_factor_secret=NULL WHERE id=?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(query);
+            pst.setInt(1, userId);
+            boolean result = pst.executeUpdate() > 0;
+            if (result) {
+                System.out.println("[2FA] 2FA désactivée pour l'utilisateur " + userId);
+                TwoFactorAuthService.deleteQRCode(userId);
+            }
+            return result;
+        } catch (SQLException e) {
+            System.err.println("[2FA] Erreur lors de la désactivation: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Récupère le secret 2FA d'un utilisateur
+     */
+    public String getTwoFactorSecret(int userId) {
+        String query = "SELECT two_factor_secret FROM user WHERE id=?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(query);
+            pst.setInt(1, userId);
+            ResultSet rs = pst.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getString("two_factor_secret");
+            }
+        } catch (SQLException e) {
+            System.err.println("[2FA] Erreur lors de la récupération du secret: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Vérifie si la 2FA est activée pour un utilisateur
+     */
+    public boolean isTwoFactorEnabled(int userId) {
+        String query = "SELECT two_factor_enabled FROM user WHERE id=?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(query);
+            pst.setInt(1, userId);
+            ResultSet rs = pst.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getBoolean("two_factor_enabled");
+            }
+        } catch (SQLException e) {
+            System.err.println("[2FA] Erreur lors de la vérification: " + e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * Charge les données 2FA dans un objet User
+     */
+    private void load2FAData(User user, ResultSet rs) {
+        try {
+            boolean twoFactorEnabled = false;
+            try {
+                twoFactorEnabled = rs.getBoolean("two_factor_enabled");
+            } catch (SQLException ignored) {}
+            
+            String twoFactorSecret = null;
+            try {
+                twoFactorSecret = rs.getString("two_factor_secret");
+            } catch (SQLException ignored) {}
+            
+            user.setTwoFactorEnabled(twoFactorEnabled);
+            user.setTwoFactorSecret(twoFactorSecret);
+        } catch (Exception e) {
+            System.err.println("[2FA] Erreur chargement données 2FA: " + e.getMessage());
+        }
+    }
+    /**
+     * Active ou désactive un utilisateur dans la base de données
+     */
+    public boolean setActive(int userId, boolean active) {
+        String query = "UPDATE user SET is_active=? WHERE id=?";
+        try {
+            PreparedStatement pst = cnx.prepareStatement(query);
+            pst.setBoolean(1, active);
+            pst.setInt(2, userId);
+            boolean result = pst.executeUpdate() > 0;
+            if (result) {
+                String status = active ? "activé" : "désactivé";
+                System.out.println("[USER] Utilisateur " + userId + " " + status);
+            }
+            return result;
+        } catch (SQLException e) {
+            System.err.println("[USER] Erreur lors de la modification du statut actif: " + e.getMessage());
+            return false;
+        }
+    }}

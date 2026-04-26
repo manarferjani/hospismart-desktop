@@ -36,29 +36,50 @@ public class RegisterController {
 
     @FXML
     void handleRegister(ActionEvent event) {
-        String nom = nomField.getText();
-        String prenom = prenomField.getText();
-        String email = emailField.getText();
-        String telephone = telephoneField.getText();
+        // Reset styles
+        nomField.setStyle("");
+        prenomField.setStyle("");
+        emailField.setStyle("");
+        telephoneField.setStyle("");
+        passwordField.setStyle("");
+
+        String nom = nomField.getText().trim();
+        String prenom = prenomField.getText().trim();
+        String email = emailField.getText().trim();
+        String telephone = telephoneField.getText().trim();
         String password = passwordField.getText();
 
-        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || telephone.isEmpty() || password.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Veuillez remplir tous les champs obligatoires.");
-            return;
+        boolean isValid = true;
+
+        if (nom.isEmpty()) {
+            nomField.setStyle("-fx-border-color: red;");
+            isValid = false;
+        }
+        if (prenom.isEmpty()) {
+            prenomField.setStyle("-fx-border-color: red;");
+            isValid = false;
+        }
+        
+        // Validation email
+        if (email.isEmpty() || !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            emailField.setStyle("-fx-border-color: red;");
+            isValid = false;
         }
 
-        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            showAlert(Alert.AlertType.ERROR, "Email Invalide", "Veuillez entrer une adresse e-mail valide.");
-            return;
+        // Validation téléphone (exactement 8 chiffres)
+        if (telephone.isEmpty() || !telephone.matches("\\d{8}")) {
+            telephoneField.setStyle("-fx-border-color: red;");
+            isValid = false;
         }
 
-        if (!telephone.matches("\\d{8,15}")) {
-            showAlert(Alert.AlertType.ERROR, "Téléphone Invalide", "Le numéro de téléphone doit contenir entre 8 et 15 chiffres.");
-            return;
+        // Validation mot de passe (min 6 caractères, 1 chiffre, 1 caractère spécial)
+        if (password.isEmpty() || password.length() < 6 || !password.matches(".*\\d.*") || !password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*")) {
+            passwordField.setStyle("-fx-border-color: red;");
+            isValid = false;
         }
 
-        if (password.length() < 6) {
-            showAlert(Alert.AlertType.ERROR, "Mot de passe faible", "Le mot de passe doit comporter au moins 6 caractères.");
+        if (!isValid) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Veuillez corriger les champs en rouge.\n- Le téléphone doit contenir exactement 8 chiffres.\n- L'email doit être valide.\n- Le mot de passe doit contenir au moins 6 caractères, un chiffre et un caractère spécial.");
             return;
         }
 
@@ -68,12 +89,25 @@ public class RegisterController {
         newUser.setEmail(email);
         newUser.setTelephone(telephone);
         newUser.setPassword(password);
+        newUser.setType("ROLE_PATIENT");  // Type par défaut pour les nouvelles inscriptions
 
         try {
             boolean success = userService.ajouter(newUser);
             if (success) {
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Compte créé avec succès !");
-                navigate(event, "/com/hospismart/hospismartdesktop/Login.fxml");
+                User registeredUser = userService.findByEmail(newUser.getEmail());
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Compte créé avec succès ! Enregistrez maintenant votre visage.");
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/FaceRegister.fxml"));
+                    Scene scene = new Scene(loader.load());
+                    FaceRegisterController controller = loader.getController();
+                    controller.setUserToRegister(registeredUser);
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    navigate(event, "/com/hospismart/hospismartdesktop/Login.fxml");
+                }
             } else {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "L'ajout a échoué (aucune ligne modifiée).");
             }
