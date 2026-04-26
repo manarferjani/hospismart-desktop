@@ -69,7 +69,7 @@ public class MedicamentDAO {
      * @return true si l'insertion a réussi, false en cas d'erreur SQL.
      */
     public boolean add(Medicament m) {
-        String sql = "INSERT INTO medicament (nom, quantite, seuil_alerte, prix_unitaire, date_peremption, categorie_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO medicament (nom, quantite, seuil_alerte, prix_unitaire, date_peremption, categorie_id, image_filename) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, m.getNom());
             ps.setInt(2, m.getQuantite());
@@ -78,6 +78,7 @@ public class MedicamentDAO {
             ps.setDate(5, m.getDatePeremption() != null ? Date.valueOf(m.getDatePeremption()) : null);
             if (m.getCategorieId() > 0) ps.setInt(6, m.getCategorieId());
             else ps.setNull(6, Types.INTEGER);
+            ps.setString(7, m.getImageFilename());
             ps.executeUpdate();
             System.out.println("✅ Médicament ajouté !");
             return true;
@@ -94,7 +95,7 @@ public class MedicamentDAO {
      * @return true si la modification a réussi, false en cas d'erreur SQL.
      */
     public boolean update(Medicament m) {
-        String sql = "UPDATE medicament SET nom=?, quantite=?, seuil_alerte=?, prix_unitaire=?, date_peremption=?, categorie_id=? WHERE id=?";
+        String sql = "UPDATE medicament SET nom=?, quantite=?, seuil_alerte=?, prix_unitaire=?, date_peremption=?, categorie_id=?, image_filename=? WHERE id=?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, m.getNom());
             ps.setInt(2, m.getQuantite());
@@ -103,7 +104,8 @@ public class MedicamentDAO {
             ps.setDate(5, m.getDatePeremption() != null ? Date.valueOf(m.getDatePeremption()) : null);
             if (m.getCategorieId() > 0) ps.setInt(6, m.getCategorieId());
             else ps.setNull(6, Types.INTEGER);
-            ps.setInt(7, m.getId());
+            ps.setString(7, m.getImageFilename());
+            ps.setInt(8, m.getId());
             ps.executeUpdate();
             System.out.println("✅ Médicament modifié !");
             return true;

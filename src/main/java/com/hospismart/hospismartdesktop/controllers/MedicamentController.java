@@ -2,6 +2,12 @@ package com.hospismart.hospismartdesktop.controllers;
 
 import com.hospismart.hospismartdesktop.services.MedicamentDAO;
 import com.hospismart.hospismartdesktop.services.CategorieDAO;
+import com.hospismart.hospismartdesktop.services.MouvementStockDAO;
+import com.hospismart.hospismartdesktop.services.MailService;
+import com.hospismart.hospismartdesktop.services.ImageAIService;
+import com.hospismart.hospismartdesktop.services.QRCodeService;
+import com.hospismart.hospismartdesktop.services.PredictionService;
+import com.hospismart.hospismartdesktop.models.MouvementStock;
 import com.hospismart.hospismartdesktop.models.Medicament;
 import com.hospismart.hospismartdesktop.models.Categorie;
 import javafx.collections.FXCollections;
@@ -53,6 +59,50 @@ public class MedicamentController {
         colDate.setCellValueFactory(new PropertyValueFactory<>("datePeremption"));
         colCategorie.setCellValueFactory(new PropertyValueFactory<>("categorieNom"));
 
+        // ===== COLONNE IMAGE =====
+        TableColumn<Medicament, String> colImage = new TableColumn<>("Image");
+        colImage.setCellValueFactory(new PropertyValueFactory<>("imageFilename"));
+        colImage.setPrefWidth(60);
+        colImage.setCellFactory(col -> new TableCell<>() {
+            private final javafx.scene.image.ImageView imageView = new javafx.scene.image.ImageView();
+
+            {
+                imageView.setFitWidth(45);
+                imageView.setFitHeight(45);
+                imageView.setPreserveRatio(true);
+                setStyle("-fx-cursor: hand;");
+                // Clic sur la cellule pour agrandir l'image
+                setOnMouseClicked(e -> {
+                    Medicament m = getTableRow() != null ? getTableRow().getItem() : null;
+                    if (m != null && m.getImageFilename() != null && !m.getImageFilename().isEmpty()) {
+                        java.io.File imgFile = new java.io.File("generated_images/" + m.getImageFilename());
+                        showImagePopup(m.getNom(), imgFile.getAbsolutePath());
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(String imageFilename, boolean empty) {
+                super.updateItem(imageFilename, empty);
+                if (empty || imageFilename == null || imageFilename.isEmpty()) {
+                    setGraphic(null);
+                } else {
+                    try {
+                        java.io.File imgFile = new java.io.File("generated_images/" + imageFilename);
+                        javafx.scene.image.Image img = new javafx.scene.image.Image(
+                            imgFile.toURI().toString(), 45, 45, true, true);
+                        imageView.setImage(img);
+                        setGraphic(imageView);
+                        setAlignment(javafx.geometry.Pos.CENTER);
+                    } catch (Exception e) {
+                        setGraphic(null);
+                    }
+                }
+            }
+        });
+        // Ajouter la colonne au début du tableau
+        medicamentTable.getColumns().add(0, colImage);
+
         // Couleur rouge si stock en alerte
         colQuantite.setCellFactory(col -> new TableCell<>() {
             @Override protected void updateItem(Integer item, boolean empty) {
@@ -68,15 +118,17 @@ public class MedicamentController {
             }
         });
 
-        // Colonne Actions (✎ Modifier  ✕ Supprimer)
+        // Colonne Actions (✐ Modifier  ✕ Supprimer  🤖 IA  📱 QR)
         TableColumn<Medicament, Void> colActions = new TableColumn<>("Actions");
-        colActions.setPrefWidth(175);
+        colActions.setPrefWidth(330);
         colActions.setResizable(false);
         colActions.setCellFactory(col -> new TableCell<>() {
-            private final Button btnEdit   = new Button("✎  Modifier");
+            private final Button btnEdit   = new Button("✐  Modifier");
             private final Button btnDelete = new Button("✕  Supprimer");
+            private final Button btnAI     = new Button("🤖 IA");
+            private final Button btnQR     = new Button("📱 QR");
             private final javafx.scene.layout.HBox box =
-                new javafx.scene.layout.HBox(6, btnEdit, btnDelete);
+                new javafx.scene.layout.HBox(5, btnEdit, btnDelete, btnAI, btnQR);
 
             {
                 btnEdit.setStyle("-fx-background-color:#dbeafe;-fx-text-fill:#1d4ed8;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;");
@@ -86,6 +138,14 @@ public class MedicamentController {
                 btnDelete.setStyle("-fx-background-color:#fee2e2;-fx-text-fill:#dc3545;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;");
                 btnDelete.setOnMouseEntered(e -> btnDelete.setStyle("-fx-background-color:#dc3545;-fx-text-fill:white;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
                 btnDelete.setOnMouseExited (e -> btnDelete.setStyle("-fx-background-color:#fee2e2;-fx-text-fill:#dc3545;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
+
+                btnAI.setStyle("-fx-background-color:#ede9fe;-fx-text-fill:#7c3aed;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;");
+                btnAI.setOnMouseEntered(e -> btnAI.setStyle("-fx-background-color:#7c3aed;-fx-text-fill:white;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;"));
+                btnAI.setOnMouseExited (e -> btnAI.setStyle("-fx-background-color:#ede9fe;-fx-text-fill:#7c3aed;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;"));
+
+                btnQR.setStyle("-fx-background-color:#d1fae5;-fx-text-fill:#065f46;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;");
+                btnQR.setOnMouseEntered(e -> btnQR.setStyle("-fx-background-color:#065f46;-fx-text-fill:white;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;"));
+                btnQR.setOnMouseExited (e -> btnQR.setStyle("-fx-background-color:#d1fae5;-fx-text-fill:#065f46;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;"));
 
                 box.setAlignment(javafx.geometry.Pos.CENTER);
 
@@ -107,6 +167,74 @@ public class MedicamentController {
                             lblStatus.setText("✅ « " + m.getNom() + " » supprimé.");
                         }
                     });
+                });
+
+                // ===== BOUTON IA : Générer image avec HuggingFace =====
+                btnAI.setOnAction(e -> {
+                    Medicament m = getTableRow().getItem();
+                    if (m == null) return;
+                    btnAI.setText("⏳...");
+                    btnAI.setDisable(true);
+                    lblStatus.setText("🤖 Génération IA en cours pour " + m.getNom() + "...");
+
+                    final int medId = m.getId();
+                    final String medNom = m.getNom();
+                    final String medCat = m.getCategorieNom();
+
+                    new Thread(() -> {
+                        ImageAIService aiService = new ImageAIService();
+                        String imagePath = aiService.genererImage(medNom, medCat, medId);
+
+                        javafx.application.Platform.runLater(() -> {
+                            btnAI.setText("🤖 IA");
+                            btnAI.setDisable(false);
+
+                            if (imagePath != null) {
+                                // Mettre à jour le nom du fichier image en BDD
+                                java.io.File imgFile = new java.io.File(imagePath);
+                                m.setImageFilename(imgFile.getName());
+                                medicamentDAO.update(m);
+
+                                // Rafraîchir le tableau pour afficher l'image dans la colonne
+                                handleRefresh();
+                                lblStatus.setText("✅ Image IA générée pour " + medNom + " !");
+                            } else {
+                                lblStatus.setText("❌ Échec de la génération IA pour " + medNom);
+                            }
+                        });
+                    }).start();
+                });
+
+                // ===== BOUTON QR : Générer QR Code via API =====
+                btnQR.setOnAction(e -> {
+                    Medicament m = getTableRow().getItem();
+                    if (m == null) return;
+                    btnQR.setText("⏳");
+                    btnQR.setDisable(true);
+                    lblStatus.setText("📱 Génération QR Code pour " + m.getNom() + "...");
+
+                    final Medicament medQR = m;
+                    new Thread(() -> {
+                        QRCodeService qrService = new QRCodeService();
+                        String qrPath = qrService.genererQRCode(
+                            medQR.getNom(), medQR.getQuantite(), medQR.getSeuilAlerte(),
+                            medQR.getPrixUnitaire(),
+                            medQR.getDatePeremption() != null ? medQR.getDatePeremption().toString() : "",
+                            medQR.getCategorieNom(), medQR.getId()
+                        );
+
+                        javafx.application.Platform.runLater(() -> {
+                            btnQR.setText("📱 QR");
+                            btnQR.setDisable(false);
+
+                            if (qrPath != null) {
+                                lblStatus.setText("✅ QR Code généré pour " + medQR.getNom() + " !");
+                                showImagePopup("📱 QR Code : " + medQR.getNom(), qrPath);
+                            } else {
+                                lblStatus.setText("❌ Échec de la génération QR pour " + medQR.getNom());
+                            }
+                        });
+                    }).start();
                 });
             }
 
@@ -279,9 +407,32 @@ public class MedicamentController {
 
             boolean ok = isEdit ? medicamentDAO.update(m) : medicamentDAO.add(m);
             handleRefresh();
-            lblStatus.setText(ok
-                ? (isEdit ? "✅ Médicament modifié !" : "✅ Médicament ajouté !")
-                : "❌ Erreur lors de l'opération.");
+
+            if (ok) {
+                String statusMsg = isEdit ? "✅ Médicament modifié !" : "✅ Médicament ajouté !";
+
+                // ===== ALERTE EMAIL : vérifier si le stock est sous le seuil =====
+                if (m.getQuantite() <= m.getSeuilAlerte()) {
+                    final String baseMsg = statusMsg;
+                    final Medicament medAlerte = m;
+                    new Thread(() -> {
+                        MailService mailService = new MailService();
+                        boolean emailOk = mailService.envoyerAlerteRuptureStock(medAlerte);
+                        javafx.application.Platform.runLater(() -> {
+                            if (emailOk) {
+                                lblStatus.setText(baseMsg + " | 📧 Alerte email envoyée !");
+                            } else {
+                                lblStatus.setText(baseMsg + " | ⚠️ Échec envoi email.");
+                            }
+                        });
+                    }).start();
+                    statusMsg += " | 📧 Envoi alerte en cours...";
+                }
+
+                lblStatus.setText(statusMsg);
+            } else {
+                lblStatus.setText("❌ Erreur lors de l'opération.");
+            }
         }
     }
 
@@ -398,4 +549,190 @@ public class MedicamentController {
     @FXML private void handleAdd()    { showDialog(null); }
     @FXML private void handleUpdate() { }
     @FXML private void handleDelete() { }
+
+    // ===== PRÉDICTION IA DE RUPTURE DE STOCK =====
+    @FXML
+    private void handlePrediction() {
+        lblStatus.setText("🧠 Analyse prédictive en cours...");
+
+        new Thread(() -> {
+            PredictionService predictionService = new PredictionService();
+            MouvementStockDAO mouvDAO = new MouvementStockDAO();
+
+            // 1. Calculer les prédictions pour chaque médicament
+            java.util.List<PredictionService.PredictionResult> predictions = new java.util.ArrayList<>();
+            for (Medicament med : medicamentList) {
+                java.util.List<MouvementStock> mouvements = mouvDAO.findByMedicamentId(med.getId());
+                PredictionService.PredictionResult pred = predictionService.predire(med, mouvements);
+                predictions.add(pred);
+            }
+
+            // Trier par risque (les plus critiques en premier)
+            predictions.sort((a, b) -> Integer.compare(a.joursAvantRupture, b.joursAvantRupture));
+
+            // 2. Générer le rapport IA
+            String rapportIA = predictionService.genererRapportIA(predictions);
+
+            // 3. Afficher les résultats sur le thread JavaFX
+            final java.util.List<PredictionService.PredictionResult> finalPreds = predictions;
+            final String finalRapport = rapportIA;
+
+            javafx.application.Platform.runLater(() -> {
+                lblStatus.setText("✅ Analyse prédictive terminée !");
+                showPredictionDialog(finalPreds, finalRapport);
+            });
+        }).start();
+    }
+
+    private void showPredictionDialog(java.util.List<PredictionService.PredictionResult> predictions, String rapportIA) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("🧠 Rapport d'Analyse IA");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dialog.getDialogPane().setPrefWidth(850);
+        dialog.getDialogPane().setPrefHeight(680);
+        dialog.getDialogPane().setStyle("-fx-background-color: #f8fafc; -fx-font-family: 'Segoe UI', Arial, sans-serif;");
+
+        // Bouton de fermeture stylisé
+        javafx.scene.Node closeBtn = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        if (closeBtn != null) {
+            closeBtn.setStyle("-fx-background-color: #7c3aed; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 20; -fx-cursor: hand;");
+        }
+
+        javafx.scene.layout.VBox mainBox = new javafx.scene.layout.VBox(20);
+        mainBox.setPadding(new Insets(25));
+        mainBox.setStyle("-fx-background-color: transparent;");
+
+        // --- EN-TÊTE ---
+        javafx.scene.layout.HBox headerBox = new javafx.scene.layout.HBox(15);
+        headerBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        headerBox.setStyle("-fx-background-color: linear-gradient(to right, #7c3aed, #5b21b6); -fx-padding: 20; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(124,58,237,0.3), 10, 0, 0, 4);");
+        Label titreIcon = new Label("🤖");
+        titreIcon.setStyle("-fx-font-size: 36px;");
+        javafx.scene.layout.VBox titreTexts = new javafx.scene.layout.VBox(2);
+        Label titre = new Label("Intelligence Artificielle");
+        titre.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;");
+        Label sousTitre = new Label("Analyse prédictive experte des risques de rupture de stock");
+        sousTitre.setStyle("-fx-font-size: 13px; -fx-text-fill: #e8dbfa;");
+        titreTexts.getChildren().addAll(titre, sousTitre);
+        headerBox.getChildren().addAll(titreIcon, titreTexts);
+        mainBox.getChildren().add(headerBox);
+
+        // --- SECTION RAPPORT IA ---
+        javafx.scene.layout.VBox rapportBox = new javafx.scene.layout.VBox(10);
+        Label lblRapport = new Label("📝 Décryptage et Recommandations (Généré par IA)");
+        lblRapport.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
+        
+        javafx.scene.control.TextArea txtRapport = new javafx.scene.control.TextArea();
+        txtRapport.setWrapText(true);
+        txtRapport.setEditable(false);
+        txtRapport.setPrefHeight(180);
+        txtRapport.setStyle("-fx-font-size: 13px; -fx-text-fill: #334155; -fx-background-color: transparent; -fx-control-inner-background: white; -fx-border-color: #cbd5e1; -fx-border-radius: 12; -fx-background-radius: 12;");
+        txtRapport.setText(rapportIA != null && !rapportIA.isEmpty() ? rapportIA.trim() : "⚠️ Impossible de générer le rapport textuel intelligent. Veuillez vérifier votre connexion.");
+        
+        rapportBox.getChildren().addAll(lblRapport, txtRapport);
+        mainBox.getChildren().add(rapportBox);
+
+        // --- SECTION TABLEAU ---
+        javafx.scene.layout.VBox tableBox = new javafx.scene.layout.VBox(10);
+        Label lblTableau = new Label("📊 Détails Mathématiques des Prédictions");
+        lblTableau.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
+        
+        javafx.scene.control.TableView<PredictionService.PredictionResult> table = new javafx.scene.control.TableView<>();
+        table.setPrefHeight(230);
+        table.setStyle("-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 12; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);");
+        
+        javafx.scene.control.TableColumn<PredictionService.PredictionResult, String> colMed = new javafx.scene.control.TableColumn<>("Médicament");
+        colMed.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().nomMedicament));
+        colMed.setPrefWidth(200);
+        colMed.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-alignment: center-left; -fx-padding: 0 0 0 10;");
+        
+        javafx.scene.control.TableColumn<PredictionService.PredictionResult, Number> colStock = new javafx.scene.control.TableColumn<>("Stock");
+        colStock.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().stockActuel));
+        colStock.setPrefWidth(80);
+        colStock.setStyle("-fx-alignment: center;");
+        
+        javafx.scene.control.TableColumn<PredictionService.PredictionResult, String> colConso = new javafx.scene.control.TableColumn<>("Conso/Jour");
+        colConso.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(String.format("%.1f", data.getValue().consommationJour)));
+        colConso.setPrefWidth(100);
+        colConso.setStyle("-fx-alignment: center;");
+        
+        javafx.scene.control.TableColumn<PredictionService.PredictionResult, String> colJours = new javafx.scene.control.TableColumn<>("Autonomie");
+        colJours.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().joursAvantRupture >= 0 ? data.getValue().joursAvantRupture + " j" : "N/A"));
+        colJours.setPrefWidth(100);
+        colJours.setStyle("-fx-alignment: center; -fx-font-weight: bold;");
+        
+        javafx.scene.control.TableColumn<PredictionService.PredictionResult, String> colDate = new javafx.scene.control.TableColumn<>("Date Rupture");
+        colDate.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().dateRuptureEstimee));
+        colDate.setPrefWidth(120);
+        colDate.setStyle("-fx-alignment: center;");
+
+        javafx.scene.control.TableColumn<PredictionService.PredictionResult, String> colRisque = new javafx.scene.control.TableColumn<>("Criticité");
+        colRisque.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().niveauRisque));
+        colRisque.setPrefWidth(160);
+        colRisque.setCellFactory(column -> new javafx.scene.control.TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) { setText(null); setGraphic(null); }
+                else {
+                    PredictionService.PredictionResult p = getTableRow().getItem();
+                    if (p != null) {
+                        Label badge = new Label(item.toUpperCase());
+                        String color = p.couleurRisque.equals("red") ? "#dc3545" : (p.couleurRisque.equals("orange") ? "#d97706" : "#059669");
+                        String bg = p.couleurRisque.equals("red") ? "#fee2e2" : (p.couleurRisque.equals("orange") ? "#fef3c7" : "#d1fae5");
+                        badge.setStyle("-fx-background-color: " + bg + "; -fx-text-fill: " + color + "; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 4 12; -fx-font-size: 11px;");
+                        
+                        javafx.scene.layout.HBox box = new javafx.scene.layout.HBox(badge);
+                        box.setAlignment(javafx.geometry.Pos.CENTER);
+                        setGraphic(box);
+                        setText(null);
+                    }
+                }
+            }
+        });
+
+        table.getColumns().addAll(colMed, colStock, colConso, colJours, colDate, colRisque);
+        table.getItems().addAll(predictions);
+        
+        tableBox.getChildren().addAll(lblTableau, table);
+        mainBox.getChildren().add(tableBox);
+
+        javafx.scene.control.ScrollPane scroll = new javafx.scene.control.ScrollPane(mainBox);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: transparent; -fx-background: #f8fafc;");
+        dialog.getDialogPane().setContent(scroll);
+        
+        dialog.showAndWait();
+    }
+
+    private Label styledLabel2(String text, String style) {
+        Label l = new Label(text);
+        l.setStyle(style);
+        return l;
+    }
+
+    private void showImagePopup(String medNom, String imagePath) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("🤖 Image IA : " + medNom);
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+
+        try {
+            java.io.File file = new java.io.File(imagePath);
+            javafx.scene.image.Image img = new javafx.scene.image.Image(file.toURI().toString());
+            javafx.scene.image.ImageView imgView = new javafx.scene.image.ImageView(img);
+            imgView.setFitWidth(500);
+            imgView.setPreserveRatio(true);
+            
+            javafx.scene.layout.VBox box = new javafx.scene.layout.VBox(10, imgView);
+            box.setAlignment(javafx.geometry.Pos.CENTER);
+            box.setPadding(new Insets(10));
+            
+            dialog.getDialogPane().setContent(box);
+            dialog.showAndWait();
+        } catch (Exception e) {
+            System.err.println("❌ Erreur affichage image : " + e.getMessage());
+        }
+    }
 }

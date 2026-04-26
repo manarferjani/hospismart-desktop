@@ -2,6 +2,7 @@ package com.hospismart.hospismartdesktop.controllers;
 
 import com.hospismart.hospismartdesktop.services.MouvementStockDAO;
 import com.hospismart.hospismartdesktop.services.MedicamentDAO;
+import com.hospismart.hospismartdesktop.services.MailService;
 import com.hospismart.hospismartdesktop.models.MouvementStock;
 import com.hospismart.hospismartdesktop.models.Medicament;
 import javafx.collections.FXCollections;
@@ -224,16 +225,48 @@ public class MouvementStockController {
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == saveBtn) {
             Medicament med = fMedicament.getValue();
+            String typeChoisi = fType.getValue();
+            int qte = Integer.parseInt(fQuantite.getText().trim());
+
             MouvementStock ms = new MouvementStock(
-                fType.getValue(),
-                Integer.parseInt(fQuantite.getText().trim()),
+                typeChoisi, qte,
                 fCommentaire.getText().trim(),
                 med.getId());
             boolean ok = mouvementDAO.add(ms);
             handleRefresh();
-            lblStatus.setText(ok
-                ? "✅ Mouvement enregistré : " + fType.getValue() + " de " + fQuantite.getText() + " unités."
-                : "❌ Erreur lors de l'enregistrement.");
+
+            if (ok) {
+                String statusMsg = "✅ Mouvement enregistré : " + typeChoisi + " de " + qte + " unités.";
+
+                // ===== ALERTE EMAIL : vérifier si le stock est passé sous le seuil =====
+                if ("SORTIE".equals(typeChoisi)) {
+                    // Recharger le médicament depuis la BDD pour avoir la quantité mise à jour
+                    Medicament medActualise = medicamentDAO.findById(med.getId());
+                    if (medActualise != null && medActualise.getQuantite() <= medActualise.getSeuilAlerte()) {
+                        // Envoi de l'email d'alerte dans un thread séparé pour ne pas bloquer l'interface
+                        final Medicament medAlerte = medActualise;
+                        final String baseMsg = statusMsg;
+                        new Thread(() -> {
+                            MailService mailService = new MailService();
+                            boolean emailOk = mailService.envoyerAlerteRuptureStock(medAlerte);
+                            // Mise à jour du statut sur le thread JavaFX
+                            javafx.application.Platform.runLater(() -> {
+                                if (emailOk) {
+                                    lblStatus.setText(baseMsg + " | 📧 Alerte email envoyée !");
+                                } else {
+                                    lblStatus.setText(baseMsg + " | ⚠️ Échec envoi email.");
+                                }
+                            });
+                        }).start();
+
+                        statusMsg = statusMsg + " | 📧 Envoi alerte en cours...";
+                    }
+                }
+
+                lblStatus.setText(statusMsg);
+            } else {
+                lblStatus.setText("❌ Erreur lors de l'enregistrement.");
+            }
         }
     }
 

@@ -4,6 +4,8 @@ module com.hospismart.hospismartdesktop {
     requires javafx.web;
     requires java.sql;
     requires java.desktop;
+    requires jakarta.mail;
+    requires java.net.http;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;

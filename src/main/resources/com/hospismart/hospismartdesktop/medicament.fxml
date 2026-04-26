@@ -50,6 +50,11 @@
                 style="-fx-background-color:#0d6efd;-fx-text-fill:white;-fx-font-weight:bold;
                        -fx-background-radius:22;-fx-padding:8 18;-fx-cursor:hand;
                        -fx-effect:dropshadow(gaussian,rgba(13,110,253,0.25),6,0,0,2);"/>
+        <Button text="🧠  Prédiction IA"
+                onAction="#handlePrediction"
+                style="-fx-background-color:#7c3aed;-fx-text-fill:white;-fx-font-weight:bold;
+                       -fx-background-radius:22;-fx-padding:8 18;-fx-cursor:hand;
+                       -fx-effect:dropshadow(gaussian,rgba(124,58,237,0.3),6,0,0,2);"/>
         <Region HBox.hgrow="ALWAYS"/>
         <!-- Filtre catégorie -->
         <ComboBox fx:id="cbFilterCategorie" prefWidth="175"

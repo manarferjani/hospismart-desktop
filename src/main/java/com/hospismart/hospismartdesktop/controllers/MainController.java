@@ -18,8 +18,13 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        // Afficher médicaments par défaut au démarrage
-        showMedicaments();
+        // Afficher le dashboard par défaut au démarrage
+        showDashboard();
+    }
+
+    @FXML
+    public void showDashboard() {
+        loadView("/com/hospismart/hospismartdesktop/dashboard.fxml");
     }
 
     @FXML

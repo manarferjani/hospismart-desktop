@@ -115,6 +115,12 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- Jakarta Mail pour l'envoi d'emails d'alerte de stock -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -146,6 +152,10 @@
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
+                            <options>
+                                <option>--add-reads</option>
+                                <option>com.hospismart.hospismartdesktop=ALL-UNNAMED</option>
+                            </options>
                         </configuration>
                     </execution>
                 </executions>
