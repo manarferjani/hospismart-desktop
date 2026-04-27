@@ -3,6 +3,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ComboBox?>
@@ -14,40 +15,67 @@
 <VBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.hospismart.hospismartdesktop.controllers.EvenementFrontController"
-      spacing="0">
+      spacing="0" style="-fx-background-color: #f5f7fb;">
 
-    <!-- ── Header bar ────────────────────────────────────────────── -->
-    <HBox styleClass="app-header" spacing="10">
-        <Button text="←  Retour" onAction="#onRetour" styleClass="btn-retour"/>
-        <Label text="🏥  HospiSmart" styleClass="app-title"/>
-        <Label text="— Espace Public" styleClass="app-subtitle" style="-fx-padding: 2 0 0 6;"/>
-    </HBox>
+    <!-- ══ White Top Navbar ══════════════════════════════════════ -->
+    <HBox styleClass="front-navbar">
+        <!-- Logo -->
+        <StackPane styleClass="front-logo-circle">
+            <Label text="H" styleClass="front-logo-letter"/>
+        </StackPane>
+        <Label text="Hospismart" styleClass="front-navbar-brand"/>
 
-    <!-- ── Filter bar ────────────────────────────────────────────── -->
-    <HBox styleClass="toolbar-area" spacing="12">
-        <Label text="📅  Tous les Événements" styleClass="section-title"/>
         <Region HBox.hgrow="ALWAYS"/>
 
-        <TextField fx:id="searchField"
-                   promptText="🔍  Rechercher un événement..."
-                   styleClass="search-field"
-                   onAction="#onSearch"/>
+        <!-- Nav links -->
+        <Label text="Accueil"       styleClass="front-nav-link"/>
+        <Label text="Evenements"    styleClass="front-nav-link-active"/>
 
-        <ComboBox fx:id="typeFilter" styleClass="combo-filter" promptText="Type"/>
+        <Region prefWidth="20"/>
 
-        <Button text="Filtrer"      onAction="#onSearch"  styleClass="btn-secondary"/>
-        <Button text="↺  Actualiser" onAction="#onRefresh" styleClass="btn-secondary"/>
-
-        <Label fx:id="totalLabel" text="0 événement(s)" styleClass="count-label"/>
+        <Button text="Mon Compte"   styleClass="btn-mon-compte"/>
+        <Region prefWidth="8"/>
+        <Button text="Deconnexion"  onAction="#onRetour" styleClass="btn-deconnexion"/>
     </HBox>
 
-    <!-- ── Scrollable card grid ──────────────────────────────────── -->
+    <!-- ══ Search Strip ═════════════════════════════════════════ -->
+    <HBox styleClass="front-search-strip">
+        <TextField fx:id="searchField"
+                   promptText="Rechercher un evenement ou un lieu..."
+                   styleClass="front-search-field"
+                   HBox.hgrow="ALWAYS"
+                   onAction="#onSearch"/>
+        <ComboBox fx:id="typeFilter" styleClass="combo-filter" promptText="Type"/>
+        <Region prefWidth="4"/>
+        <Button text="Rechercher" onAction="#onSearch" styleClass="btn-rechercher"/>
+    </HBox>
+
+    <!-- ══ Scrollable Content ═══════════════════════════════════ -->
     <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane">
-        <FlowPane fx:id="cardsContainer" hgap="20" vgap="20">
+        <VBox spacing="6" style="-fx-background-color: #f5f7fb;">
             <padding>
-                <Insets top="24" right="24" bottom="24" left="24"/>
+                <Insets top="28" right="32" bottom="28" left="32"/>
             </padding>
-        </FlowPane>
+
+            <!-- Section header -->
+            <Label text="NOS EVENEMENTS" styleClass="front-section-badge"/>
+            <Label text="Decouvrez nos evenements" styleClass="front-section-title"/>
+            <Label text="Que ce soit pour une formation, une reunion ou une visite, inscrivez-vous facilement."
+                   styleClass="front-section-subtitle"/>
+
+            <!-- Stats -->
+            <HBox spacing="20" style="-fx-padding: 8 0 12 0;">
+                <Label fx:id="totalLabel" text="0 evenements disponibles" styleClass="front-stat-label"/>
+            </HBox>
+
+            <!-- Card Grid -->
+            <FlowPane fx:id="cardsContainer" hgap="20" vgap="20">
+                <padding>
+                    <Insets top="0" right="0" bottom="20" left="0"/>
+                </padding>
+            </FlowPane>
+
+        </VBox>
     </ScrollPane>
 
 </VBox>

@@ -3,6 +3,11 @@ module com.hospismart.hospismartdesktop {
     requires javafx.fxml;
     requires javafx.web;
     requires java.sql;
+    requires java.net.http;
+    requires jdk.jsobject;
+    requires com.google.gson;
+    requires itextpdf;
+    requires java.desktop;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -16,6 +21,7 @@ module com.hospismart.hospismartdesktop {
     exports com.hospismart.hospismartdesktop.controllers;
     exports com.hospismart.hospismartdesktop.models;
     exports com.hospismart.hospismartdesktop.services;
+    exports com.hospismart.hospismartdesktop.utils;
     exports com.hospismart.hospismartdesktop.tests;
 
     // Autoriser JavaFX à accéder aux fichiers FXML
@@ -23,5 +29,6 @@ module com.hospismart.hospismartdesktop {
     opens com.hospismart.hospismartdesktop.controllers to javafx.fxml;
     opens com.hospismart.hospismartdesktop.models      to javafx.fxml;
     opens com.hospismart.hospismartdesktop.services    to javafx.fxml;
+    opens com.hospismart.hospismartdesktop.utils       to javafx.fxml;
     opens com.hospismart.hospismartdesktop.tests       to javafx.fxml;
 }

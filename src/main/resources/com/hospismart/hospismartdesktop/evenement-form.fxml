@@ -12,6 +12,8 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.web.WebView?>
 <?import javafx.geometry.Insets?>
 
 <VBox xmlns="http://javafx.com/javafx/21"
@@ -88,24 +90,41 @@
                     <!-- Row 5 : Lieu -->
                     <Label text="Lieu *" styleClass="form-label"
                            GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.valignment="CENTER"/>
-                    <TextField fx:id="lieuField" promptText="Lieu de l'événement"
+                    <TextField fx:id="lieuField" promptText="Lieu de l'événement (ou cliquez sur la carte)"
                                styleClass="form-field"
                                GridPane.rowIndex="5" GridPane.columnIndex="1"/>
 
-                    <!-- Row 6 : Budget -->
-                    <Label text="Budget (TND)" styleClass="form-label"
-                           GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.valignment="CENTER"/>
-                    <TextField fx:id="budgetField" promptText="0.00" styleClass="form-field"
-                               GridPane.rowIndex="6" GridPane.columnIndex="1"/>
-
-                    <!-- Row 7 : Description -->
-                    <Label text="Description" styleClass="form-label"
-                           GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.valignment="TOP"
+                    <!-- Row 6 : Map -->
+                    <Label text="📍 Carte" styleClass="form-label"
+                           GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.valignment="TOP"
                            style="-fx-padding:8 0 0 0;"/>
-                    <TextArea fx:id="descriptionArea"
-                              promptText="Description de l'événement (facultatif)..."
-                              prefRowCount="4" wrapText="true" styleClass="form-field"
-                              GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+                    <WebView fx:id="mapWebView" prefHeight="220"
+                             GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+                    <!-- Row 7 : Budget -->
+                    <Label text="Budget (TND)" styleClass="form-label"
+                           GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.valignment="CENTER"/>
+                    <TextField fx:id="budgetField" promptText="0.00" styleClass="form-field"
+                               GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+                    <!-- Row 8 : Description + AI button -->
+                    <Label text="Description" styleClass="form-label"
+                           GridPane.rowIndex="8" GridPane.columnIndex="0" GridPane.valignment="TOP"
+                           style="-fx-padding:8 0 0 0;"/>
+                    <VBox spacing="8"
+                          GridPane.rowIndex="8" GridPane.columnIndex="1">
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Button fx:id="aiGenerateBtn" text="✨ Générer avec IA"
+                                    onAction="#onGenerateAiDescription"
+                                    styleClass="btn-ai-generate"/>
+                            <ProgressIndicator fx:id="aiSpinner" prefWidth="20" prefHeight="20"
+                                               visible="false" managed="false"/>
+                            <Label fx:id="aiStatusLabel" text="" style="-fx-text-fill:#64748b; -fx-font-size:11px;"/>
+                        </HBox>
+                        <TextArea fx:id="descriptionArea"
+                                  promptText="Description de l'événement (facultatif)..."
+                                  prefRowCount="4" wrapText="true" styleClass="form-field"/>
+                    </VBox>
 
                 </GridPane>
             </VBox>

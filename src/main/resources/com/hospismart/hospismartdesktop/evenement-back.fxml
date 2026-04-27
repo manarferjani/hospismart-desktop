@@ -3,64 +3,129 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.geometry.Insets?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
+<HBox xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.hospismart.hospismartdesktop.controllers.EvenementBackController"
       spacing="0">
 
-    <!-- ── Header bar ────────────────────────────────────────────── -->
-    <HBox styleClass="app-header" spacing="10">
-        <Button text="←  Retour" onAction="#onRetour" styleClass="btn-retour"/>
-        <Label text="🏥  HospiSmart" styleClass="app-title"/>
-        <Label text="— Administration" styleClass="app-subtitle" style="-fx-padding: 2 0 0 6;"/>
-    </HBox>
+    <!-- ══════════════════════════════════════════════════════════
+         LEFT SIDEBAR
+         ══════════════════════════════════════════════════════════ -->
+    <VBox styleClass="back-sidebar">
 
-    <!-- ── Toolbar ──────────────────────────────────────────────── -->
-    <HBox styleClass="toolbar-area" spacing="10">
+        <!-- Logo -->
+        <HBox styleClass="sidebar-logo-area">
+            <Label text="HospiSmart" styleClass="sidebar-logo-text"/>
+            <Region prefWidth="8"/>
+            <Label text="ADMIN" styleClass="sidebar-badge"/>
+        </HBox>
 
-        <TextField fx:id="searchField"
-                   promptText="🔍  Rechercher par titre, lieu..."
-                   styleClass="search-field"
-                   onAction="#onSearch"/>
+        <!-- Avatar Area -->
+        <VBox styleClass="sidebar-avatar-area">
+            <StackPane styleClass="sidebar-avatar">
+                <Label text="A" styleClass="sidebar-avatar-letter"/>
+            </StackPane>
+            <Label text="Administrateur" styleClass="sidebar-user-name"/>
+            <Label text="GESTIONNAIRE" styleClass="sidebar-user-role"/>
+        </VBox>
 
-        <ComboBox fx:id="typeFilter"   styleClass="combo-filter" promptText="Type"/>
-        <ComboBox fx:id="statutFilter" styleClass="combo-filter" promptText="Statut"/>
+        <!-- Overview Section -->
+        <Label text="OVERVIEW" styleClass="sidebar-section-header"/>
 
-        <Button text="Filtrer"         onAction="#onSearch" styleClass="btn-secondary"/>
-        <Button text="↺  Réinitialiser" onAction="#onReset"  styleClass="btn-secondary"/>
+        <!-- Dashboard / Evenements (active) -->
+        <HBox styleClass="sidebar-nav-item-active">
+            <padding><Insets left="14" right="14"/></padding>
+            <Label text="Evenements" styleClass="sidebar-nav-text-active"/>
+        </HBox>
 
-        <Region HBox.hgrow="ALWAYS"/>
+        <!-- Stats -->
+        <HBox styleClass="sidebar-nav-item" onMouseClicked="#onGoStats">
+            <padding><Insets left="14" right="14"/></padding>
+            <Label text="📊 Statistiques" styleClass="sidebar-nav-text"/>
+        </HBox>
 
-        <Label fx:id="countLabel" text="0 événement(s)" styleClass="count-label"
-               style="-fx-padding: 0 8 0 0;"/>
+        <!-- Gestion Section -->
+        <Label text="GESTION" styleClass="sidebar-section-header"/>
 
-        <Button text="➕  Ajouter un Événement" onAction="#onAdd" styleClass="btn-primary"/>
-    </HBox>
+        <HBox styleClass="sidebar-nav-item" onMouseClicked="#onGoFront">
+            <Label text="Vue Publique" styleClass="sidebar-nav-text"/>
+        </HBox>
 
-    <!-- ── Data Table ───────────────────────────────────────────── -->
-    <TableView fx:id="evenementTable" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="colId"       text="ID"           prefWidth="55"  minWidth="40"  sortable="true"/>
-            <TableColumn fx:id="colTitre"    text="Titre"        prefWidth="195" minWidth="120"/>
-            <TableColumn fx:id="colType"     text="Type"         prefWidth="110" minWidth="80"/>
-            <TableColumn fx:id="colDateDebut" text="Date Début"  prefWidth="148" minWidth="110" sortable="false"/>
-            <TableColumn fx:id="colDateFin"  text="Date Fin"     prefWidth="148" minWidth="110" sortable="false"/>
-            <TableColumn fx:id="colLieu"     text="Lieu"         prefWidth="140" minWidth="100"/>
-            <TableColumn fx:id="colStatut"   text="Statut"       prefWidth="100" minWidth="80"/>
-            <TableColumn fx:id="colBudget"   text="Budget"       prefWidth="112" minWidth="80"  sortable="false"/>
-            <TableColumn fx:id="colActions"  text="Actions"      prefWidth="260" minWidth="240" sortable="false" resizable="false"/>
-        </columns>
-        <placeholder>
-            <Label text="Aucun événement trouvé. Cliquez sur « Ajouter » pour créer le premier."
-                   style="-fx-text-fill:#94A3B8; -fx-font-size:14px;"/>
-        </placeholder>
-    </TableView>
+        <!-- Spacer -->
+        <Region VBox.vgrow="ALWAYS"/>
 
-</VBox>
+        <!-- Bottom -->
+        <Label text="Deconnexion" styleClass="sidebar-bottom-link" onMouseClicked="#onRetour"/>
+        <Label text="PIDEV 2025-2026" styleClass="sidebar-footer"/>
+
+    </VBox>
+
+    <!-- ══════════════════════════════════════════════════════════
+         MAIN CONTENT
+         ══════════════════════════════════════════════════════════ -->
+    <VBox styleClass="back-main" HBox.hgrow="ALWAYS">
+
+        <!-- Title Row -->
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <VBox spacing="4">
+                <Label text="Gestion des Evenements" styleClass="back-page-title"/>
+                <Label fx:id="countLabel" text="0 evenement(s) enregistres." styleClass="back-page-subtitle"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="📊 Stats" onAction="#onGoStats" styleClass="btn-outlined"/>
+            <Button text="+ Ajouter" onAction="#onAdd" styleClass="btn-add-green"/>
+        </HBox>
+
+        <!-- Toolbar -->
+        <HBox styleClass="back-toolbar">
+            <ComboBox fx:id="typeFilter"   styleClass="combo-filter" promptText="Type"/>
+            <ComboBox fx:id="statutFilter" styleClass="combo-filter" promptText="Statut"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField"
+                       promptText="Rechercher..."
+                       styleClass="back-search-field"
+                       onAction="#onSearch"/>
+            <Button text="Actualiser" onAction="#onReset" styleClass="btn-outlined"/>
+        </HBox>
+
+        <!-- Data Table -->
+        <TableView fx:id="evenementTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colTitre"     text="Titre"        prefWidth="180" minWidth="120"/>
+                <TableColumn fx:id="colType"      text="Type"         prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="colDateDebut"  text="Date Debut"  prefWidth="140" minWidth="110"/>
+                <TableColumn fx:id="colDateFin"   text="Date Fin"     prefWidth="140" minWidth="110"/>
+                <TableColumn fx:id="colLieu"      text="Lieu"         prefWidth="130" minWidth="100"/>
+                <TableColumn fx:id="colStatut"    text="Statut"       prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="colBudget"    text="Budget"       prefWidth="90"  minWidth="70"/>
+                <TableColumn fx:id="colActions"   text="Actions"      prefWidth="240" minWidth="200" sortable="false" resizable="false"/>
+            </columns>
+            <placeholder>
+                <Label text="Aucun evenement trouve. Cliquez sur + Ajouter pour creer le premier."
+                       style="-fx-text-fill:#94A3B8; -fx-font-size:14px;"/>
+            </placeholder>
+        </TableView>
+
+        <!-- Pagination Bar -->
+        <HBox fx:id="paginationBox" spacing="12" alignment="CENTER"
+              style="-fx-padding: 10 0 4 0;">
+            <Button fx:id="btnPrevPage" text="← Précédent" onAction="#onPrevPage" styleClass="btn-outlined"/>
+            <Label fx:id="pageInfoLabel" text="Page 1 / 1" style="-fx-text-fill:#64748b; -fx-font-size:13px; -fx-font-weight:600;"/>
+            <Button fx:id="btnNextPage" text="Suivant →" onAction="#onNextPage" styleClass="btn-outlined"/>
+        </HBox>
+
+        <!-- Footer -->
+        <Label fx:id="footerLabel" text="0 evenements charges." styleClass="back-footer-label"/>
+
+    </VBox>
+
+</HBox>
