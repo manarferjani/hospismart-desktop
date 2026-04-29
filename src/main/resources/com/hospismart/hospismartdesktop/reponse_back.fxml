@@ -71,8 +71,8 @@
             <PieChart fx:id="chartReponses" title="Répartition des réponses par admin" legendVisible="true" labelsVisible="true" prefHeight="340.0" minHeight="320.0"/>
 
             <TableView fx:id="tableReponse" onMouseClicked="#handleTableClick" VBox.vgrow="ALWAYS" styleClass="card">
+
                 <columns>
-                    <TableColumn fx:id="colId" text="ID" prefWidth="50" />
                     <TableColumn fx:id="colContenu" text="Contenu de la Réponse" prefWidth="250" />
                     <TableColumn fx:id="colAdminNom" text="Admin" prefWidth="120" />
                     <TableColumn fx:id="colAdminEmail" text="Email Admin" prefWidth="150" />
@@ -91,9 +91,8 @@
                         <TextField fx:id="txtAdminNom" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
                         <Label text="Email Admin :" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                        <TextField fx:id="txtAdminEmail" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                            <TextField fx:id="txtAdminEmail" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
                     </GridPane>
-
                     <HBox spacing="12" alignment="CENTER_LEFT" style="-fx-padding: 12 0 0 0;">
                         <Button text="Modifier la Réponse" onAction="#modifierReponse" styleClass="btn btn-primary"/>
                         <Button text="Supprimer la Réponse" onAction="#supprimerReponse" styleClass="btn btn-danger"/>

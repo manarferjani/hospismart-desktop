@@ -84,12 +84,16 @@ public class ReclamationBackController implements Initializable { // Controller 
     @FXML
     private VBox pnlTraitement;
 
+    @FXML
+    private Label notifIcon; // Icône notification (à ajouter dans le FXML)
+
     private ReclamationDao dao = new ReclamationDao(); // DAO reclamation
     private ReponseDao reponseDao = new ReponseDao(); // DAO reponse
     private ObservableList<Reclamation> reclamationList = FXCollections.observableArrayList(); // Source de donnees de la table
     private int selectedId = -1; // Id selectionne, -1 si rien selectionne
     private Reponse currentReponse = null; // Reponse liee a la reclamation selectionnee
     private int lastMaxId = 0; // Pour le tracking des nouvelles reclamations
+    private int unreadCount = 0; // Nombre de notifications non lues
     private boolean isFirstCheck = true; // Permet de gerer proprement l'etat initial du polling
 
     @Override
@@ -154,11 +158,14 @@ public class ReclamationBackController implements Initializable { // Controller 
             // Emet un son systeme
             java.awt.Toolkit.getDefaultToolkit().beep();
 
+            int newCount = 0;
             for (Reclamation r : currentList) {
                 if (r.getId() > lastMaxId) {
-                    showNotificationPopup(r);
+                    newCount++;
                 }
             }
+            unreadCount += newCount;
+            updateNotifIcon();
             lastMaxId = currentMaxId;
 
             // On met a jour le tableau en silence
@@ -173,52 +180,72 @@ public class ReclamationBackController implements Initializable { // Controller 
         }
     }
 
-    private void showNotificationPopup(Reclamation newReclamation) {
-        javafx.stage.Stage popupStage = new javafx.stage.Stage();
-        popupStage.initStyle(javafx.stage.StageStyle.TRANSPARENT);
-        popupStage.setAlwaysOnTop(true);
+    private void updateNotifIcon() {
+        System.out.println("[DEBUG] updateNotifIcon appelé, unreadCount=" + unreadCount);
+        if (notifIcon != null) {
+            if (unreadCount > 0) {
+                notifIcon.setText("🔔 " + unreadCount);
+                notifIcon.setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-font-size: 20px;");
+                notifIcon.setVisible(true);
+            } else {
+                notifIcon.setText("🔔");
+                notifIcon.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
+            }
+        } else {
+            System.out.println("[DEBUG] notifIcon est null");
+        }
+    }
 
-        VBox popupBox = new VBox(5);
-        popupBox.setStyle("-fx-background-color: #2c3e50; -fx-padding: 15; -fx-border-radius: 8; -fx-background-radius: 8; -fx-border-color: #f39c12; -fx-border-width: 2;");
-        popupBox.setPrefWidth(320);
+    @FXML
+    private void handleNotifClick() {
+        unreadCount = 0;
+        updateNotifIcon();
 
-        Label titleLabel = new Label("🔔 Nouvelle Réclamation !");
-        titleLabel.setStyle("-fx-text-fill: #f1c40f; -fx-font-weight: bold; -fx-font-size: 14px;");
+        try {
+            javafx.stage.Stage popupStage = new javafx.stage.Stage();
+            popupStage.setTitle("Dernières Notifications");
 
-        Label patientLabel = new Label("Patient: " + newReclamation.getNomPatient());
-        patientLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12px; -fx-wrap-text: true;");
+            javafx.scene.layout.VBox vbox = new javafx.scene.layout.VBox(10);
+            vbox.setStyle("-fx-padding: 20; -fx-background-color: white; -fx-border-color: #dbe3ed; -fx-border-width: 1; -fx-border-radius: 5;");
 
-        Label descLabel = new Label("Sujet: " + newReclamation.getTitre());
-        descLabel.setStyle("-fx-text-fill: #bdc3c7; -fx-font-size: 12px; -fx-wrap-text: true;");
+            javafx.scene.control.Label titleLabel = new javafx.scene.control.Label("Les 3 dernières réclamations :");
+            titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #2f6ecf;");
+            vbox.getChildren().add(titleLabel);
 
-        popupBox.getChildren().addAll(titleLabel, patientLabel, descLabel);
+            java.util.List<Reclamation> allRecs = dao.getAllReclamations();
+            allRecs.sort((r1, r2) -> Integer.compare(r2.getId(), r1.getId()));
 
-        javafx.scene.Scene scene = new javafx.scene.Scene(popupBox);
-        scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
-        popupStage.setScene(scene);
+            int count = 0;
+            for (Reclamation r : allRecs) {
+                if (count >= 3) break;
+                // Formater la date en String si elle existe
+                String dateStr = r.getDateCreation() != null ? r.getDateCreation().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "Date inconnue";
 
-        // Positionner en bas a droite
-        javafx.geometry.Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
-        popupStage.setX(screenBounds.getMaxX() - 340);
-        popupStage.setY(screenBounds.getMaxY() - 120);
+                javafx.scene.layout.VBox itemBox = new javafx.scene.layout.VBox(2);
+                itemBox.setStyle("-fx-padding: 8; -fx-background-color: #f7f9fc; -fx-background-radius: 5;");
 
-        popupStage.setOpacity(1.0); // Visible au depart
-        popupStage.show();
+                javafx.scene.control.Label lblTitre = new javafx.scene.control.Label("• " + r.getTitre());
+                lblTitre.setStyle("-fx-font-weight: bold; -fx-text-fill: #333333;");
 
-        // Animation d'apparition sur le stage lui-meme
-        FadeTransition fadeIn = new FadeTransition(Duration.millis(400), popupStage.getScene().getRoot());
-        fadeIn.setFromValue(0);
-        fadeIn.setToValue(1);
+                javafx.scene.control.Label lblDetails = new javafx.scene.control.Label("  Par: " + r.getNomPatient() + " - " + dateStr);
+                lblDetails.setStyle("-fx-text-fill: #6b7785; -fx-font-size: 11px;");
 
-        // Disparition apres 4 secondes
-        FadeTransition fadeOut = new FadeTransition(Duration.millis(500), popupStage.getScene().getRoot());
-        fadeOut.setFromValue(1);
-        fadeOut.setToValue(0);
-        fadeOut.setDelay(Duration.seconds(4));
-        fadeOut.setOnFinished(e -> popupStage.close());
+                itemBox.getChildren().addAll(lblTitre, lblDetails);
+                vbox.getChildren().add(itemBox);
+                count++;
+            }
 
-        fadeIn.setOnFinished(e -> fadeOut.play());
-        fadeIn.play();
+            if (count == 0) {
+                vbox.getChildren().add(new javafx.scene.control.Label("Aucune réclamation trouvée."));
+            }
+
+            javafx.scene.Scene scene = new javafx.scene.Scene(vbox, 350, 250);
+            popupStage.setScene(scene);
+            popupStage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            popupStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     // ==========================================
 
@@ -645,6 +672,56 @@ public class ReclamationBackController implements Initializable { // Controller 
         }
     }
 
+    @FXML
+    void exporterExcel() {
+        if (tableReclamation.getItems().isEmpty()) {
+            showAlert("Attention", "Aucune donnée à exporter.");
+            return;
+        }
+        javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+        fileChooser.setTitle("Enregistrer le rapport Excel");
+        fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("Fichiers Excel", "*.xlsx"));
+        fileChooser.setInitialFileName("Rapport_Reclamations.xlsx");
+        java.io.File file = fileChooser.showSaveDialog(tableReclamation.getScene().getWindow());
+
+        if (file != null) {
+            try (org.apache.poi.xssf.usermodel.XSSFWorkbook workbook = new org.apache.poi.xssf.usermodel.XSSFWorkbook()) {
+                org.apache.poi.xssf.usermodel.XSSFSheet sheet = workbook.createSheet("Réclamations");
+
+                // En-tête
+                org.apache.poi.xssf.usermodel.XSSFRow headerRow = sheet.createRow(0);
+                String[] columns = {"ID", "Titre", "Patient", "Email", "Catégorie", "Priorité", "Statut", "Date"};
+                for (int i = 0; i < columns.length; i++) {
+                    org.apache.poi.xssf.usermodel.XSSFCell cell = headerRow.createCell(i);
+                    cell.setCellValue(columns[i]);
+                }
+
+                // Lignes
+                java.time.format.DateTimeFormatter dtFormatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                int rowNum = 1;
+                for (Reclamation r : tableReclamation.getItems()) {
+                    org.apache.poi.xssf.usermodel.XSSFRow row = sheet.createRow(rowNum++);
+                    row.createCell(0).setCellValue(r.getId());
+                    row.createCell(1).setCellValue(r.getTitre());
+                    row.createCell(2).setCellValue(r.getNomPatient());
+                    row.createCell(3).setCellValue(r.getEmail());
+                    row.createCell(4).setCellValue(r.getCategorie());
+                    row.createCell(5).setCellValue(r.getPriorite());
+                    row.createCell(6).setCellValue(r.getStatut());
+                    row.createCell(7).setCellValue(r.getDateCreation() != null ? r.getDateCreation().format(dtFormatter) : "N/A");
+                }
+
+                try (java.io.FileOutputStream fileOut = new java.io.FileOutputStream(file)) {
+                    workbook.write(fileOut);
+                }
+                showAlert("Succès", "L'export Excel a été généré avec succès !");
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Erreur", "Une erreur est survenue lors de l'export : " + e.getMessage());
+            }
+        }
+    }
+
     private void drawStatItem(org.apache.pdfbox.pdmodel.PDPageContentStream stream, float x, float y, int rColor, int gColor, int bColor, String text) throws java.io.IOException {
         // Dessiner le petit carré de couleur ("l'icône")
         stream.setNonStrokingColor(rColor, gColor, bColor);
@@ -749,6 +826,12 @@ public class ReclamationBackController implements Initializable { // Controller 
         ftTable.play();
     }
 }
+
+
+
+
+
+
 
 
 

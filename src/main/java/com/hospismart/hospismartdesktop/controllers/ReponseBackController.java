@@ -29,8 +29,6 @@ public class ReponseBackController implements Initializable { // Controller Back
 
     @FXML // Table injectee depuis FXML
     private TableView<Reponse> tableReponse; // Tableau des reponses
-    @FXML // Colonne id injectee
-    private TableColumn<Reponse, Integer> colId; // Colonne identifiant
     @FXML // Colonne contenu injectee
     private TableColumn<Reponse, String> colContenu; // Colonne texte reponse
     @FXML // Colonne admin nom injectee
@@ -63,7 +61,6 @@ public class ReponseBackController implements Initializable { // Controller Back
 
     @Override // Methode appelee apres chargement FXML
     public void initialize(URL url, ResourceBundle resourceBundle) { // Initialisation de la vue back reponse
-        colId.setCellValueFactory(new PropertyValueFactory<>("id")); // Lie colId a getId()
         colContenu.setCellValueFactory(new PropertyValueFactory<>("contenu")); // Lie colContenu a getContenu()
         colAdminNom.setCellValueFactory(new PropertyValueFactory<>("adminNom")); // Lie colAdminNom a getAdminNom()
         colAdminEmail.setCellValueFactory(new PropertyValueFactory<>("adminEmail")); // Lie colAdminEmail a getAdminEmail()

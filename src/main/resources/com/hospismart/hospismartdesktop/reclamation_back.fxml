@@ -41,9 +41,11 @@
 
     <center>
         <VBox styleClass="app-bg">
-            <HBox styleClass="top-bar" alignment="CENTER_LEFT">
-                <Label text="📋 Gestion des Reclamations" styleClass="top-bar-title"/>
-            </HBox>
+        <HBox styleClass="top-bar" alignment="CENTER_LEFT" spacing="10">
+            <Label text="📋 Gestion des Reclamations" styleClass="top-bar-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="notifIcon" text="🔔" style="-fx-font-size: 20px; -fx-cursor: hand; -fx-text-fill: white;" onMouseClicked="#handleNotifClick"/>
+        </HBox>
 
             <HBox spacing="18" style="-fx-padding: 12 18 8 18; -fx-background-color: #f7f9fc; -fx-border-color: #dbe3ed; -fx-border-width: 0 0 1 0;">
                 <HBox spacing="8" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 8 12; -fx-background-radius: 8; -fx-border-color: #dbe3ed; -fx-border-radius: 8;">
@@ -60,11 +62,12 @@
                 </HBox>
             </HBox>
 
-            <HBox styleClass="filter-bar" alignment="CENTER_LEFT">
+            <HBox styleClass="filter-bar" alignment="CENTER_LEFT" spacing="10">
                 <Label text="Recherche:" style="-fx-font-weight: 700; -fx-text-fill: #5a6b7f;"/>
-                <TextField fx:id="txtRecherche" promptText="Titre, patient ou statut..." prefWidth="260" styleClass="form-field" style="-fx-padding: 8 12; -fx-background-radius: 4;"/>
+                <TextField fx:id="txtRecherche" promptText="Titre, patient ou statut..." prefWidth="240" styleClass="form-field" style="-fx-padding: 8 12; -fx-background-radius: 4;"/>
                 <Button text="↻ Rafraichir" onAction="#actualiser" styleClass="btn-filter"/>
                 <Button text="📥 Exporter PDF" onAction="#exporterPDF" styleClass="btn-filter" style="-fx-background-color: #d32f2f; -fx-text-fill: white;"/>
+                <Button text="📊 Exporter Excel" onAction="#exporterExcel" styleClass="btn-filter" style="-fx-background-color: #217346; -fx-text-fill: white;"/>
                 <Button text="💬 Répondre" onAction="#basculerPanneauTraitement" styleClass="btn-filter" style="-fx-background-color: #2f6ecf; -fx-text-fill: white;"/>
                 <Region HBox.hgrow="ALWAYS"/>
             </HBox>

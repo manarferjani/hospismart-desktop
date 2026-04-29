@@ -18,6 +18,7 @@ public class ReclamationDao { // DAO responsable du CRUD table reclamation
     }
 
     private void verifierEtMettreAJourSchema() { // Verifie qu'une colonne legacy existe
+        if (cnx == null) return;
         try { // Debut bloc SQL
             // Verifie si la colonne 'reponse' existe, sinon la cree.
             DatabaseMetaData metaData = cnx.getMetaData(); // Recupere meta-infos BD
@@ -33,6 +34,7 @@ public class ReclamationDao { // DAO responsable du CRUD table reclamation
     }
 
     public void addReclamation(Reclamation r) { // Inserer une reclamation
+        if (cnx == null) return;
         String req = "INSERT INTO reclamation (titre, description, date_creation, email, nom_patient, statut, categorie, priorite, reponse, etat_mental) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; // Requete SQL d'insertion
         try { // Debut bloc SQL
             PreparedStatement pst = cnx.prepareStatement(req); // Prepare la requete parametree
@@ -54,6 +56,10 @@ public class ReclamationDao { // DAO responsable du CRUD table reclamation
 
     public List<Reclamation> getAllReclamations() { // Recuperer toutes les reclamations
         List<Reclamation> list = new ArrayList<>(); // Liste resultat
+        if (cnx == null) {
+            System.err.println("Erreur: Connexion BD non initialisée.");
+            return list;
+        }
         String req = "SELECT * FROM reclamation"; // Requete de lecture complete
         try { // Debut bloc SQL
             Statement st = cnx.createStatement(); // Cree statement simple
@@ -106,6 +112,7 @@ public class ReclamationDao { // DAO responsable du CRUD table reclamation
     }
 
     public void updateReclamation(Reclamation r) { // Mettre a jour une reclamation existante
+        if (cnx == null) return;
         String req = "UPDATE reclamation SET titre=?, description=?, email=?, nom_patient=?, statut=?, categorie=?, priorite=?, reponse=?, etat_mental=? WHERE id=?"; // Requete SQL d'update
         try { // Debut bloc SQL
             PreparedStatement pst = cnx.prepareStatement(req); // Prepare la requete
@@ -126,6 +133,7 @@ public class ReclamationDao { // DAO responsable du CRUD table reclamation
     }
 
     public void deleteReclamation(int id) { // Supprimer une reclamation par son id
+        if (cnx == null) return;
         String req = "DELETE FROM reclamation WHERE id=?"; // Requete SQL de suppression
         try { // Debut bloc SQL
             PreparedStatement pst = cnx.prepareStatement(req); // Prepare la requete parametree

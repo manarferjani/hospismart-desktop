@@ -15,6 +15,7 @@ public class ReponseDao { // DAO responsable du CRUD sur la table reponse
     }
 
     public void addReponse(Reponse r) { // Inserer une nouvelle reponse en base
+        if (cnx == null) return;
         String req = "INSERT INTO reponse (contenu, date_reponse, admin_nom, reclamation_id, admin_email) VALUES (?, ?, ?, ?, ?)"; // Requete SQL d'insertion
         try { // Debut bloc d'execution SQL
             PreparedStatement pst = cnx.prepareStatement(req); // Prepare la requete parametree
@@ -31,6 +32,7 @@ public class ReponseDao { // DAO responsable du CRUD sur la table reponse
 
     public java.util.List<Reponse> getAllReponses() { // Recuperer toutes les reponses
         java.util.List<Reponse> list = new java.util.ArrayList<>(); // Liste resultat
+        if (cnx == null) return list;
         String req = "SELECT * FROM reponse"; // Requete SQL de lecture complete
         try { // Debut bloc SQL
             Statement st = cnx.createStatement(); // Cree un statement simple
@@ -54,6 +56,7 @@ public class ReponseDao { // DAO responsable du CRUD sur la table reponse
     }
 
     public Reponse getReponseByReclamationId(int reclamationId) { // Recuperer la reponse associee a une reclamation
+        if (cnx == null) return null;
         String req = "SELECT * FROM reponse WHERE reclamation_id = ?"; // Requete SQL filtree par id reclamation
         try { // Debut bloc SQL
             PreparedStatement pst = cnx.prepareStatement(req); // Prepare la requete parametree
@@ -78,6 +81,7 @@ public class ReponseDao { // DAO responsable du CRUD sur la table reponse
     }
 
     public void updateReponse(Reponse r) { // Mettre a jour une reponse existante
+        if (cnx == null) return;
         String req = "UPDATE reponse SET contenu=?, admin_nom=?, admin_email=?, date_reponse=? WHERE id=?"; // Requete SQL de mise a jour
         try { // Debut bloc SQL
             PreparedStatement pst = cnx.prepareStatement(req); // Prepare la requete parametree
@@ -93,6 +97,7 @@ public class ReponseDao { // DAO responsable du CRUD sur la table reponse
     }
 
     public void deleteReponse(int id) { // Supprimer une reponse par son id
+        if (cnx == null) return;
         String req = "DELETE FROM reponse WHERE id=?"; // Requete SQL de suppression
         try { // Debut bloc SQL
             PreparedStatement pst = cnx.prepareStatement(req); // Prepare la requete parametree

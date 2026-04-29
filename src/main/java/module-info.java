@@ -15,6 +15,9 @@ module com.hospismart.hospismartdesktop {
     requires com.almasb.fxgl.all;
     // PDF generation (Apache PDFBox)
     requires org.apache.pdfbox;
+    // Excel generation
+    requires org.apache.poi.ooxml;
+    requires org.apache.poi.poi;
 
     exports com.hospismart.hospismartdesktop.main;
     exports com.hospismart.hospismartdesktop.controllers;
