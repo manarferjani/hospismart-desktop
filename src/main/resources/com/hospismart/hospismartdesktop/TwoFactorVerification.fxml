@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #f4f6f9;" stylesheets="@style-admin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.TwoFactorAuthController">
+   <children>
+      <AnchorPane layoutX="100.0" layoutY="50.0" prefHeight="400.0" prefWidth="400.0" styleClass="card-pane">
+         <children>
+            <!-- Titre -->
+            <Label layoutX="80.0" layoutY="20.0" text="Vérification 2FA" textFill="#1565C0">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+
+            <!-- Description -->
+            <Label layoutX="20.0" layoutY="60.0" prefHeight="60.0" prefWidth="360.0" text="Veuillez entrer le code à 6 chiffres généré par votre application Google Authenticator" textFill="#666666" wrapText="true">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Label>
+
+            <!-- Icône 2FA -->
+            <Label layoutX="170.0" layoutY="130.0" text="🔐" style="-fx-font-size: 40;">
+            </Label>
+
+            <!-- Champ de saisie du code -->
+            <TextField fx:id="codeField" layoutX="50.0" layoutY="190.0" prefHeight="50.0" prefWidth="300.0" promptText="Entrez le code 6 chiffres" style="-fx-font-size: 20; -fx-text-alignment: CENTER;" styleClass="text-input">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+
+            <!-- Message d'erreur -->
+            <Label fx:id="errorLabel" layoutX="50.0" layoutY="250.0" prefHeight="30.0" prefWidth="300.0" textFill="#d32f2f" wrapText="true">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Label>
+
+            <!-- Bouton de vérification -->
+            <Button layoutX="50.0" layoutY="290.0" mnemonicParsing="false" onAction="#handleVerify" prefHeight="40.0" prefWidth="300.0" style="-fx-font-size: 14;" styleClass="btn-primary" text="✅ Vérifier le code" />
+
+            <!-- Lien pour utiliser un code de secours -->
+            <Hyperlink layoutX="100.0" layoutY="340.0" onAction="#handleUseBackupCode" text="Utiliser un code de secours ?" />
+
+            <!-- Bouton retour -->
+            <Button layoutX="50.0" layoutY="360.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="35.0" prefWidth="300.0" style="-fx-font-size: 12;" text="⬅️ Retour à la connexion">
+               <style>
+                  -fx-background-color: #757575;
+                  -fx-text-fill: white;
+               </style>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

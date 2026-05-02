@@ -11,6 +11,11 @@ public class User {
     private String password;
     private String type; // ADMIN, PATIENT, MEDECIN
     private String image;
+    private boolean isActive = true; // active by default
+
+    // Champs pour 2FA (Double Authentification)
+    private boolean twoFactorEnabled = false;
+    private String twoFactorSecret = null;
 
     // Champs spécifiques Patient
     private LocalDate dateNaissance;
@@ -79,6 +84,15 @@ public class User {
 
     public int getServiceId() { return serviceId; }
     public void setServiceId(int serviceId) { this.serviceId = serviceId; }
+
+    public boolean isActive() { return isActive; }
+    public void setActive(boolean active) { isActive = active; }
+
+    public boolean isTwoFactorEnabled() { return twoFactorEnabled; }
+    public void setTwoFactorEnabled(boolean twoFactorEnabled) { this.twoFactorEnabled = twoFactorEnabled; }
+
+    public String getTwoFactorSecret() { return twoFactorSecret; }
+    public void setTwoFactorSecret(String twoFactorSecret) { this.twoFactorSecret = twoFactorSecret; }
 
     @Override
     public String toString() {

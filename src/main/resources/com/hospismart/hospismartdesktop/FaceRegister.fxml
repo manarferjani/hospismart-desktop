@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #f4f6f9;" 
+    xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.hospismart.hospismartdesktop.controllers.FaceRegisterController">
+    <children>
+        <!-- Titre -->
+        <Label layoutX="200.0" layoutY="20.0" text="Enregistrement de votre Visage (Optionnel)" textFill="#1565C0">
+            <font>
+                <Font name="System Bold" size="22.0" />
+            </font>
+        </Label>
+
+        <!-- Description -->
+        <Label layoutX="50.0" layoutY="60.0" prefHeight="40.0" prefWidth="800.0" 
+            text="Pour utiliser la connexion par reconnaissance faciale, veuillez enregistrer votre visage. Cette étape est optionnelle et vous pouvez la sauter." 
+            textFill="#666666" wrapText="true">
+            <font>
+                <Font size="12.0" />
+            </font>
+        </Label>
+
+        <!-- Cadre pour le flux vidéo -->
+        <BorderPane layoutX="50.0" layoutY="110.0" prefHeight="480.0" prefWidth="800.0" 
+            style="-fx-border-color: #1565C0; -fx-border-width: 2; -fx-background-color: #000000;">
+            <center>
+                <ImageView fx:id="cameraView" fitHeight="480.0" fitWidth="800.0" preserveRatio="true" />
+            </center>
+        </BorderPane>
+
+        <!-- Statut -->
+        <Label fx:id="statusLabel" layoutX="50.0" layoutY="600.0" prefHeight="30.0" prefWidth="800.0" 
+            text="✅ Caméra initialisée - Positionnez votre visage" textFill="#424242" wrapText="true">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+
+        <!-- Boutons -->
+        <HBox layoutX="250.0" layoutY="640.0" spacing="20.0">
+            <Button fx:id="captureButton" mnemonicParsing="false" onAction="#handleCapture" 
+                prefHeight="40.0" prefWidth="200.0" style="-fx-font-size: 14; -fx-padding: 10;" 
+                text="📷 Enregistrer mon visage">
+                <style>
+                    -fx-background-color: #4CAF50;
+                    -fx-text-fill: white;
+                    -fx-font-weight: bold;
+                </style>
+            </Button>
+            
+            <Button fx:id="skipButton" mnemonicParsing="false" onAction="#handleSkip" 
+                prefHeight="40.0" prefWidth="150.0" style="-fx-font-size: 14; -fx-padding: 10;" 
+                text="⏭️ Passer">
+                <style>
+                    -fx-background-color: #757575;
+                    -fx-text-fill: white;
+                    -fx-font-weight: bold;
+                </style>
+            </Button>
+        </HBox>
+    </children>
+</AnchorPane>

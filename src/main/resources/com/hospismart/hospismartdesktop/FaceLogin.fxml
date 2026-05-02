@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #f4f6f9;" stylesheets="@style-admin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.FaceLoginController">
+    <children>
+        <!-- Top Navbar -->
+        <AnchorPane prefHeight="50.0" prefWidth="900.0" styleClass="top-navbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+           <children>
+              <Label layoutX="20.0" layoutY="12.0" styleClass="navbar-title" text="HospiSmart — Reconnaissance Faciale" />
+           </children>
+        </AnchorPane>
+
+        <!-- Titre -->
+        <Label layoutX="250.0" layoutY="70.0" text="Connexion par Reconnaissance Faciale" textFill="#1565C0">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+
+        <!-- Cadre pour le flux vidéo -->
+        <BorderPane layoutX="50.0" layoutY="120.0" prefHeight="450.0" prefWidth="800.0" styleClass="card-pane" style="-fx-border-color: #1565C0; -fx-border-width: 2; -fx-background-color: #000000; -fx-padding: 0;">
+            <center>
+                <ImageView fx:id="cameraView" fitHeight="450.0" fitWidth="800.0" preserveRatio="true" />
+            </center>
+        </BorderPane>
+
+        <!-- Statut -->
+        <Label fx:id="statusLabel" layoutX="50.0" layoutY="590.0" prefHeight="40.0" prefWidth="800.0" 
+            text="✅ Caméra initialisée - Positionnez votre visage" textFill="#424242" wrapText="true">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+
+        <!-- Boutons -->
+        <HBox layoutX="250.0" layoutY="640.0" spacing="20.0">
+            <Button fx:id="captureButton" mnemonicParsing="false" onAction="#handleCapture" 
+                prefHeight="40.0" prefWidth="250.0" styleClass="btn-primary" text="📷 Capturer et Connexion" />
+            
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" 
+                prefHeight="40.0" prefWidth="150.0" styleClass="btn-tertiary" text="❌ Retour" />
+        </HBox>
+
+        <!-- Info -->
+        <Label layoutX="50.0" layoutY="650.0" text="💡 Positionez votre visage dans le cadre" 
+            textFill="#666666">
+            <font>
+                <Font size="12.0" />
+            </font>
+        </Label>
+    </children>
+</AnchorPane>
