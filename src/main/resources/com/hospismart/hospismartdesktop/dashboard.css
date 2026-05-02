@@ -1,0 +1,695 @@
+/* Configuration Générale */
+.root {
+    -fx-font-family: "Montserrat";
+    -main-bg: #f8fafc;
+    -primary-color: #6366f1; /* Indigo modern */
+    -primary-light: #e0e7ff;
+    -text-main: #1e293b;
+    -text-muted: #64748b;
+    -border-color: #e2e8f0;
+    -fx-background-color: -main-bg;
+    -fx-font-smoothing-type: lcd;
+}
+.label, .text, .button {
+    -fx-font-smoothing-type: lcd;
+}
+
+.header-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 24px;
+    -fx-text-fill: #1a1a2e;
+}
+
+.main-container {
+    -fx-background-color: #f8fafc;
+}
+
+.content-padding {
+    -fx-padding: 30;
+    -fx-background-color: #f8fafc;
+}
+
+/* Header */
+.header-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a1a2e;
+}
+
+.header-subtitle {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 16px;
+}
+
+.date-badge {
+    -fx-background-color: white;
+    -fx-padding: 10 20;
+    -fx-background-radius: 10;
+    -fx-text-fill: #1a1a2e;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+/* Cartes de statistiques */
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+    -fx-pref-width: 250;
+}
+
+.card-blue   { -fx-border-color: #0d6efd; -fx-border-width: 0 0 0 5; }
+.card-yellow { -fx-border-color: #ffc107; -fx-border-width: 0 0 0 5; }
+.card-green  { -fx-border-color: #198754; -fx-border-width: 0 0 0 5; }
+
+.stat-label {
+    -fx-text-fill: #64748b;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.stat-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.stat-icon {
+    -fx-font-size: 20px;
+}
+
+/* Cartes blanches et sections */
+.white-card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 15, 0, 0, 0);
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* Prochain Patient */
+.patient-name {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.time-badge {
+    -fx-background-color: #eef2ff;
+    -fx-text-fill: #4178F5;
+    -fx-padding: 5 15;
+    -fx-background-radius: 20;
+}
+
+.motif-box {
+    -fx-background-color: #f8fafc;
+    -fx-padding: 15;
+    -fx-background-radius: 10;
+    -fx-border-color: #e2e8f0;
+}
+
+.motif-label { -fx-text-fill: #64748b; -fx-font-size: 12px; }
+.motif-text  { -fx-font-weight: 500; }
+
+/* Boutons */
+.btn-primary-green {
+    -fx-background-color: #198754;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 12;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.btn-outline-blue {
+    -fx-background-color: transparent;
+    -fx-border-color: #0d6efd;
+    -fx-text-fill: #0d6efd;
+    -fx-font-weight: bold;
+    -fx-padding: 12;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.btn-text-link {
+    -fx-background-color: transparent;
+    -fx-border-color: #4178F5;
+    -fx-border-radius: 20;
+    -fx-text-fill: #4178F5;
+    -fx-cursor: hand;
+}
+
+/* TableView Moderne (Aperçu Hebdomadaire) */
+.modern-table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.modern-table .column-header-background {
+    -fx-background-color: transparent;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0 0 5 0;
+}
+
+.modern-table .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-size: 40px;
+}
+
+.modern-table .column-header .label {
+    -fx-text-fill: #1e293b;
+    -fx-font-weight: 800;
+    -fx-font-size: 13px;
+    -fx-alignment: center-left;
+}
+
+.modern-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #f8fafc;
+    -fx-border-width: 0 0 1 0;
+    -fx-cell-size: 50px;
+}
+
+.modern-table .table-row-cell:odd {
+    -fx-background-color: #fcfcfc;
+}
+
+.modern-table .table-row-cell:hover {
+    -fx-background-color: #f1f5f9;
+}
+
+.modern-table .table-cell {
+    -fx-border-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-size: 13px;
+    -fx-alignment: center-left;
+    -fx-padding: 0 10;
+}
+
+/* Enlève la petite bordure de focus de JavaFX */
+.modern-table:focused {
+    -fx-background-color: transparent;
+}
+/* Palette de couleurs Symfony */
+.root {
+    -fx-primary: #0d6efd;
+    -fx-sidebar-bg: #1e293b;
+    -fx-text-muted: rgba(255, 255, 255, 0.5);
+}
+
+/* Sidebar principale */
+.sidebar {
+    -fx-background-color: -fx-sidebar-bg;
+    -fx-padding: 30 20;
+    -fx-pref-width: 280;
+}
+
+/* Titre HospiSmart */
+.sidebar-brand {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 30 15;
+}
+
+/* Badge de rôle (Médecin) */
+.role-badge {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: -fx-primary;
+    -fx-padding: 2 8;
+    -fx-background-radius: 10;
+    -fx-font-size: 10px;
+}
+
+/* Section Profil */
+.sidebar-profile {
+    -fx-padding: 15 10 25 10;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 0 0 1 0; /* Bordure basse comme en CSS */
+    -fx-alignment: CENTER;
+}
+
+.profile-name {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 0 0;
+}
+
+.profile-spec {
+    -fx-text-fill: -fx-text-muted;
+    -fx-font-size: 11px;
+}
+
+/* En-têtes de menu (Overview, Ma Clinique...) */
+.menu-header {
+    -fx-text-fill: rgba(255, 255, 255, 0.3);
+    -fx-font-size: 11px;
+    -fx-padding: 20 0 10 15;
+}
+
+/* Boutons de navigation */
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-padding: 12 15;
+    -fx-background-radius: 12;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-border-width: 1px;
+    -fx-border-color: transparent;
+}
+
+.menu-button:hover {
+    -fx-background-color: rgba(13, 110, 253, 0.15);
+    -fx-text-fill: white;
+}
+
+.menu-button-active {
+    -fx-background-color: rgba(13, 110, 253, 0.15);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Déconnexion */
+.btn-logout {
+    -fx-text-fill: #dc3545;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 20 15 0 15;
+}
+
+/* Bouton style Symfony rounded-pill */
+.btn-primary-pill {
+    -fx-background-color: #0d6efd;
+    -fx-text-fill: white;
+    -fx-background-radius: 50;
+    -fx-padding: 10 25;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+/* Alerte style Symfony */
+.alert-primary-pill {
+    -fx-background-color: #f0f7ff;
+    -fx-border-color: #d1e7dd;
+    -fx-background-radius: 50;
+    -fx-border-radius: 50;
+    -fx-padding: 10 20;
+}
+
+/* Badge Statut Libre/Réservé */
+.badge-libre {
+    -fx-background-color: #d1e7dd;
+    -fx-text-fill: #0f5132;
+    -fx-background-radius: 20;
+    -fx-padding: 2 10;
+}
+
+.badge-reserve {
+    -fx-background-color: #f8d7da;
+    -fx-text-fill: #842029;
+    -fx-background-radius: 20;
+    -fx-padding: 2 10;
+}
+/* Couleurs */
+.main-container {
+    -fx-background-color: #F8FAFC; /* Fond gris très clair comme sur le web */
+}
+
+.header-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A1A2E;
+}
+
+.text-muted {
+    -fx-text-fill: #64748B;
+    -fx-font-size: 14px;
+}
+
+/* Boutons */
+.btn-primary-pill {
+    -fx-background-color: #0D6EFD;
+    -fx-text-fill: white;
+    -fx-background-radius: 50;
+    -fx-padding: 10 25;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.btn-outline-pill-sm {
+    -fx-background-color: transparent;
+    -fx-border-color: #0D6EFD;
+    -fx-border-radius: 50;
+    -fx-text-fill: #0D6EFD;
+    -fx-padding: 5 15;
+}
+
+/* Carte d'alerte bleue */
+.alert-card-pill {
+    -fx-background-color: #F0F7FF;
+    -fx-background-radius: 50;
+    -fx-border-color: #D1E7DD;
+    -fx-border-radius: 50;
+    -fx-padding: 10 20;
+}
+
+.alert-text {
+    -fx-text-fill: #084298;
+    -fx-font-weight: bold;
+}
+
+/* Table Card */
+.white-card-container {
+    -fx-background-color: white;
+    -fx-background-radius: 25;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);
+    -fx-padding: 20;
+}
+
+/* Stylisation de la TableView pour qu'elle soit "invisible" */
+.modern-table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 14px; /* Augmente la taille du contenu */
+    -fx-background-color: transparent;
+}
+
+.modern-table .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #EEE transparent;
+    -fx-size: 40;
+}
+
+.modern-table .column-header .label {
+    -fx-text-fill: #64748B;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.modern-table .cell {
+    -fx-border-color: transparent transparent #F1F5F9 transparent;
+    -fx-padding: 15;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Style spécifique pour les Statuts (Badge) */
+/* Vous devrez appliquer ces styles via un CellFactory dans votre contrôleur Java */
+.badge-reserve {
+    -fx-background-color: #F8D7DA;
+    -fx-text-fill: #842029;
+    -fx-background-radius: 50;
+    -fx-padding: 5 12;
+}
+
+.badge-libre {
+    -fx-background-color: #D1E7DD;
+    -fx-text-fill: #0F5132;
+    -fx-background-radius: 50;
+    -fx-padding: 5 12;
+}
+/* Conteneur de la carte blanche */
+.white-card-container {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);
+}
+
+/* Le Tableau */
+.modern-table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-family: "Montserrat";
+    -fx-font-size: 13px;
+}
+
+/* En-têtes de colonnes */
+.modern-table .column-header-background {
+    -fx-background-color: #F9FAFB; /* Gris très clair comme la capture */
+    -fx-background-radius: 10 10 0 0;
+    -fx-padding: 0 0 5 0;
+}
+
+.modern-table .column-header {
+    -fx-background-color: transparent;
+    -fx-size: 45px;
+    -fx-border-color: transparent; /* Supprime les lignes entre colonnes en haut */
+}
+
+.modern-table .column-header .label {
+    -fx-text-fill: #6B7280; /* Gris texte mentor */
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Les Lignes (Rows) */
+.modern-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: #F3F4F6 transparent #F3F4F6 transparent; /* Lignes horizontales uniquement */
+    -fx-padding: 10 0 10 0;
+}
+
+.modern-table .table-row-cell:odd {
+    -fx-background-color: #FFFFFF;
+}
+
+.modern-table .table-row-cell:hover {
+    -fx-background-color: #F9FAFB;
+}
+
+/* Les Cellules */
+.modern-table .table-cell {
+    -fx-padding: 15px;
+    -fx-text-fill: #374151; /* Couleur de texte sombre mais douce */
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-color: transparent;
+}
+
+/* Supprimer la bordure de focus bleue */
+.modern-table:focused {
+    -fx-background-color: transparent;
+}
+
+/* Cacher la barre de défilement horizontale si vide */
+.modern-table .virtual-flow .clipped-container .sheet {
+    -fx-background-color: transparent;
+}
+
+/* Design du Badge Statut (Optionnel, à gérer dans votre Controller) */
+.status-badge-active {
+    -fx-background-color: #ECFDF5;
+    -fx-text-fill: #10B981;
+    -fx-background-radius: 15;
+    -fx-padding: 5 12 5 12;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+/* 1. Masquer totalement la barre de défilement verticale */
+.modern-table .scroll-bar:vertical {
+    -fx-opacity: 0;
+    -fx-padding: -7; /* Réduit l'espace réservé à la scrollbar */
+}
+
+/* 2. Supprimer la zone vide (filler) à droite des en-têtes */
+.modern-table .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+/* 3. Supprimer les bordures inutiles qui créent des lignes blanches */
+.modern-table {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+/* 4. Optionnel : S'assurer que les lignes touchent les bords */
+.modern-table .table-row-cell {
+    -fx-background-insets: 0, 0 0 1 0;
+}
+/* --- Style du contenu du tableau --- */
+.modern-table {
+    -fx-font-size: 14px; /* Augmente la taille du contenu */
+    -fx-background-color: transparent;
+}
+
+/* --- Supprimer l'espace vide à droite de la dernière colonne --- */
+.modern-table .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+/* --- Supprimer le petit décalage de la scrollbar invisible --- */
+.modern-table .scroll-bar:vertical {
+    -fx-opacity: 0;
+    -fx-padding: -7;
+}
+
+/* --- Style des cellules pour plus de clarté --- */
+.modern-table .table-cell {
+    -fx-padding: 0 10 0 10;
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-fill: #4B5563; /* Gris foncé professionnel */
+}
+
+/* --- Hauteur des lignes pour l'aspect aéré --- */
+.modern-table .table-row-cell {
+    -fx-cell-size: 55px;
+    -fx-border-color: transparent transparent #F3F4F6 transparent;
+}
+
+/* Badges des Jours */
+.badge-jour {
+    -fx-background-radius: 50;
+    -fx-padding: 5 15;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-alignment: center;
+}
+
+.badge-lundi { -fx-background-color: #E0F2FE; -fx-text-fill: #0284C7; }
+.badge-mardi { -fx-background-color: #FCE7F3; -fx-text-fill: #DB2777; }
+.badge-mercredi { -fx-background-color: #FEF08A; -fx-text-fill: #854D0E; }
+.badge-jeudi { -fx-background-color: #DCFCE7; -fx-text-fill: #166534; }
+.badge-vendredi { -fx-background-color: #F3E8FF; -fx-text-fill: #7E22CE; }
+.badge-samedi { -fx-background-color: #FFEDD5; -fx-text-fill: #C2410C; }
+.badge-dimanche { -fx-background-color: #F1F5F9; -fx-text-fill: #475569; }
+
+/* --- Modal Modern Redesign --- */
+.modal-root {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 20, 0, 0, 10);
+}
+
+.modal-sidebar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20 10;
+    -fx-border-color: transparent -border-color transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.sidebar-item {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-muted;
+    -fx-padding: 8 15;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.sidebar-item:hover {
+    -fx-background-color: #f1f5f9;
+}
+
+.sidebar-item-active {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: -text-main;
+    -fx-font-weight: bold;
+}
+
+.modal-content {
+    -fx-padding: 25;
+}
+
+.modal-footer {
+    -fx-padding: 15 25;
+    -fx-border-color: -border-color transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.btn-apply {
+    -fx-background-color: -primary-color;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-padding: 10 25;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.btn-cancel {
+    -fx-background-color: white;
+    -fx-text-fill: -text-main;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 25;
+    -fx-cursor: hand;
+}
+
+.input-group {
+    -fx-background-color: white;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 8;
+    -fx-padding: 5 10;
+}
+
+.input-label {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+/* Custom DatePicker Styling */
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 5 0;
+}
+
+.date-picker {
+    -fx-background-color: white;
+    -fx-border-color: -border-color;
+    -fx-border-radius: 8;
+}
+
+/* Icônes d'action (SVG) */
+.icon-edit {
+    -fx-shape: "M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z";
+    -fx-background-color: #6366f1; /* Indigo matching theme */
+    -fx-min-width: 14px;
+    -fx-min-height: 14px;
+}
+
+.icon-delete {
+    -fx-shape: "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z";
+    -fx-background-color: #ef4444; /* Clean red */
+    -fx-min-width: 14px;
+    -fx-min-height: 14px;
+}
+/* Boutons d'action dans le tableau */
+.btn-success-sm {
+    -fx-background-color: #198754;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 12;
+    -fx-cursor: hand;
+}
+
+.btn-danger-outline-sm {
+    -fx-background-color: transparent;
+    -fx-border-color: #dc3545;
+    -fx-border-radius: 10;
+    -fx-text-fill: #dc3545;
+    -fx-font-size: 12px;
+    -fx-padding: 5 12;
+    -fx-cursor: hand;
+}
+
+/* Badge pour la date */
+.badge-date-time {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 5;
+    -fx-padding: 2 8;
+    -fx-text-fill: #1e293b;
+}

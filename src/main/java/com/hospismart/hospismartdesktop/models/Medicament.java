@@ -11,6 +11,7 @@ public class Medicament {
     private LocalDate datePeremption;
     private int categorieId;
     private String imageFilename;
+    private String categorieNom; // champ calculé via JOIN
 
     public Medicament() {}
 
@@ -38,6 +39,9 @@ public class Medicament {
 
     public String getImageFilename() { return imageFilename; }
     public void setImageFilename(String imageFilename) { this.imageFilename = imageFilename; }
+
+    public String getCategorieNom() { return categorieNom; }
+    public void setCategorieNom(String categorieNom) { this.categorieNom = categorieNom; }
 
     @Override
     public String toString() { return nom; }
