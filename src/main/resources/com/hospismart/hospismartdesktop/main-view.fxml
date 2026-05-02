@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.hospismart.hospismartdesktop.controllers.MainController">
+
+    <!-- ── App Header ── -->
+    <top>
+        <HBox styleClass="app-header">
+            <Label text="🏥  HospiSmart" styleClass="app-title"/>
+            <Label text="— Gestion des Événements" styleClass="app-subtitle"
+                   style="-fx-padding: 2 0 0 6;"/>
+        </HBox>
+    </top>
+
+    <!-- ── Tab pane (content filled programmatically by MainController) ── -->
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+            <Tab text="⚙   Administration" fx:id="backTab"/>
+            <Tab text="🌐   Vue Publique"   fx:id="frontTab"/>
+        </TabPane>
+    </center>
+
+</BorderPane>

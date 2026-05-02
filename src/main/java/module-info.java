@@ -8,6 +8,11 @@ module com.hospismart.hospismartdesktop {
     requires java.desktop;
     requires jakarta.mail;
     requires java.net.http;
+    requires java.net.http;
+    requires jdk.jsobject;
+    requires com.google.gson;
+    requires itextpdf;
+    requires java.desktop;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -34,11 +39,15 @@ module com.hospismart.hospismartdesktop {
     exports com.hospismart.hospismartdesktop.services;
     exports com.hospismart.hospismartdesktop.util;
     exports com.hospismart.hospismartdesktop.utils;
+    exports com.hospismart.hospismartdesktop.services;
+    exports com.hospismart.hospismartdesktop.utils;
     exports com.hospismart.hospismartdesktop.tests;
 
     opens com.hospismart.hospismartdesktop.main        to javafx.fxml;
     // Ouverture des packages pour la réflexion (nécessaire pour FXMLLoader)
     opens com.hospismart.hospismartdesktop.main to javafx.fxml;
+    // Autoriser JavaFX à accéder aux fichiers FXML
+    opens com.hospismart.hospismartdesktop.main        to javafx.fxml;
     opens com.hospismart.hospismartdesktop.controllers to javafx.fxml;
     opens com.hospismart.hospismartdesktop.models      to javafx.base, javafx.fxml;
     opens com.hospismart.hospismartdesktop.services    to javafx.fxml;
@@ -49,4 +58,8 @@ module com.hospismart.hospismartdesktop {
     opens com.hospismart.hospismartdesktop.tests to javafx.fxml;
 
 
+    opens com.hospismart.hospismartdesktop.models      to javafx.fxml;
+    opens com.hospismart.hospismartdesktop.services    to javafx.fxml;
+    opens com.hospismart.hospismartdesktop.utils       to javafx.fxml;
+    opens com.hospismart.hospismartdesktop.tests       to javafx.fxml;
 }

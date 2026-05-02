@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.web.WebView?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hospismart.hospismartdesktop.controllers.EvenementFormController"
+      spacing="0"
+      style="-fx-background-color:#EEF2F7;">
+
+    <!-- ── Form Header ──────────────────────────────────────────── -->
+    <HBox styleClass="app-header" spacing="10">
+        <Label text="🗓" style="-fx-text-fill:white; -fx-font-size:22px;"/>
+        <Label fx:id="formTitle" text="Ajouter un Événement" styleClass="app-title"/>
+    </HBox>
+
+    <!-- ── Scrollable body ─────────────────────────────────────── -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="scroll-pane">
+        <VBox spacing="16" style="-fx-background-color:#EEF2F7;">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <!-- Error banner -->
+            <Label fx:id="errorLabel" text="" styleClass="error-label" wrapText="true"
+                   visible="false" managed="false"/>
+
+            <!-- Form card -->
+            <VBox styleClass="form-card" spacing="0">
+                <GridPane hgap="16" vgap="14">
+
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="130" prefWidth="145" maxWidth="160"/>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="200"/>
+                    </columnConstraints>
+
+                    <!-- Row 0 : Titre -->
+                    <Label text="Titre *" styleClass="form-label"
+                           GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.valignment="CENTER"/>
+                    <TextField fx:id="titreField" promptText="Titre de l'événement"
+                               styleClass="form-field"
+                               GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <!-- Row 1 : Type -->
+                    <Label text="Type *" styleClass="form-label"
+                           GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.valignment="CENTER"/>
+                    <ComboBox fx:id="typeCombo" maxWidth="Infinity"
+                              GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <!-- Row 2 : Statut -->
+                    <Label text="Statut *" styleClass="form-label"
+                           GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.valignment="CENTER"/>
+                    <ComboBox fx:id="statutCombo" maxWidth="Infinity"
+                              GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                    <!-- Row 3 : Date début -->
+                    <Label text="Date de début *" styleClass="form-label"
+                           GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.valignment="CENTER"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT"
+                          GridPane.rowIndex="3" GridPane.columnIndex="1">
+                        <DatePicker fx:id="dateDebutPicker" HBox.hgrow="ALWAYS"/>
+                        <Label text="à" style="-fx-text-fill:#546E7A; -fx-font-size:13px;"/>
+                        <TextField fx:id="heureDebutField" promptText="HH:mm"
+                                   prefWidth="78" styleClass="form-field"/>
+                    </HBox>
+
+                    <!-- Row 4 : Date fin -->
+                    <Label text="Date de fin *" styleClass="form-label"
+                           GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.valignment="CENTER"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT"
+                          GridPane.rowIndex="4" GridPane.columnIndex="1">
+                        <DatePicker fx:id="dateFinPicker" HBox.hgrow="ALWAYS"/>
+                        <Label text="à" style="-fx-text-fill:#546E7A; -fx-font-size:13px;"/>
+                        <TextField fx:id="heureFinField" promptText="HH:mm"
+                                   prefWidth="78" styleClass="form-field"/>
+                    </HBox>
+
+                    <!-- Row 5 : Lieu -->
+                    <Label text="Lieu *" styleClass="form-label"
+                           GridPane.rowIndex="5" GridPane.columnIndex="0" GridPane.valignment="CENTER"/>
+                    <TextField fx:id="lieuField" promptText="Lieu de l'événement (ou cliquez sur la carte)"
+                               styleClass="form-field"
+                               GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                    <!-- Row 6 : Map -->
+                    <Label text="📍 Carte" styleClass="form-label"
+                           GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.valignment="TOP"
+                           style="-fx-padding:8 0 0 0;"/>
+                    <WebView fx:id="mapWebView" prefHeight="220"
+                             GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+                    <!-- Row 7 : Budget -->
+                    <Label text="Budget (TND)" styleClass="form-label"
+                           GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.valignment="CENTER"/>
+                    <TextField fx:id="budgetField" promptText="0.00" styleClass="form-field"
+                               GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+                    <!-- Row 8 : Description + AI button -->
+                    <Label text="Description" styleClass="form-label"
+                           GridPane.rowIndex="8" GridPane.columnIndex="0" GridPane.valignment="TOP"
+                           style="-fx-padding:8 0 0 0;"/>
+                    <VBox spacing="8"
+                          GridPane.rowIndex="8" GridPane.columnIndex="1">
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Button fx:id="aiGenerateBtn" text="✨ Générer avec IA"
+                                    onAction="#onGenerateAiDescription"
+                                    styleClass="btn-ai-generate"/>
+                            <ProgressIndicator fx:id="aiSpinner" prefWidth="20" prefHeight="20"
+                                               visible="false" managed="false"/>
+                            <Label fx:id="aiStatusLabel" text="" style="-fx-text-fill:#64748b; -fx-font-size:11px;"/>
+                        </HBox>
+                        <TextArea fx:id="descriptionArea"
+                                  promptText="Description de l'événement (facultatif)..."
+                                  prefRowCount="4" wrapText="true" styleClass="form-field"/>
+                    </VBox>
+
+                </GridPane>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+
+    <!-- ── Button bar (green Save / grey Cancel — matching web) ── -->
+    <HBox spacing="12" alignment="CENTER_RIGHT"
+          style="-fx-background-color:white;
+                 -fx-border-color:#ecf0f1 transparent transparent transparent;
+                 -fx-border-width:1;
+                 -fx-padding:14 20 14 20;">
+        <Button text="Annuler"      onAction="#onCancel" styleClass="btn-cancel"/>
+        <Button text="Enregistrer" onAction="#onSave"   styleClass="btn-save"/>
+    </HBox>
+
+</VBox>
