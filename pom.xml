@@ -103,6 +103,25 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- PDF Generation (OpenHTMLToPDF) -->
+        <dependency>
+            <groupId>com.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-core</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-pdfbox</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+
+        <!-- Email Sending (Jakarta Mail) -->
+        <dependency>
+            <groupId>org.eclipse.angus</groupId>
+            <artifactId>angus-mail</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -138,7 +157,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.hospismart.hospismartdesktop/com.hospismart.hospismartdesktop.main.HelloApplication
+                                com.hospismart.hospismartdesktop/com.hospismart.hospismartdesktop.main.MainClass
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

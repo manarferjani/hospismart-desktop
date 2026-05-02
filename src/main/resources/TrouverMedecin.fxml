@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox spacing="0" style="-fx-background-color: #f4f7fe;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.PatientController">
+    <fx:include source="Navbar.fxml" />
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #f4f7fe;" VBox.vgrow="ALWAYS">
+        <VBox spacing="20" alignment="TOP_CENTER">
+            <padding>
+                <Insets top="20" right="30" bottom="20" left="30"/>
+            </padding>
+
+            <!-- Search Bar - Adjusted for better fit -->
+            <HBox alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-background-radius: 50; -fx-border-color: #e2e8f0; -fx-border-radius: 50; -fx-padding: 8 20;" maxWidth="1000" minWidth="0">
+                <TextField fx:id="searchField" promptText="Rechercher un spécialiste ou un service..."
+                           HBox.hgrow="ALWAYS" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 14;"/>
+                <Button text="Rechercher" onAction="#handleSearch"
+                        style="-fx-background-color: #4178F5; -fx-text-fill: white; -fx-background-radius: 50; -fx-font-weight: bold; -fx-padding: 8 25; -fx-cursor: hand;"/>
+            </HBox>
+
+            <!-- Main Content Card - Fixed overflow - Increased Width & Height -->
+            <VBox spacing="25" style="-fx-background-color: white; -fx-background-radius: 35; -fx-padding: 40; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);" maxWidth="1400" minWidth="0" prefHeight="580" VBox.vgrow="ALWAYS">
+                <HBox alignment="BOTTOM_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Circle radius="5" fill="#4178F5"/>
+                            <Label text="NOS SERVICES" style="-fx-text-fill: #4178F5; -fx-font-weight: bold; -fx-font-size: 12;"/>
+                        </HBox>
+                        <Label text="Trouvez le bon spécialiste" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+                        <Label text="Que ce soit pour une consultation générale ou un soin spécialisé..."
+                               style="-fx-text-fill: #6b7280; -fx-font-size: 14;" wrapText="true" maxWidth="600"/>
+                    </VBox>
+
+                    <HBox spacing="10">
+                        <Button text="&lt;" onAction="#scrollLeft" style="-fx-background-radius: 50; -fx-min-width: 45; -fx-min-height: 45;"/>
+                        <Button text="&gt;" onAction="#scrollRight" style="-fx-background-color: #4178F5; -fx-text-fill: white; -fx-background-radius: 50; -fx-min-width: 45; -fx-min-height: 45;"/>
+                    </HBox>
+                </HBox>
+
+                <ScrollPane fx:id="scrollPane" vbarPolicy="NEVER" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+                    <HBox fx:id="servicesContainer" spacing="20">
+                    </HBox>
+                </ScrollPane>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

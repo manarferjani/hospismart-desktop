@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hospismart.hospismartdesktop.controllers.RendezVousController">
+
+    <fx:include source="Navbar.fxml" />
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #f8fafc;" VBox.vgrow="ALWAYS">
+
+        <VBox alignment="TOP_CENTER" spacing="25.0" style="-fx-background-color: #f8fafc;">
+            <padding>
+                <Insets bottom="40.0" left="40.0" right="40.0" top="30.0" />
+            </padding>
+
+            <children>
+                <HBox maxWidth="1000.0">
+                    <children>
+                        <Hyperlink fx:id="btnRetour" style="-fx-text-fill: #4178F5; -fx-font-weight: bold; -fx-underline: false;" text="← Retour à la liste">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Hyperlink>
+                    </children>
+                </HBox>
+
+                <VBox maxWidth="1000.0" spacing="35.0" style="-fx-background-color: white; -fx-background-radius: 30;">
+                    <padding>
+                        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+                    </padding>
+                    <effect>
+                        <DropShadow blurType="GAUSSIAN" height="40.0" radius="19.5" width="40.0">
+                            <color>
+                                <Color opacity="0.06" />
+                            </color>
+                        </DropShadow>
+                    </effect>
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="35.0">
+                            <children>
+                                <StackPane fx:id="imageContainer">
+                                    <children>
+                                        <ImageView fx:id="imgMedecin" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                                    </children>
+                                    <effect>
+                                        <DropShadow height="25.0" radius="12.0" width="25.0">
+                                            <color>
+                                                <Color opacity="0.12" />
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </StackPane>
+
+                                <VBox spacing="10.0">
+                                    <children>
+                                        <Label style="-fx-background-color: rgba(65, 120, 245, 0.1); -fx-text-fill: #4178F5; -fx-padding: 6 15; -fx-background-radius: 10; -fx-font-weight: bold;" text="Profil Vérifié" />
+                                        <Label fx:id="lblNomMedecin" style="-fx-text-fill: #1a1a2e;" text="DR. CHARFI MANAR">
+                                            <font>
+                                                <Font name="System Bold" size="36.0" />
+                                            </font>
+                                        </Label>
+                                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                            <children>
+                                                <Label fx:id="lblSpecialite" style="-fx-text-fill: #4178F5; -fx-font-weight: 600;" text="Cardiologue">
+                                                    <font>
+                                                        <Font size="20.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label style="-fx-text-fill: #94a3b8;" text="•">
+                                                    <font>
+                                                        <Font name="System Bold" size="20.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label style="-fx-text-fill: #64748b;" text="Hôpital Hospismart, Monastir">
+                                                    <font>
+                                                        <Font size="16.0" />
+                                                    </font>
+                                                </Label>
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <Separator opacity="0.15" />
+
+                        <VBox spacing="20.0">
+                            <children>
+                                <Label style="-fx-text-fill: #1a1a2e;" text="Disponibilités">
+                                    <font>
+                                        <Font name="System Bold" size="24.0" />
+                                    </font>
+                                </Label>
+                                <Label fx:id="lblCount" style="-fx-text-fill: #94a3b8;" text="0 créneaux disponibles trouvés" />
+                                <FlowPane fx:id="gridDispo" hgap="20.0" prefWrapLength="900.0" vgap="20.0" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </ScrollPane>
+</VBox>

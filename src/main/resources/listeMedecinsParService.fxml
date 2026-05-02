@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="0" style="-fx-background-color: #f4f7fe;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.hospismart.hospismartdesktop.controllers.MedecinController">
+
+    <fx:include source="Navbar.fxml" />
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #f4f7fe;">
+        <VBox spacing="30" style="-fx-padding: 40 48;">
+
+            <VBox spacing="10">
+                <Hyperlink text="← Retour aux services" onAction="#handleBack" style="-fx-text-fill: #4178F5; -fx-font-weight: bold; -fx-underline: false;"/>
+                <Label fx:id="labelTitre" text="Nos spécialistes en ..." style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+                <Label fx:id="labelCount" text="X expert(s) disponible(s)" style="-fx-text-fill: #64748b; -fx-font-size: 16;"/>
+            </VBox>
+
+            <FlowPane fx:id="doctorsGrid" hgap="30" vgap="30" prefWrapLength="1200">
+            </FlowPane>
+
+        </VBox>
+    </ScrollPane>
+</VBox>

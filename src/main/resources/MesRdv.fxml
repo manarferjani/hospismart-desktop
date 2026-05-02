@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="0" style="-fx-background-color: #f4f7fe;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.MesRdvController">
+
+    <!-- Barre de navigation -->
+    <fx:include source="Navbar.fxml" />
+
+    <VBox spacing="20" VBox.vgrow="ALWAYS">
+        <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
+
+        <!-- En-tête -->
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label text="Mon agenda m&#233;dical" style="-fx-font-size: 28; -fx-font-weight: 800; -fx-text-fill: #1a1a2e;" />
+                <Label fx:id="lblSubtitle" text="Retrouvez tous vos rendez-vous ici." style="-fx-text-fill: #64748b; -fx-font-size: 14;" />
+            </VBox>
+            <Button text="+ Prendre un nouveau RDV" onAction="#handleNouveauRdv"
+                    style="-fx-background-color: #4178F5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-padding: 12 24; -fx-cursor: hand; -fx-font-size: 13;" />
+        </HBox>
+
+        <!-- Contenu principal -->
+        <ScrollPane fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    vbarPolicy="NEVER"
+                    style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;"
+                    VBox.vgrow="ALWAYS">
+            <StackPane>
+                <FlowPane fx:id="gridRdv"
+                          alignment="TOP_CENTER"
+                          hgap="20"
+                          vgap="25"
+                          prefWrapLength="750">
+                    <padding><Insets bottom="20" top="10" left="0" right="0"/></padding>
+                </FlowPane>
+
+                <VBox fx:id="emptyState" alignment="CENTER" spacing="15" visible="false">
+                    <padding><Insets top="60"/></padding>
+                    <Label text="&#x1F4C5;" style="-fx-font-size: 60; -fx-opacity: 0.4;" />
+                    <Label text="Aucun rendez-vous actif." style="-fx-text-fill: #1a1a2e; -fx-font-size: 18; -fx-font-weight: bold;" />
+                    <Label text="Vos rendez-vous appara&#238;tront ici une fois planifi&#233;s." style="-fx-text-fill: #94a3b8; -fx-font-size: 14;" />
+                    <Button text="Trouver un m&#233;decin" onAction="#handleNouveauRdv"
+                            style="-fx-background-color: #4178F5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 50; -fx-padding: 12 30; -fx-cursor: hand; -fx-font-size: 13;" />
+                </VBox>
+            </StackPane>
+        </ScrollPane>
+    </VBox>
+</VBox>

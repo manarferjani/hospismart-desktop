@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import java.net.URL?>
+
+<?import javafx.scene.image.ImageView?>
+<BorderPane minHeight="800.0" minWidth="1200.0" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.DashboardController">
+    <stylesheets>
+        <URL value="@css/style.css" />
+    </stylesheets>
+
+    <left>
+        <VBox fx:id="sidebarVBox" minWidth="280.0" maxWidth="280.0" prefWidth="280.0" styleClass="sidebar" style="-fx-min-width: 280; -fx-max-width: 280;">
+            <HBox alignment="CENTER_LEFT" styleClass="sidebar-brand">
+                <Label text="HospiSmart" style="-fx-text-fill: white; font-weight: bold; font-size: 20px;"/>
+                <Label text="MÉDECIN" styleClass="role-badge">
+                    <HBox.margin><Insets left="10"/></HBox.margin>
+                </Label>
+            </HBox>
+
+            <VBox styleClass="sidebar-profile" alignment="CENTER">
+                <StackPane>
+                    <Circle fx:id="profileCircle" fill="DODGERBLUE" radius="35.0" stroke="WHITE" strokeWidth="2" />
+                    <ImageView fx:id="imgProfile" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" />
+                </StackPane>
+                <Label fx:id="lblSidebarName" styleClass="profile-name" text="Chargement..." />
+                <Label styleClass="profile-spec" text="CARDIOLOGUE" />
+            </VBox>
+
+            <VBox spacing="5" VBox.vgrow="ALWAYS">
+                <Label text="OVERVIEW" styleClass="menu-header" />
+                <Button fx:id="btnDashboard" styleClass="menu-button-active" maxWidth="Infinity" text="🏠 Dashboard" onAction="#showDashboard" />
+
+                <Label text="MA CLINIQUE" styleClass="menu-header" />
+                <Button styleClass="menu-button" maxWidth="Infinity" text="📅 Mes RDV" onAction="#showDemandesRdv" />
+                <Button fx:id="btnDispo" styleClass="menu-button" maxWidth="Infinity" text="👥 Mes disponibilités" onAction="#showDisponibilites" />
+                <Button fx:id="btnMesPatients" styleClass="menu-button" maxWidth="Infinity" text="👥 Mes Patients" onAction="#showMesPatients" />
+            </VBox>
+
+            <Button styleClass="menu-button" maxWidth="Infinity" text="🚪 Déconnexion" />
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: #f0f2f5;">
+            <!-- Pages will be loaded here -->
+        </StackPane>
+    </center>
+</BorderPane>

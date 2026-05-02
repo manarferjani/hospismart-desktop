@@ -11,6 +11,8 @@ public class RendezVous {
     private int patientId;
     private int medecinId;
     private int priorite;
+    private int disponibiliteId; // Lien vers la disponibilité réservée
+    private String patientName; // Transient field for display
 
     public RendezVous() {
         this.datetime = LocalDateTime.now();
@@ -37,4 +39,19 @@ public class RendezVous {
 
     public int getPriorite() { return priorite; }
     public void setPriorite(int priorite) { this.priorite = priorite; }
+
+    public int getDisponibiliteId() { return disponibiliteId; }
+    public void setDisponibiliteId(int disponibiliteId) { this.disponibiliteId = disponibiliteId; }
+
+    public String getPatientName() { return patientName; }
+    public void setPatientName(String patientName) { this.patientName = patientName; }
+
+    private String medecinName; // Transient field for patient view
+    private String specialite;  // Transient field for patient view
+
+    public String getMedecinName() { return medecinName; }
+    public void setMedecinName(String medecinName) { this.medecinName = medecinName; }
+
+    public String getSpecialite() { return specialite; }
+    public void setSpecialite(String specialite) { this.specialite = specialite; }
 }

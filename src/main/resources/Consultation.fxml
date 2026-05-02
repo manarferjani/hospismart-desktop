@@ -1,0 +1,19 @@
+<?import javax.swing.table.TableColumn?>
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml">
+    <Label text="Consultation Index" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <TableView fx:id="tableConsultations">
+        <columns>
+            <TableColumn fx:id="colId" text="Id" prefWidth="50" />
+            <TableColumn fx:id="colDate" text="Date_heure" prefWidth="150" />
+            <TableColumn fx:id="colStatut" text="Statut" prefWidth="100" />
+            <TableColumn fx:id="colMotif" text="Motif" prefWidth="200" />
+            <TableColumn fx:id="colObservations" text="Observations" prefWidth="250" />
+        </columns>
+        <placeholder>
+            <Label text="No records found" />
+        </placeholder>
+    </TableView>
+
+    <Button text="Create new" onAction="#handleCreateNew" styleClass="btn-primary"/>
+</VBox>

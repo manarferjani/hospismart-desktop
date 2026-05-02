@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane alignment="CENTER" style="-fx-background-color: rgba(0, 0, 0, 0.5);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.FinaliserRdvController">
+    <VBox spacing="25" maxWidth="500" prefWidth="500" maxHeight="600" style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 30, 0, 0, 15);">
+        <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+
+        <VBox spacing="10" alignment="CENTER">
+            <Label text="Finaliser votre rendez-vous" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #3b82f6;" />
+            <Label text="Veuillez confirmer les détails ci-dessous" style="-fx-text-fill: #64748b; -fx-font-size: 14;" />
+        </VBox>
+
+        <VBox spacing="20" style="-fx-background-color: #f8fafc; -fx-padding: 20; -fx-background-radius: 15; -fx-border-color: #e2e8f0; -fx-border-radius: 15;">
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <StackPane prefWidth="45" prefHeight="45">
+                    <Circle radius="22.5" fill="#eff6ff" />
+                    <Label text="👨‍⚕️" style="-fx-font-size: 20;" />
+                </StackPane>
+                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Médecin :" style="-fx-font-weight: bold; -fx-text-fill: #8b5cf6; -fx-font-size: 14;" />
+                        <Label fx:id="lblMedecinValue" text="Dr. NOM Prenom" style="-fx-font-weight: bold; -fx-text-fill: #1e293b; -fx-font-size: 16;" />
+                    </HBox>
+                    <Label text="Médecin référent" style="-fx-text-fill: #94a3b8; -fx-font-size: 12;" />
+                </VBox>
+            </HBox>
+            
+            <Separator style="-fx-opacity: 0.1;" />
+            
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <StackPane prefWidth="45" prefHeight="45">
+                    <Circle radius="22.5" fill="#f0fdf4" />
+                    <Label text="📅" style="-fx-font-size: 20;" />
+                </StackPane>
+                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Date :" style="-fx-font-weight: bold; -fx-text-fill: #8b5cf6; -fx-font-size: 14;" />
+                        <Label fx:id="lblDateValue" text="12/04/2026 à 14:30" style="-fx-font-weight: bold; -fx-text-fill: #1e293b; -fx-font-size: 16;" />
+                    </HBox>
+                    <Label text="Date et heure du rendez-vous" style="-fx-text-fill: #94a3b8; -fx-font-size: 12;" />
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <VBox spacing="12">
+            <Label text="Motif de la consultation" style="-fx-font-weight: bold; -fx-text-fill: #475569; -fx-font-size: 14;" />
+            <TextArea fx:id="txtMotif" prefHeight="100" promptText="Décrivez brièvement vos symptômes..." wrapText="true" 
+                      style="-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #e2e8f0; -fx-focus-color: #3b82f6; -fx-faint-focus-color: transparent;"/>
+        </VBox>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="Annuler" onAction="#handleAnnuler" prefWidth="180" 
+                    style="-fx-background-color: #f1f5f9; -fx-text-fill: #64748b; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 12; -fx-cursor: hand;" />
+            <Button text="Confirmer" onAction="#handleConfirmer" prefWidth="250" 
+                    style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 12; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(59,130,246,0.3), 10, 0, 0, 5);" />
+        </HBox>
+    </VBox>
+</StackPane>

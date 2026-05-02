@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Circle?>
+
+<VBox spacing="25" styleClass="main-container" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.DispoController">
+    <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Gestion des Disponibilités" styleClass="header-title" />
+            <Label text="Gérez vos horaires de consultation en toute simplicité" styleClass="text-muted" />
+        </VBox>
+        <Button text="+ Nouveau créneau" onAction="#handleNewCreneau" styleClass="btn-primary-pill" />
+    </HBox>
+
+    <HBox fx:id="alertBox" spacing="15" alignment="CENTER_LEFT" styleClass="alert-card-pill">
+        <Label text="🔔" style="-fx-font-size: 16;" />
+        <Label fx:id="lblAlertMessage" text="3 demande(s) en attente de validation." styleClass="alert-text" HBox.hgrow="ALWAYS" />
+        <Button text="Voir et répondre" styleClass="btn-outline-pill-sm" />
+    </HBox>
+
+    <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+        <VBox styleClass="white-card-container"
+              HBox.hgrow="ALWAYS"
+              maxWidth="900"
+              maxHeight="600"
+              alignment="CENTER">
+
+        <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+
+        <TableView fx:id="tableDispos" VBox.vgrow="ALWAYS" styleClass="modern-table">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+            <columns>
+                <TableColumn fx:id="colJour" text="Jour" prefWidth="150" />
+                <TableColumn fx:id="colDate" text="Date" prefWidth="150" />
+                <TableColumn fx:id="colHeure" text="Heure" prefWidth="180" />
+                <TableColumn fx:id="colStatut" text="Statut" prefWidth="150" />
+                <TableColumn fx:id="colActions" text="Actions" prefWidth="150" />
+            </columns>
+        </TableView>
+    </VBox>
+    </HBox>
+</VBox>

@@ -18,11 +18,16 @@ public class MyDbConnexion {
 
     // Constructeur privé (on ne peut pas faire 'new' en dehors de cette classe)
     private MyDbConnexion() {
+        connect();
+    }
+
+    private void connect() {
         try {
             cnx = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
             System.out.println("Connexion au projet Hospismart : OK");
         } catch (SQLException e) {
             System.err.println("Erreur de connexion : " + e.getMessage());
+            cnx = null;
         }
     }
 
@@ -34,6 +39,13 @@ public class MyDbConnexion {
     }
 
     public Connection getCnx() {
+        try {
+            if (cnx == null || cnx.isClosed()) {
+                connect(); // Force la reconnexion si la connexion a été perdue ou a échoué initialement
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur de vérification de la connexion : " + e.getMessage());
+        }
         return cnx;
     }
 }

@@ -11,15 +11,23 @@ module com.hospismart.hospismartdesktop {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.desktop;
+    requires java.net.http;
+    requires openhtmltopdf.core;
+    requires openhtmltopdf.pdfbox;
+    requires jakarta.mail;
 
+    // Exportation des packages qui contiennent des classes
     exports com.hospismart.hospismartdesktop.main;
     exports com.hospismart.hospismartdesktop.controllers;
     exports com.hospismart.hospismartdesktop.models;
     exports com.hospismart.hospismartdesktop.tests;
 
-    // Autoriser JavaFX à accéder aux fichiers FXML
+    // Ouverture des packages pour la réflexion (nécessaire pour FXMLLoader)
     opens com.hospismart.hospismartdesktop.main to javafx.fxml;
     opens com.hospismart.hospismartdesktop.controllers to javafx.fxml;
     opens com.hospismart.hospismartdesktop.models to javafx.fxml;
     opens com.hospismart.hospismartdesktop.tests to javafx.fxml;
+
+
 }

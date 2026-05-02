@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: white; -fx-padding: 15 40; -fx-border-color: #dee2e6; -fx-border-width: 0 0 1 0;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.NavbarController">
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <StackPane style="-fx-background-color: #0d6efd; -fx-background-radius: 8; -fx-padding: 8;">
+            <Label text="H" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16;"/>
+        </StackPane>
+        <Label text="Hospismart" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
+    </HBox>
+
+    <Region HBox.hgrow="ALWAYS" /> <HBox alignment="CENTER" spacing="25">
+    <Hyperlink fx:id="linkAccueil" text="Accueil" onAction="#goToAccueil"
+               style="-fx-text-fill: #555; -fx-underline: false; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;"/>
+
+    <Hyperlink fx:id="linkServices" text="Services" onAction="#goToServices"
+               style="-fx-text-fill: #555; -fx-underline: false; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;"/>
+
+    <Hyperlink fx:id="linkRdvs" text="Mes Rendez-vous" onAction="#goToRdvs"
+               style="-fx-text-fill: #555; -fx-underline: false; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;"/>
+
+    <Hyperlink fx:id="linkEvenements" text="Événements"
+               style="-fx-text-fill: #555; -fx-underline: false; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;"/>
+
+    <Hyperlink fx:id="linkReclamations" text="Réclamations"
+               style="-fx-text-fill: #555; -fx-underline: false; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;"/>
+
+</HBox>
+
+    <Region HBox.hgrow="ALWAYS" /> <HBox alignment="CENTER" spacing="20">
+
+    <!-- Notification Bell -->
+    <StackPane fx:id="bellContainer" alignment="TOP_RIGHT" style="-fx-cursor: hand;" onMouseClicked="#toggleNotifications">
+        <Label fx:id="bellIcon" text="&#x1F514;" style="-fx-font-size: 22; -fx-padding: 5;"/>
+        <StackPane fx:id="badgePane" alignment="CENTER" managed="false" visible="false"
+                   style="-fx-background-color: #ef4444; -fx-background-radius: 50; -fx-min-width: 20; -fx-min-height: 20; -fx-max-width: 20; -fx-max-height: 20;"
+                   translateX="10" translateY="-5">
+            <Label fx:id="badgeCount" text="0" style="-fx-text-fill: white; -fx-font-size: 10; -fx-font-weight: bold;"/>
+        </StackPane>
+    </StackPane>
+
+    <Button text="Mon Compte" style="-fx-background-color: transparent; -fx-border-color: #0d6efd; -fx-border-radius: 50; -fx-text-fill: #0d6efd; -fx-padding: 8 20;"/>
+    <Button text="Déconnexion" style="-fx-background-color: #0d6efd; -fx-text-fill: white; -fx-background-radius: 50; -fx-padding: 8 20; -fx-font-weight: bold;"/>
+</HBox>
+
+</HBox>

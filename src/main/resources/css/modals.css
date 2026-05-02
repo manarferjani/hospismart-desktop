@@ -1,0 +1,111 @@
+/* Conteneur principal de la modal */
+.modal-container {
+    -fx-background-color: white;
+    -fx-background-radius: 25px; /* Très arrondi comme sur l'image */
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 20, 0, 0, 10);
+}
+
+/* Icône ronde avec fond pastel */
+.icon-box-success {
+    -fx-background-color: #e6f9ed; /* Vert très clair */
+    -fx-background-radius: 12px;
+    -fx-padding: 10px;
+}
+
+.icon-box-error {
+    -fx-background-color: #fee2e2; /* Rouge très clair */
+    -fx-background-radius: 12px;
+    -fx-padding: 10px;
+}
+
+/* Textes */
+.modal-title {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 20px;
+    -fx-text-fill: #1f2937;
+}
+
+.modal-message {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+    -fx-text-fill: #6b7280;
+    -fx-text-alignment: center;
+}
+
+/* Boutons */
+.button-primary {
+    -fx-background-color: white;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 10 40;
+}
+
+.button-danger {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-background-radius: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 10 40;
+}
+
+.close-x {
+    -fx-background-color: #f3f4f6;
+    -fx-background-radius: 50%;
+    -fx-cursor: hand;
+}
+.modal-container {
+    -fx-background-color: white; /* Remplissage opaque */
+    -fx-background-radius: 20;   /* Coins arrondis */
+    -fx-border-radius: 20;
+    -fx-padding: 25;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
+}
+
+
+/* Le fond sombre (Overlay) */
+.modal-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.5); /* Noir transparent à 50% */
+}
+
+/* La boîte de dialogue blanche */
+.modal-container {
+    -fx-background-color: white; /* REND LA MODAL OPAQUE */
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-padding: 25;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 15, 0, 0, 5);
+}
+
+.modal-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2937;
+}
+
+.modal-message {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6b7280;
+}
+
+.button-primary {
+    -fx-background-color: #4f46e5;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.icon-box-success { -fx-background-color: #ecfdf5; -fx-background-radius: 50; }
+.icon-box-error { -fx-background-color: #fef2f2; -fx-background-radius: 50; }
+
+.close-x {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+}
