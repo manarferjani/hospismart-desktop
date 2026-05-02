@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="25" styleClass="main-container" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.MesPatientsController">
+    <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="👥 Mes Patients" styleClass="header-title" />
+            <Label fx:id="lblCount" text="Chargement..." styleClass="text-muted" />
+        </VBox>
+    </HBox>
+
+    <VBox fx:id="patientsTableContainer" styleClass="white-card-container" VBox.vgrow="ALWAYS" maxWidth="1000" alignment="TOP_CENTER">
+        <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+
+        <TableView fx:id="tablePatients" VBox.vgrow="ALWAYS" styleClass="modern-table">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+            <columns>
+                <TableColumn fx:id="colNomPrenom" text="Patient" prefWidth="250" />
+                <TableColumn fx:id="colEmail" text="Email" prefWidth="250" />
+                <TableColumn fx:id="colTelephone" text="Téléphone" prefWidth="150" />
+                <TableColumn fx:id="colGenre" text="Genre" prefWidth="100" />
+                <TableColumn fx:id="colSang" text="Groupe Sanguin" prefWidth="100" />
+                <TableColumn fx:id="colActions" text="Actions" prefWidth="150" />
+            </columns>
+        </TableView>
+
+        <VBox fx:id="emptyState" alignment="CENTER" spacing="15" visible="false" managed="false">
+            <Label text="👤" style="-fx-font-size: 50;" />
+            <Label text="Aucun patient trouvé" styleClass="header-title" style="-fx-font-size: 18;" />
+            <Label text="Les patients apparaîtront ici dès qu'un rendez-vous sera enregistré." styleClass="text-muted" />
+        </VBox>
+    </VBox>
+</VBox>

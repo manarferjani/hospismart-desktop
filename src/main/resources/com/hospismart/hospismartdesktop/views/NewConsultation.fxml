@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: #f0f2f5;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.NewConsultationController">
+    <VBox spacing="30.0" styleClass="content-padding" style="-fx-background-color: #f0f2f5;">
+        <Label style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #1e293b;" text="🩺 Dossier de Consultation" />
+        
+        <!-- Dual Card Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15 25; -fx-background-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);" HBox.hgrow="ALWAYS">
+                <Label text="👤 Patient :" style="-fx-font-size: 15; -fx-text-fill: #64748b; -fx-font-weight: bold;" />
+                <Label fx:id="lblPatientName" style="-fx-font-size: 18; -fx-text-fill: #1e293b; -fx-font-weight: bold;" text="Chargement..." />
+            </HBox>
+            
+            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15 25; -fx-background-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);">
+                <Label text="📅 Date :" style="-fx-font-size: 14; -fx-text-fill: #64748b; -fx-font-weight: bold;" />
+                <Label fx:id="lblDate" style="-fx-font-size: 14; -fx-text-fill: #6366f1; -fx-font-weight: bold;" text="Chargement date..." />
+            </HBox>
+        </HBox>
+
+        <GridPane hgap="30" vgap="25" maxWidth="Infinity">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+            </columnConstraints>
+
+            <!-- Left Column -->
+            <VBox spacing="25" GridPane.columnIndex="0">
+                <HBox spacing="0" styleClass="white-card-container" style="-fx-padding: 0;">
+                    <!-- Colored Left Accent -->
+                    <Region minWidth="6" style="-fx-background-color: #f59e0b; -fx-background-radius: 15 0 0 15;"/>
+                    <VBox spacing="15" HBox.hgrow="ALWAYS" style="-fx-padding: 20;">
+                        <Label styleClass="section-title" text="📌 Détails de la Visite" style="-fx-text-fill: #f59e0b;"/>
+                        <VBox spacing="10" style="-fx-background-color: #fffbeb; -fx-padding: 15; -fx-background-radius: 12;">
+                            <Label text="Motif de Consultation" style="-fx-font-weight: bold; -fx-text-fill: #b45309; -fx-font-size: 13;"/>
+                            <Label fx:id="lblMotif" style="-fx-font-size: 15; -fx-text-fill: #92400e;" text="..." wrapText="true" minHeight="50"/>
+                        </VBox>
+                        <Label text="Observations" style="-fx-font-weight: bold; -fx-text-fill: #64748b; -fx-font-size: 13;"/>
+                        <TextArea fx:id="txtObservations" prefHeight="130" promptText="Observations générales..." wrapText="true" />
+                    </VBox>
+                </HBox>
+                
+                <HBox spacing="0" styleClass="white-card-container" style="-fx-padding: 0;">
+                    <Region minWidth="6" style="-fx-background-color: #3b82f6; -fx-background-radius: 15 0 0 15;"/>
+                    <VBox spacing="15" HBox.hgrow="ALWAYS" style="-fx-padding: 20;">
+                        <Label styleClass="section-title" text="🔬 Examens Complémentaires" style="-fx-text-fill: #3b82f6;"/>
+                        <TextArea fx:id="txtExamensComplementaires" prefHeight="130" promptText="Analyses, imagerie à prévoir..." wrapText="true" />
+                    </VBox>
+                </HBox>
+                
+                <HBox spacing="0" styleClass="white-card-container" style="-fx-padding: 0;">
+                    <Region minWidth="6" style="-fx-background-color: #10b981; -fx-background-radius: 15 0 0 15;"/>
+                    <VBox spacing="15" HBox.hgrow="ALWAYS" style="-fx-padding: 20;">
+                        <Label styleClass="section-title" text="💡 Recommandations" style="-fx-text-fill: #10b981;"/>
+                        <TextArea fx:id="txtRecommandations" prefHeight="130" promptText="Conseils d'hygiène et alimentation..." wrapText="true" />
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Right Column -->
+            <VBox spacing="25" GridPane.columnIndex="1">
+                <HBox spacing="0" styleClass="white-card-container" style="-fx-padding: 0;">
+                    <Region minWidth="6" style="-fx-background-color: #06b6d4; -fx-background-radius: 15 0 0 15;"/>
+                    <VBox spacing="15" HBox.hgrow="ALWAYS" style="-fx-padding: 20;">
+                        <Label styleClass="section-title" text="👨‍⚕️ Examen &amp; Diagnostic" style="-fx-text-fill: #06b6d4;"/>
+                        <VBox spacing="10">
+                            <Label text="Examen Clinique" style="-fx-font-weight: bold; -fx-text-fill: #64748b; -fx-font-size: 13;"/>
+                            <TextArea fx:id="txtExamenClinique" prefHeight="130" promptText="Signes vitaux, auscultation..." wrapText="true" />
+                            <Label text="Diagnostic Final" style="-fx-font-weight: bold; -fx-text-fill: #64748b; -fx-font-size: 13;"/>
+                            <TextArea fx:id="txtDiagnostic" prefHeight="130" promptText="Pathologie identifiée..." wrapText="true" />
+                        </VBox>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="0" styleClass="white-card-container" style="-fx-padding: 0;">
+                    <Region minWidth="8" style="-fx-background-color: #6366f1; -fx-background-radius: 15 0 0 15;"/>
+                    <VBox spacing="15" HBox.hgrow="ALWAYS" style="-fx-padding: 20;">
+                        <Label styleClass="section-title" text="💊 Ordonnance" style="-fx-text-fill: #6366f1;"/>
+                        <VBox spacing="10">
+                            <Label text="Traitement prescrit" style="-fx-font-weight: bold; -fx-text-fill: #64748b; -fx-font-size: 13;"/>
+                            <TextArea fx:id="txtTraitement" prefHeight="315" promptText="Ex: Médicaments, dosage, durée..." wrapText="true" style="-fx-font-family: 'Consolas', monospace;"/>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </GridPane>
+
+        <HBox alignment="CENTER_RIGHT" spacing="15" style="-fx-padding: 0 0 40 0;">
+            <Button onAction="#handleCancel" styleClass="btn-cancel" text="Annuler" prefWidth="120"/>
+            <Button onAction="#handleSave" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20; -fx-font-size: 14;" text="💾 Enregistrer et Envoyer" prefWidth="250"/>
+            <Button onAction="#handleAICheck" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20; -fx-font-size: 14;" text="⚡ Vérifier avec HospiSmart AI" prefWidth="280"/>
+        </HBox>
+    </VBox>
+</ScrollPane>

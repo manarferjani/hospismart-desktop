@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="0" prefWidth="700" prefHeight="480" styleClass="modal-root" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.AddDispoModalController">
+    
+    <HBox VBox.vgrow="ALWAYS" spacing="0">
+        <!-- Sidebar Selection Rapide -->
+        <VBox prefWidth="200" styleClass="modal-sidebar" spacing="5">
+            <Label text="OPTIONS" style="-fx-text-fill: -text-muted; -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 0 0 10 15;"/>
+            <Button fx:id="btnToday" text="Aujourd'hui" onAction="#selectToday" styleClass="sidebar-item" maxWidth="Infinity" alignment="CENTER_LEFT"/>
+            <Button fx:id="btnTomorrow" text="Demain" onAction="#selectTomorrow" styleClass="sidebar-item" maxWidth="Infinity" alignment="CENTER_LEFT"/>
+            <Button fx:id="btnThisWeek" text="Lundi Prochain" onAction="#selectNextMonday" styleClass="sidebar-item" maxWidth="Infinity" alignment="CENTER_LEFT"/>
+            
+            <Region VBox.vgrow="ALWAYS" />
+            
+            <VBox spacing="5" style="-fx-padding: 15;">
+                <Label text="Aide" styleClass="text-muted" style="-fx-font-size: 11px;"/>
+                <Label text="Définissez vos créneaux pour permettre aux patients de prendre rendez-vous." wrapText="true" style="-fx-text-fill: -text-muted; -fx-font-size: 10px;"/>
+            </VBox>
+        </VBox>
+
+        <!-- Main Content area -->
+        <VBox styleClass="modal-content" HBox.hgrow="ALWAYS" spacing="25">
+            <VBox spacing="5">
+                <Label text="Nouveau Créneau" styleClass="header-title" style="-fx-font-size: 22px;"/>
+                <Label text="Configurez votre disponibilité temporelle ci-dessous." styleClass="text-muted"/>
+            </VBox>
+
+            <Separator />
+
+            <VBox spacing="15">
+                <!-- Date Input Group -->
+                <VBox spacing="8" styleClass="input-group">
+                    <Label text="DATE DE DISPONIBILITÉ" styleClass="input-label" />
+                    <DatePicker fx:id="dpDate" maxWidth="Infinity" promptText="Choisir une date..." />
+                </VBox>
+
+                <HBox spacing="20">
+                    <!-- Start Time -->
+                    <VBox spacing="8" styleClass="input-group" HBox.hgrow="ALWAYS">
+                        <Label text="HEURE DE DÉBUT" styleClass="input-label" />
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ComboBox fx:id="cbHeureDebut" prefWidth="80" styleClass="combo-clean"/>
+                            <Label text=":" style="-fx-font-weight: bold;"/>
+                            <ComboBox fx:id="cbMinDebut" prefWidth="80" styleClass="combo-clean"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- End Time -->
+                    <VBox spacing="8" styleClass="input-group" HBox.hgrow="ALWAYS">
+                        <Label text="HEURE DE FIN" styleClass="input-label" />
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ComboBox fx:id="cbHeureFin" prefWidth="80" styleClass="combo-clean"/>
+                            <Label text=":" style="-fx-font-weight: bold;"/>
+                            <ComboBox fx:id="cbMinFin" prefWidth="80" styleClass="combo-clean"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+            
+            <Region VBox.vgrow="ALWAYS" />
+        </VBox>
+    </HBox>
+
+    <!-- Footer -->
+    <HBox styleClass="modal-footer" spacing="12">
+        <Button text="Annuler" onAction="#handleCancel" styleClass="btn-cancel" />
+        <Button text="Enregistrer la disponibilité" onAction="#handleSave" styleClass="btn-apply" />
+    </HBox>
+
+</VBox>
