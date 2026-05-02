@@ -3,6 +3,8 @@ module com.hospismart.hospismartdesktop {
     requires javafx.fxml;
     requires javafx.web;
     requires java.sql;
+    requires java.desktop;
+    requires java.net.http;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -16,6 +18,11 @@ module com.hospismart.hospismartdesktop {
     requires openhtmltopdf.core;
     requires openhtmltopdf.pdfbox;
     requires jakarta.mail;
+    // PDF generation (Apache PDFBox)
+    requires org.apache.pdfbox;
+    // Excel generation
+    requires org.apache.poi.ooxml;
+    requires org.apache.poi.poi;
 
     // Exportation des packages qui contiennent des classes
     exports com.hospismart.hospismartdesktop.main;
@@ -26,7 +33,7 @@ module com.hospismart.hospismartdesktop {
     // Ouverture des packages pour la réflexion (nécessaire pour FXMLLoader)
     opens com.hospismart.hospismartdesktop.main to javafx.fxml;
     opens com.hospismart.hospismartdesktop.controllers to javafx.fxml;
-    opens com.hospismart.hospismartdesktop.models to javafx.fxml;
+    opens com.hospismart.hospismartdesktop.models to javafx.fxml, javafx.base;
     opens com.hospismart.hospismartdesktop.tests to javafx.fxml;
 
 

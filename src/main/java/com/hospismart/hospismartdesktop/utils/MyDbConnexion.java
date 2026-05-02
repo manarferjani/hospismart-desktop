@@ -4,7 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class MyDbConnexion {
+public class
+MyDbConnexion {
 
     // On garde les mêmes noms que le prof pour rester cohérente avec ses exemples
     private String USER_NAME = "root";
