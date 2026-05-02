@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -109,7 +110,6 @@ public class AICheckDialog {
                         + "-fx-border-radius: 16 16 0 0;"
         );
 
-        // Icône circulaire
         StackPane iconPane = new StackPane();
         Circle circle = new Circle(18);
         circle.setFill(Color.web(iconBg));
@@ -123,13 +123,13 @@ public class AICheckDialog {
         Label subtitleLbl = new Label("HospiSmart AI-Check");
         subtitleLbl.setStyle("-fx-font-size: 11; -fx-text-fill: " + subtitleColor + ";");
         headerText.getChildren().addAll(titleLbl, subtitleLbl);
-
         header.getChildren().addAll(iconPane, headerText);
 
         // ── Body ──────────────────────────────────────────────────────────
         VBox body = new VBox(12);
         body.setPadding(new Insets(20, 24, 24, 24));
 
+        // Sous-titre
         if (subtitle != null && !subtitle.isEmpty()) {
             Label subLbl = new Label(subtitle);
             subLbl.setStyle("-fx-font-size: 13; -fx-text-fill: #6B7280; -fx-wrap-text: true;");
@@ -137,7 +137,7 @@ public class AICheckDialog {
             body.getChildren().add(subLbl);
         }
 
-        // Carte avant/après (correction orthographique)
+        // ── Carte avant/après (correction orthographique) ─────────────────
         if (avant != null && apres != null) {
             VBox diffCard = new VBox(8);
             diffCard.setPadding(new Insets(10, 14, 10, 14));
@@ -162,31 +162,79 @@ public class AICheckDialog {
             body.getChildren().add(diffCard);
         }
 
-        // Bloc d'analyse avec bordure gauche colorée
+        // ── Carte diagnostic/traitement (incohérence) ─────────────────────
         if (detail != null && !detail.isEmpty()) {
-            Label detailLbl = new Label(detail);
-            detailLbl.setStyle("""
-                    -fx-font-size: 12;
-                    -fx-text-fill: #4B5563;
-                    -fx-wrap-text: true;
-                    -fx-padding: 10 14 10 14;
-                    -fx-background-color: #FAECE7;
-                    -fx-background-radius: 0 8 8 0;
-                    -fx-border-color: #D85A30;
-                    -fx-border-width: 0 0 0 3;
-                    """);
-            detailLbl.setMaxWidth(392);
-            body.getChildren().add(detailLbl);
+            if (type == DialogType.INCOHERENCE) {
+                // Carte grise avec Diagnostic + Traitement sur deux lignes
+                VBox detailCard = new VBox(8);
+                detailCard.setPadding(new Insets(10, 14, 10, 14));
+                detailCard.setStyle("-fx-background-color: #F9FAFB; -fx-background-radius: 8;");
+
+                for (String line : detail.split("\n")) {
+                    String[] parts = line.split(":", 2);
+                    if (parts.length == 2) {
+                        HBox row = new HBox(8);
+                        row.setAlignment(Pos.CENTER_LEFT);
+                        Label key = new Label(parts[0].trim());
+                        key.setStyle("-fx-font-size: 12; -fx-text-fill: #9CA3AF; -fx-min-width: 90;");
+                        Label val = new Label(parts[1].trim());
+                        val.setStyle("-fx-font-size: 13; -fx-font-weight: bold; "
+                                + "-fx-text-fill: #374151; -fx-wrap-text: true;");
+                        val.setMaxWidth(270);
+                        row.getChildren().addAll(key, val);
+                        detailCard.getChildren().add(row);
+                    }
+                }
+                body.getChildren().add(detailCard);
+
+
+            } else {
+                // Autres types → bloc avec bordure gauche orange
+                Label detailLbl = new Label(detail);
+                detailLbl.setStyle("""
+                        -fx-font-size: 12;
+                        -fx-text-fill: #4B5563;
+                        -fx-wrap-text: true;
+                        -fx-padding: 10 14 10 14;
+                        -fx-background-color: #FAECE7;
+                        -fx-background-radius: 0 8 8 0;
+                        -fx-border-color: #D85A30;
+                        -fx-border-width: 0 0 0 3;
+                        """);
+                detailLbl.setMaxWidth(392);
+                body.getChildren().add(detailLbl);
+            }
         }
 
-        // Texte d'analyse en italique
+        // ── Analyse IA en italique ─────────────────────────────────────────
+// ── Analyse IA en italique avec bordure gauche ─────────────────────────
         if (analyseText != null && !analyseText.isEmpty()
                 && !analyseText.equals("Analyse terminée.")) {
-            Label analyseLbl = new Label(analyseText);
-            analyseLbl.setStyle("-fx-font-size: 12; -fx-text-fill: #9CA3AF; "
-                    + "-fx-wrap-text: true; -fx-font-style: italic;");
-            analyseLbl.setMaxWidth(392);
-            body.getChildren().add(analyseLbl);
+
+            if (type == DialogType.INCOHERENCE) {
+                // Style bloc avec bordure gauche orange
+                Label analyseLbl = new Label(analyseText);
+                analyseLbl.setStyle("""
+                -fx-font-size: 12;
+                -fx-text-fill: #4B5563;
+                -fx-wrap-text: true;
+                -fx-padding: 10 14 10 14;
+                -fx-background-color: #FAECE7;
+                -fx-background-radius: 0 8 8 0;
+                -fx-border-color: #D85A30;
+                -fx-border-width: 0 0 0 3;
+                """);
+                analyseLbl.setMaxWidth(392);
+                body.getChildren().add(analyseLbl);
+
+            } else {
+                // Autres types → texte gris italique simple
+                Label analyseLbl = new Label(analyseText);
+                analyseLbl.setStyle("-fx-font-size: 12; -fx-text-fill: #9CA3AF; "
+                        + "-fx-wrap-text: true; -fx-font-style: italic;");
+                analyseLbl.setMaxWidth(392);
+                body.getChildren().add(analyseLbl);
+            }
         }
 
         // ── Boutons ───────────────────────────────────────────────────────
@@ -234,7 +282,6 @@ public class AICheckDialog {
         stage.setScene(scene);
         stage.centerOnScreen();
 
-        // Fermer l'overlay quand la modal se ferme
         final Stage finalOverlay = overlayStage;
         stage.setOnHidden(e -> {
             if (finalOverlay != null) finalOverlay.close();

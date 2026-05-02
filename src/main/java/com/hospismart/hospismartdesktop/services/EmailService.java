@@ -1,53 +1,69 @@
 package com.hospismart.hospismartdesktop.services;
 
-import jakarta.mail.*;
-import jakarta.mail.internet.*;
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.mail.internet.*;
 import java.util.Properties;
 import java.io.File;
 
+/**
+ * Service d'envoi d'emails (Réinitialisation de mot de passe, Bienvenue, Notifications avec pièces jointes).
+ */
 public class EmailService {
 
-    private final String username = "manarferjanii@gmail.com";
-    private final String password = "fkws uabo rkik xjek";
-    // Configuration SMTP
+    // Configuration SMTP Gmail
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
 
-    // Configuration Gmail
+    // Identifiants (Utilisez des mots de passe d'application Google)
     private static final String SMTP_USER = "tabeagle947@gmail.com";
     private static final String SMTP_PASSWORD = "rcdf rczc tgbq wamw";
 
-    public void sendEmailWithAttachment(String recipientEmail, String subject, String body, String attachmentPath) throws Exception {
-        Properties prop = new Properties();
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true");
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", "587");
-        prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
-        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-        prop.put("mail.smtp.connectiontimeout", "10000"); // 10s
-        prop.put("mail.smtp.timeout", "10000"); // 10s
     /**
-     * Envoie un email de réinitialisation de mot de passe
+     * Envoie un email avec une pièce jointe (utile pour les ordonnances PDF).
+     */
+    public static void sendEmailWithAttachment(String recipientEmail, String subject, String body, String attachmentPath) throws Exception {
+        Properties props = getSmtpProperties();
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(SMTP_USER, SMTP_PASSWORD);
+            }
+        });
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(SMTP_USER));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
+        message.setSubject(subject);
+
+        // Corps du message
+        MimeBodyPart messageBodyPart = new MimeBodyPart();
+        messageBodyPart.setText(body);
+
+        Multipart multipart = new MimeMultipart();
+        multipart.addBodyPart(messageBodyPart);
+
+        // Pièce jointe
+        if (attachmentPath != null && !attachmentPath.isEmpty()) {
+            MimeBodyPart attachmentPart = new MimeBodyPart();
+            attachmentPart.attachFile(new File(attachmentPath));
+            multipart.addBodyPart(attachmentPart);
+        }
+
+        message.setContent(multipart);
+        Transport.send(message);
+        System.out.println("[EmailService] Email envoyé avec succès à: " + recipientEmail);
+    }
+
+    /**
+     * Envoie un email de réinitialisation de mot de passe.
      * @param toEmail Email du destinataire
-     * @param newPassword Nouveau mot de passe
+     * @param newPassword Nouveau mot de passe généré
      * @return true si l'email a été envoyé avec succès
      */
     public static boolean sendResetPasswordEmail(String toEmail, String newPassword) {
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.starttls.required", "true");
-        props.put("mail.smtp.host", SMTP_HOST);
-        props.put("mail.smtp.port", SMTP_PORT);
-        props.put("mail.smtp.connectiontimeout", "5000");
-        props.put("mail.smtp.timeout", "5000");
-        props.put("mail.smtp.writetimeout", "5000");
+        Properties props = getSmtpProperties();
 
-        Session session = Session.getInstance(prop, new Authenticator() {
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -72,22 +88,15 @@ public class EmailService {
                     "</body></html>";
 
             message.setContent(htmlContent, "text/html; charset=utf-8");
-
             Transport.send(message);
             System.out.println("[EmailService] Email de réinitialisation envoyé avec succès à: " + toEmail);
             return true;
 
         } catch (AuthenticationFailedException e) {
             System.err.println("[EmailService] ERREUR d'authentification SMTP: " + e.getMessage());
-            System.err.println("[EmailService] Vérifiez l'email et le mot de passe d'application Gmail");
             return false;
         } catch (MessagingException e) {
             System.err.println("[EmailService] ERREUR d'envoi d'email: " + e.getMessage());
-            if (e.getMessage().contains("535")) {
-                System.err.println("[EmailService] Erreur 535: Identifiants SMTP invalides");
-            } else if (e.getMessage().contains("failure")) {
-                System.err.println("[EmailService] Erreur de connexion SMTP");
-            }
             e.printStackTrace();
             return false;
         } catch (Exception e) {
@@ -98,44 +107,18 @@ public class EmailService {
     }
 
     /**
-     * Échappe les caractères spéciaux HTML
-     */
-    private static String escapeHtml(String text) {
-        return text.replace("&", "&amp;")
-                .replace("<", "&lt;")
-                .replace(">", "&gt;")
-                .replace("\"", "&quot;")
-                .replace("'", "&#39;");
-    }
-
-    /**
-     * Envoie un email de bienvenue (exemple)
+     * Envoie un email de bienvenue.
      */
     public static boolean sendWelcomeEmail(String toEmail, String userName) {
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", SMTP_HOST);
-        props.put("mail.smtp.port", SMTP_PORT);
+        Properties props = getSmtpProperties();
 
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
                 return new PasswordAuthentication(SMTP_USER, SMTP_PASSWORD);
             }
         });
 
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(username));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
-        message.setSubject(subject);
-
-        MimeBodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setText(body);
-
-        Multipart multipart = new MimeMultipart();
-        multipart.addBodyPart(messageBodyPart);
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(SMTP_USER));
@@ -149,20 +132,40 @@ public class EmailService {
                     "</body></html>";
 
             message.setContent(htmlContent, "text/html; charset=utf-8");
-
-        if (attachmentPath != null) {
-            MimeBodyPart attachmentPart = new MimeBodyPart();
-            attachmentPart.attachFile(new File(attachmentPath));
-            multipart.addBodyPart(attachmentPart);
-        }
-
-        message.setContent(multipart);
-        Transport.send(message);
             Transport.send(message);
+            System.out.println("[EmailService] Email de bienvenue envoyé à: " + toEmail);
             return true;
         } catch (MessagingException e) {
             System.err.println("[EmailService] Erreur d'envoi d'email de bienvenue: " + e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Configuration commune des propriétés SMTP.
+     */
+    private static Properties getSmtpProperties() {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", SMTP_HOST);
+        props.put("mail.smtp.port", SMTP_PORT);
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        props.put("mail.smtp.ssl.trust", SMTP_HOST);
+        props.put("mail.smtp.connectiontimeout", "10000");
+        props.put("mail.smtp.timeout", "10000");
+        return props;
+    }
+
+    /**
+     * Échappe les caractères spéciaux HTML pour éviter les injections.
+     */
+    private static String escapeHtml(String text) {
+        if (text == null) return "";
+        return text.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
     }
 }

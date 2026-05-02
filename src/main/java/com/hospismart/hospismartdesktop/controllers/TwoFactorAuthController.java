@@ -170,19 +170,8 @@ public class TwoFactorAuthController {
      * Naviguer vers le profil utilisateur
      */
     private void navigateToUserProfile(ActionEvent event) {
-        try {
-            String userRole = userAwaitingVerification.getType();
-            String viewPath = "/com/hospismart/hospismartdesktop/UserProfile.fxml";
-            
-            if (userRole != null && (userRole.contains("ROLE_ADMIN") || userRole.contains("ROLE_MEDECIN"))) {
-                viewPath = "/com/hospismart/hospismartdesktop/BackOfficeUsers.fxml";
-            }
-            
-            navigate(event, viewPath);
-        } catch (Exception e) {
-            System.err.println("[2FA] Erreur navigation: " + e.getMessage());
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la navigation: " + e.getMessage());
-        }
+        // Utilisation de la navigation centralisée selon le rôle
+        com.hospismart.hospismartdesktop.main.JavaFxMain.showDashboard(userAwaitingVerification);
     }
 
     /**

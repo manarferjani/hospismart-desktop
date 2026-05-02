@@ -114,11 +114,11 @@ public class AIService {
             {
                 "contents": [{
                     "parts": [{
-                        "text": "Tu es un expert médical. Analyse ce cas:\\nDiagnostic: %s\\nTraitement: %s\\n\\nRègles STRICTES:\\n1. Corrige l'orthographe des médicaments (ex: dolipramm->Doliprane).\\n2. Vérifie si le traitement est médicalement COHÉRENT avec le diagnostic.\\n3. Réponds avec ce JSON strict sans markdown:\\n{\\"estCorrect\\": boolean, \\"coherent\\": boolean, \\"suggestion\\": \\"traitement avec orthographe corrigée\\", \\"analyse\\": \\"explication courte\\"}\\n- estCorrect=false si faute d'orthographe OU incohérence médicale\\n- coherent=false si le médicament ne correspond pas au diagnostic\\n- suggestion = traitement avec fautes corrigées seulement (ne change pas les médicaments)"
+                        "text": "Tu es un correcteur strict de médicaments. Analyse:\\nDiagnostic: %s\\nTraitement: %s\\n\\nRègles STRICTES:\\n1. Compare CHAQUE mot du traitement avec le nom exact du médicament.\\n2. Si UN SEUL caractère est différent du nom correct -> estCorrect=false OBLIGATOIREMENT.\\n3. Exemples de fautes: doliprale/dolipramm/dolipranne -> Doliprane (faute), amoxiciline -> Amoxicilline (faute).\\n4. 'suggestion' = traitement avec TOUTES les fautes corrigées.\\n5. 'coherent' = true si le médicament correspond au diagnostic, false sinon.\\n6. Si faute détectée: estCorrect=false ET coherent=true (sauf si aussi incohérent).\\nJSON strict sans markdown:\\n{\\"estCorrect\\": boolean, \\"coherent\\": boolean, \\"suggestion\\": \\"traitement corrigé\\", \\"analyse\\": \\"liste des corrections faites\\"}"
                     }]
                 }],
                 "generationConfig": {
-                    "temperature": 0.1,
+                    "temperature": 0,
                     "maxOutputTokens": 2048,
                     "thinkingConfig": {
                         "thinkingBudget": 0

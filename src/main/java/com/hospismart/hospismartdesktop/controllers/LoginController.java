@@ -60,20 +60,11 @@ public class LoginController {
                     e.printStackTrace();
                     showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la vérification 2FA");
                 }
-            } else {
                 // 2FA non activée, continuer normalement
                 Session.getInstance().setCurrentUser(user);
 
-                // Redirection selon le type (les rôles sont au format JSON ex: ["ROLE_ADMIN"])
-                String viewPath = "";
-                String userRole = user.getType();
-                if (userRole != null && (userRole.contains("ROLE_ADMIN") || userRole.contains("ROLE_MEDECIN"))) {
-                    viewPath = "/com/hospismart/hospismartdesktop/BackOfficeUsers.fxml";
-                } else {
-                    viewPath = "/com/hospismart/hospismartdesktop/UserProfile.fxml"; // ROLE_PATIENT
-                }
-
-                navigate(event, viewPath);
+                // Utilisation de la navigation centralisée selon le rôle
+                com.hospismart.hospismartdesktop.main.JavaFxMain.showDashboard(user);
             }
         } else {
             String errorMsg = UserService.lastLoginError;

@@ -819,3 +819,395 @@
 .modern-table .table-cell {
     -fx-alignment: CENTER;
 }
+/* Tableau avec en-têtes noirs (Style Professionnel) */
+.table-dark-header .column-header-background {
+    -fx-background-color: #2C353D;
+    -fx-background-radius: 0;
+}
+.table-dark-header .column-header .label {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: 800;
+}
+
+/* Tableau "Accessible" (Lignes plus hautes et contrastées) */
+.accessible-table {
+    -fx-font-size: 13px;
+}
+.accessible-table .column-header-background {
+    -fx-background-color: #1f3348;
+}
+.accessible-table .table-row-cell {
+    -fx-cell-size: 38px;
+}
+.kpi-card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-color: #d9e4f0;
+    -fx-padding: 10 14;
+    -fx-effect: dropshadow(gaussian, rgba(22, 33, 48, 0.12), 8, 0.1, 0, 2);
+}
+
+/* Bordures colorées sur le côté pour les KPI */
+.kpi-blue   { -fx-border-width: 0 0 0 5; -fx-border-color: #3498db; }
+.kpi-orange { -fx-border-width: 0 0 0 5; -fx-border-color: #e67e22; }
+.kpi-green  { -fx-border-width: 0 0 0 5; -fx-border-color: #2ecc71; }
+
+.kpi-value {
+    -fx-font-size: 22px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #1d3551;
+}
+.status-badge-attente {
+    -fx-background-color: #ffe8c2; -fx-text-fill: #8a5a00;
+    -fx-background-radius: 12; -fx-padding: 2 8; -fx-font-weight: 700;
+}
+.status-badge-cours {
+    -fx-background-color: #d9ebff; -fx-text-fill: #0f4f96;
+    -fx-background-radius: 12; -fx-padding: 2 8; -fx-font-weight: 700;
+}
+.status-badge-resolu {
+    -fx-background-color: #d8f5de; -fx-text-fill: #1f7a36;
+    -fx-background-radius: 12; -fx-padding: 2 8; -fx-font-weight: 700;
+}
+/**************************************************************************
+ */
+.front-navbar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 15 30;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 10, 0, 0, 2);
+}
+
+.front-nav-link {
+    -fx-text-fill: #6e7a89;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+}
+
+.front-nav-link:hover, .front-nav-link-active {
+    -fx-text-fill: #246bfd;
+}
+
+
+/**********************************************/
+.btn-solid-primary {
+    -fx-background-color: #246bfd;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+}
+
+.btn-link {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2f6ecf;
+    -fx-underline: true;
+    -fx-cursor: hand;
+}
+
+.btn-outline-white {
+    -fx-background-color: transparent;
+    -fx-border-color: #ffffff;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 8;
+}
+
+.card-pane {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
+}
+
+.text-input {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #ced4da;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 5px 8px;
+}
+
+.text-input:focused {
+    -fx-border-color: #1565C0;
+    -fx-background-color: white;
+}
+.tab-active {
+    -fx-background-color: #1976d2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.tab-inactive {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b0bec5;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+}
+.btn-modifier {
+    -fx-background-color: #0288D1;
+    -fx-text-fill: white;
+    -fx-background-radius: 3px;
+    -fx-font-weight: bold;
+}
+
+.btn-supprimer {
+    -fx-background-color: #D32F2F;
+    -fx-text-fill: white;
+    -fx-background-radius: 3px;
+    -fx-font-weight: bold;
+}
+
+.btn-activer {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-background-radius: 3px;
+    -fx-font-weight: bold;
+}
+/* Ce style modifiera tous les TableView de base qui n'ont pas ta classe .modern-table */
+.table-view .column-header-background {
+    -fx-background-color: #2c3e50;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+/* ========================================================= */
+/* GRAPHIQUES (CHARTS CSS)                                   */
+/* ========================================================= */
+.chart {
+    -fx-padding: 10px;
+}
+.chart-content {
+    -fx-padding: 10px;
+}
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: #e2e8f0;
+    -fx-stroke-dash-array: 4 4;
+}
+.chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-padding: 5px;
+}
+.chart-legend-item {
+    -fx-text-fill: #475569;
+}
+.axis {
+    -fx-tick-label-fill: #64748b;
+    -fx-font-size: 11px;
+}
+.axis-tick-mark, .axis-minor-tick-mark {
+    -fx-stroke: transparent;
+}
+/* Styles Spécifiques PieChart */
+.chart-pie-label {
+    -fx-fill: #475569;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.default-color0.chart-pie { -fx-pie-color: #0d6efd; }
+.default-color1.chart-pie { -fx-pie-color: #6f42c1; }
+.default-color2.chart-pie { -fx-pie-color: #20c997; }
+.default-color3.chart-pie { -fx-pie-color: #fd7e14; }
+.default-color4.chart-pie { -fx-pie-color: #ffc107; }
+
+/* Styles BarChart par défaut (surchargés en Java si besoin) */
+.default-color0.chart-bar { -fx-bar-fill: #0d6efd; }
+.default-color1.chart-bar { -fx-bar-fill: #198754; }
+.default-color2.chart-bar { -fx-bar-fill: #dc3545; }
+
+
+/* ========================================================= */
+/* SEARCH BAR                                                 */
+/* ========================================================= */
+.search-bar {
+    -fx-background-color: white;
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 6 14;
+    -fx-prompt-text-fill: #94a3b8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 4, 0, 0, 2);
+}
+
+.search-bar:focused {
+    -fx-border-color: #0d6efd;
+}
+/* ========================================================= */
+/* SCROLLBAR                                                  */
+/* ========================================================= */
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #cbd5e1;
+    -fx-background-radius: 10;
+}
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* ========================================================= */
+/* LABELS DE STATUT / BADGES                                  */
+/* ========================================================= */
+.status-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748b;
+    -fx-padding: 4 0;
+}
+
+.badge-danger {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #dc3545;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 3 10;
+    -fx-font-size: 12px;
+}
+
+.badge-success {
+    -fx-background-color: #d1fae5;
+    -fx-text-fill: #198754;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 3 10;
+    -fx-font-size: 12px;
+}
+
+.badge-warning {
+    -fx-background-color: #fef9c3;
+    -fx-text-fill: #b45309;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 3 10;
+    -fx-font-size: 12px;
+}
+.btn-success {
+    -fx-background-color: #198754;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 8 18;
+    -fx-cursor: hand;
+}
+.btn-success:hover { -fx-background-color: #157347; }
+
+.btn-danger {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 8 18;
+    -fx-cursor: hand;
+}
+.btn-danger:hover { -fx-background-color: #bb2d3b; }
+.titled-pane {
+    -fx-text-fill: #1e293b;
+    -fx-font-weight: bold;
+}
+
+.titled-pane > .title {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 10 15;
+}
+
+.titled-pane > *.content {
+    -fx-background-color: white;
+    -fx-background-radius: 0 0 10 10;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 1 1 1;
+    -fx-border-radius: 0 0 10 10;
+}
+
+.text-field, .date-picker > .text-field, .combo-box > .list-cell {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #cbd5e1;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 7 12;
+    -fx-prompt-text-fill: #94a3b8;
+}
+
+.text-field:focused {
+    -fx-border-color: #0d6efd;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(13,110,253,0.2), 6, 0, 0, 0);
+}
+
+.combo-box {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+/* ========================================================= */
+/* TABLEVIEW MORDERNE (FLAT DESIGN)                          */
+/* ========================================================= */
+.table-view, .modern-table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.table-view .column-header-background, .modern-table .column-header-background {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #e2e8f0 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0 0 5 0;
+}
+
+.table-view .column-header, .modern-table .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-size: 35px;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f1f5f9;
+}
+
+.table-view .column-header .label, .modern-table .column-header .label {
+    -fx-text-fill: #94a3b8;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-alignment: center-left;
+}
+
+.table-view .table-row-cell, .modern-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f1f5f9 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-cell-size: 40px;
+}
+
+.table-view .table-row-cell:selected, .modern-table .table-row-cell:selected {
+    -fx-background-color: #f8fafc;
+    -fx-text-fill: #1e293b;
+}
+
+.table-view .table-row-cell:hover, .modern-table .table-row-cell:hover {
+    -fx-background-color: #f8fafc;
+}
+
+.table-view .table-cell, .modern-table .table-cell {
+    -fx-padding: 0 10;
+    -fx-text-fill: #334155;
+    -fx-font-size: 11px;
+    -fx-alignment: center-left;
+    -fx-border-color: transparent;
+}
+
+.table-view:focused, .modern-table:focused {
+    -fx-background-color: transparent;
+}

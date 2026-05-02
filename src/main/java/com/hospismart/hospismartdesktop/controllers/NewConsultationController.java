@@ -46,9 +46,18 @@ public class NewConsultationController {
     private final com.hospismart.hospismartdesktop.services.AIService aiService;
 
     public NewConsultationController() {
-        // Nouvelle Clé API Google Gemini configurée
-        String geminiKey = "AIzaSyBpFKzayprf4kAAknRarlC8uU3vAoCWhVo";
+        String geminiKey = loadApiKey();
         this.aiService = new com.hospismart.hospismartdesktop.services.AIService(geminiKey);
+    }
+    private String loadApiKey() {
+        try {
+            java.util.Properties props = new java.util.Properties();
+            props.load(getClass().getResourceAsStream("/config.properties"));
+            return props.getProperty("gemini.api.key", "");
+        } catch (Exception e) {
+            System.err.println("[Config] Impossible de charger la clé API : " + e.getMessage());
+            return "";
+        }
     }
 
     public void setDashboardController(DashboardController dashboardController) {
@@ -147,13 +156,18 @@ public class NewConsultationController {
                 handleSave(event);
 
             // ── Cas 2 : incohérence médicale ──────────────────────────────────────
+
         } else if (!coherent) {
+
+            // Construire le texte de la carte diagnostic/traitement
+            String detailCard = "Diagnostic  :  " + diag + "\nTraitement  :  " + trait;
 
             com.hospismart.hospismartdesktop.utils.AICheckDialog.Result r = dialog.show(
                     com.hospismart.hospismartdesktop.utils.AICheckDialog.DialogType.INCOHERENCE,
                     "Incohérence médicale détectée",
                     "Le traitement prescrit ne semble pas adapté au diagnostic.",
-                    analyse, null,
+                    detailCard,  // ← carte avec diag + traitement
+                    analyse,     // ← explication IA en italique en dessous
                     "Enregistrer quand même", "Corriger le traitement",
                     null, null
             );
