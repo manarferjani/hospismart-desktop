@@ -34,13 +34,13 @@ public class ImageAIService {
             // 1. Construire le prompt descriptif pour l'IA
             String prompt = construirePrompt(nomMedicament, categorie);
             System.out.println("🤖 Génération IA en cours pour : " + nomMedicament);
-            
+
             // 2. Préparer l'URL d'appel (Pollinations.ai fonctionne en GET direct)
             String encodedPrompt = URLEncoder.encode(prompt, StandardCharsets.UTF_8.toString())
-                                             .replace("+", "%20");
+                .replace("+", "%20");
             // width=800, height=800, nologo=true (pour ne pas avoir le logo pollinations)
             String urlStr = "https://image.pollinations.ai/prompt/" + encodedPrompt + "?width=800&height=800&nologo=true&enhance=true";
-            
+
             URL url = new URL(urlStr);
 
             // 3. Télécharger l'image
@@ -53,7 +53,7 @@ public class ImageAIService {
             }
 
             Path filePath = dirPath.resolve(filename);
-            
+
             // On ouvre le stream et on copie directement dans le fichier
             try (InputStream in = url.openStream()) {
                 Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);

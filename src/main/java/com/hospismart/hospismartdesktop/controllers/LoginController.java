@@ -60,6 +60,7 @@ public class LoginController {
                     e.printStackTrace();
                     showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la vérification 2FA");
                 }
+            } else {
                 // 2FA non activée, continuer normalement
                 Session.getInstance().setCurrentUser(user);
 
@@ -177,13 +178,11 @@ public class LoginController {
 
     private void navigate(ActionEvent event, String path) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-            Scene scene = new Scene(loader.load());
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
+            com.hospismart.hospismartdesktop.main.JavaFxMain.setRoot(path, null);
+        } catch (Throwable e) {
+            System.err.println("Erreur lors de la navigation vers " + path + " : " + e.getMessage());
             e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur système", "Impossible d'accéder à cette page.\nDétail : " + e.getMessage());
         }
     }
 }

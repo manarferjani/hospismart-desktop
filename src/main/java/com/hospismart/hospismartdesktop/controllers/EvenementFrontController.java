@@ -2,9 +2,11 @@ package com.hospismart.hospismartdesktop.controllers;
 
 import com.hospismart.hospismartdesktop.models.Evenement;
 import com.hospismart.hospismartdesktop.models.Inscription;
+import com.hospismart.hospismartdesktop.models.User;
 import com.hospismart.hospismartdesktop.services.EvenementService;
 import com.hospismart.hospismartdesktop.services.InscriptionService;
 import com.hospismart.hospismartdesktop.services.WeatherService;
+import com.hospismart.hospismartdesktop.utils.Session;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -72,7 +74,7 @@ public class EvenementFrontController implements Initializable {
                     getClass().getResource("/com/hospismart/hospismartdesktop/welcome-view.fxml"));
             Scene scene = new Scene(loader.load(), 900, 620);
             scene.getStylesheets().add(
-                    getClass().getResource("/com/hospismart/hospismartdesktop/styles.css").toExternalForm());
+                    getClass().getResource("/css/style.css").toExternalForm());
             Stage stage = (Stage) cardsContainer.getScene().getWindow();
             stage.setTitle("HospiSmart — Bienvenue");
             stage.setScene(scene);
@@ -507,6 +509,21 @@ public class EvenementFrontController implements Initializable {
         TextField telField = new TextField();
         telField.setPromptText("+216 XX XXX XXX (optionnel)");
         telField.setPrefWidth(320);
+
+        // Autofill with logged-in user data
+        User currentUser = Session.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String fullName = (currentUser.getNom() != null ? currentUser.getNom() : "") + " " + 
+                              (currentUser.getPrenom() != null ? currentUser.getPrenom() : "");
+            nomField.setText(fullName.trim());
+            
+            if (currentUser.getEmail() != null) {
+                emailField.setText(currentUser.getEmail());
+            }
+            if (currentUser.getTelephone() != null) {
+                telField.setText(currentUser.getTelephone());
+            }
+        }
 
         grid.add(new Label("Nom *:"), 0, 0);
         grid.add(nomField, 1, 0);

@@ -3,23 +3,20 @@ package com.hospismart.hospismartdesktop.utils;
 import com.hospismart.hospismartdesktop.models.User;
 
 public class UserSession {
-    // Instance unique de l'utilisateur connecté
-    private static User instance;
 
-    // Cette méthode sera appelée juste après la connexion (ou ton mock au démarrage)
     public static void login(User user) {
-        instance = user;
+        Session.getInstance().setCurrentUser(user);
     }
 
     public static void logout() {
-        instance = null;
+        Session.getInstance().cleanUserSession();
     }
 
     public static User getUser() {
-        return instance;
+        return Session.getInstance().getCurrentUser();
     }
 
     public static boolean isIsLoggedIn() {
-        return instance != null;
+        return Session.getInstance().getCurrentUser() != null;
     }
 }

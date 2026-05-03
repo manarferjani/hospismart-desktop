@@ -73,23 +73,31 @@ public class ResumeOrdonnaceController {
             // 2. Génération du PDF
             String pdfPath = pdfService.generateOrdonnancePdf(currentConsultation);
 
-            // 3. ENVOI RÉEL DE L'EMAIL (Cette ligne manquait !)
-            emailService.sendEmailWithAttachment(
-                    patient.getEmail(),
-                    "Votre Ordonnance HospiSmart - Réf #" + currentConsultation.getId(),
-                    "Bonjour " + patient.getPrenom() + ",\n\nVeuillez trouver ci-joint votre ordonnance.\n\nCordialement,\nL'équipe HospiSmart",
-                    pdfPath);
+            // 3. ENVOI RÉEL DE L'EMAIL (en arrière-plan)
+            new Thread(() -> {
+                try {
+                    emailService.sendEmailWithAttachment(
+                            patient.getEmail(),
+                            "Votre Ordonnance HospiSmart - Réf #" + currentConsultation.getId(),
+                            "Bonjour " + patient.getPrenom() + ",\n\nVeuillez trouver ci-joint votre ordonnance.\n\nCordialement,\nL'équipe HospiSmart",
+                            pdfPath);
 
-            // 4. Affichage de la modal MODERNE uniquement
-            showModernModal("Email Envoyé",
-                    "L'ordonnance a été envoyée avec succès à : " + patient.getEmail(),
-                    false);
+                    javafx.application.Platform.runLater(() -> 
+                        showModernModal("Email Envoyé",
+                            "L'ordonnance a été envoyée avec succès à : " + patient.getEmail(),
+                            false)
+                    );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    javafx.application.Platform.runLater(() -> 
+                        showModernModal("Erreur Email", "Échec de l'envoi. Vérifiez votre connexion SMTP.\n" + e.getMessage(), true)
+                    );
+                }
+            }).start();
 
-            // NOTE : Ne plus appeler NotificationUtils ici pour éviter l'ancien design
-
-        } catch (Exception e) {
-            showModernModal("Erreur Email", "Échec de l'envoi. Vérifiez votre connexion SMTP.", true);
-            e.printStackTrace();
+        } catch (Exception ex) {
+            showModernModal("Erreur", "Une erreur est survenue lors de la préparation du PDF.", true);
+            ex.printStackTrace();
         }
     }
 

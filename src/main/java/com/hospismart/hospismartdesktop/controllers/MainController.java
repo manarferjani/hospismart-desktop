@@ -6,23 +6,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
-    @FXML private TabPane mainTabPane;
-    @FXML private Tab backTab;
-    @FXML private Tab frontTab;
     @FXML private StackPane contentArea; // Zone où s'affichent les pages du menu
 
-    private EvenementFrontController frontController;
-
     // --- Navigation Menu Gauche ---
+
+    @FXML
+    public void showDashboard() {
+        loadView("/com/hospismart/hospismartdesktop/dashboard.fxml");
+    }
 
     @FXML
     public void showMedicaments() {
@@ -37,6 +34,21 @@ public class MainController implements Initializable {
     @FXML
     public void showMouvements() {
         loadView("/com/hospismart/hospismartdesktop/mouvement-stock.fxml");
+    }
+
+    @FXML
+    public void showUsers() {
+        loadView("/com/hospismart/hospismartdesktop/BackOfficeUsers.fxml");
+    }
+
+    @FXML
+    public void showReclamations() {
+        loadView("/com/hospismart/hospismartdesktop/reclamation_back.fxml");
+    }
+
+    @FXML
+    public void showEvenements() {
+        loadView("/com/hospismart/hospismartdesktop/evenement-back.fxml");
     }
 
     // Méthode générique pour charger une vue dans le contentArea
@@ -57,32 +69,20 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            // Chargement auto du back-office dans son onglet
-            FXMLLoader backLoader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/evenement-back.fxml"));
-            backTab.setContent(backLoader.load());
-
-            // Chargement auto du front-office dans son onglet
-            FXMLLoader frontLoader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/evenement-front.fxml"));
-            frontTab.setContent(frontLoader.load());
-            frontController = frontLoader.getController();
-
-            // Rafraîchir les données quand on clique sur l'onglet Front
-            mainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
-                if (newTab == frontTab && frontController != null) {
-                    frontController.loadData();
-                }
-            });
-
-        } catch (IOException e) {
-            System.err.println("❌ Erreur initialisation MainController");
-            e.printStackTrace();
-        }
+        // Au démarrage, afficher le dashboard par défaut
+        showDashboard();
     }
 
     @FXML
     public void handleGoFront() {
         // Appelle la méthode static de ta classe de lancement
         JavaFxMain.showFrontoffice();
+    }
+
+    @FXML
+    public void handleLogout(javafx.event.ActionEvent event) {
+        System.out.println("[Navigation] Déconnexion depuis le Back-Office (MainController)");
+        com.hospismart.hospismartdesktop.utils.Session.getInstance().cleanUserSession();
+        JavaFxMain.setRoot("/com/hospismart/hospismartdesktop/Login.fxml", "Hospismart - Connexion");
     }
 }

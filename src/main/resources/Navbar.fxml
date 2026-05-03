@@ -24,10 +24,10 @@
     <Hyperlink fx:id="linkRdvs" text="Mes Rendez-vous" onAction="#goToRdvs"
                style="-fx-text-fill: #555; -fx-underline: false; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;"/>
 
-    <Hyperlink fx:id="linkEvenements" text="Événements"
+    <Hyperlink fx:id="linkEvenements" text="Événements" onAction="#goToEvenements"
                style="-fx-text-fill: #555; -fx-underline: false; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;"/>
 
-    <Hyperlink fx:id="linkReclamations" text="Réclamations"
+    <Hyperlink fx:id="linkReclamations" text="Réclamations" onAction="#goToReclamations"
                style="-fx-text-fill: #555; -fx-underline: false; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;"/>
 
 </HBox>
@@ -44,8 +44,8 @@
         </StackPane>
     </StackPane>
 
-    <Button text="Mon Compte" style="-fx-background-color: transparent; -fx-border-color: #0d6efd; -fx-border-radius: 50; -fx-text-fill: #0d6efd; -fx-padding: 8 20;"/>
-    <Button text="Déconnexion" style="-fx-background-color: #0d6efd; -fx-text-fill: white; -fx-background-radius: 50; -fx-padding: 8 20; -fx-font-weight: bold;"/>
+    <Button text="Mon Compte" onAction="#goToMonCompte" style="-fx-background-color: transparent; -fx-border-color: #0d6efd; -fx-border-radius: 50; -fx-text-fill: #0d6efd; -fx-padding: 8 20; -fx-cursor: hand;"/>
+    <Button text="Déconnexion" onAction="#handleLogout" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 50; -fx-padding: 8 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
 </HBox>
 
 </HBox>

@@ -46,18 +46,7 @@ public class NewConsultationController {
     private final com.hospismart.hospismartdesktop.services.AIService aiService;
 
     public NewConsultationController() {
-        String geminiKey = loadApiKey();
-        this.aiService = new com.hospismart.hospismartdesktop.services.AIService(geminiKey);
-    }
-    private String loadApiKey() {
-        try {
-            java.util.Properties props = new java.util.Properties();
-            props.load(getClass().getResourceAsStream("/config.properties"));
-            return props.getProperty("gemini.api.key", "");
-        } catch (Exception e) {
-            System.err.println("[Config] Impossible de charger la clé API : " + e.getMessage());
-            return "";
-        }
+        this.aiService = new com.hospismart.hospismartdesktop.services.AIService(com.hospismart.hospismartdesktop.utils.ApiConfig.GEMINI_API_KEY);
     }
 
     public void setDashboardController(DashboardController dashboardController) {

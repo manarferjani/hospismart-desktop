@@ -7,7 +7,7 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.hospismart.hospismartdesktop.controllers.MainController"
-            stylesheets="@hospismart.css">
+            stylesheets="/css/style.css">
 
     <!-- ===================== SIDEBAR ===================== -->
     <left>
@@ -16,27 +16,37 @@
             <!-- Brand / Logo -->
             <VBox styleClass="sidebar-brand" alignment="CENTER_LEFT" spacing="2">
                 <Label text="❤️  Hospismart" styleClass="sidebar-brand-label"/>
-                <Label text="OASIS — Gestion des Stocks" styleClass="sidebar-brand-sub"/>
+                <Label text="Admin - Back Office" styleClass="sidebar-brand-sub"/>
             </VBox>
 
             <VBox VBox.vgrow="ALWAYS" spacing="2" style="-fx-padding: 12 8 8 8;">
 
                 <!-- Section: Navigation -->
-                <Label text="NAVIGATION" styleClass="menu-header"/>
-                <Button fx:id="btnDashboard" text="📊  Dashboard"
+                <!-- Section: Pharmacie & Stocks -->
+                <Label text="PHARMACIE &amp; STOCKS" styleClass="menu-header"/>
+                <Button fx:id="btnDashboard" text="📊  Tableau de Bord"
                         onAction="#showDashboard"
                         styleClass="nav-button" maxWidth="Infinity"/>
                 <Button fx:id="btnMedicaments" text="💊  Médicaments"
                         onAction="#showMedicaments"
                         styleClass="nav-button" maxWidth="Infinity"/>
-
-                <!-- Section: Gestion -->
-                <Label text="GESTION" styleClass="menu-header"/>
                 <Button fx:id="btnCategories" text="🏷️  Catégories"
                         onAction="#showCategories"
                         styleClass="nav-button" maxWidth="Infinity"/>
                 <Button fx:id="btnMouvements" text="📦  Mouvements Stock"
                         onAction="#showMouvements"
+                        styleClass="nav-button" maxWidth="Infinity"/>
+
+                <!-- Section: Administration -->
+                <Label text="ADMINISTRATION" styleClass="menu-header"/>
+                <Button fx:id="btnUsers" text="👥  Utilisateurs"
+                        onAction="#showUsers"
+                        styleClass="nav-button" maxWidth="Infinity"/>
+                <Button fx:id="btnReclamations" text="📋  Réclamations"
+                        onAction="#showReclamations"
+                        styleClass="nav-button" maxWidth="Infinity"/>
+                <Button fx:id="btnEvenements" text="📅  Événements"
+                        onAction="#showEvenements"
                         styleClass="nav-button" maxWidth="Infinity"/>
 
                 <!-- Spacer -->
@@ -48,6 +58,12 @@
                             onAction="#handleGoFront"
                             styleClass="nav-button" maxWidth="Infinity"
                             style="-fx-background-color: transparent; -fx-text-fill: #38bdf8;
+                                   -fx-font-size: 13px; -fx-padding: 10 18; -fx-cursor: hand;
+                                   -fx-alignment: CENTER_LEFT;"/>
+                    <Button text="🚪  Déconnexion"
+                            onAction="#handleLogout"
+                            styleClass="nav-button" maxWidth="Infinity"
+                            style="-fx-background-color: transparent; -fx-text-fill: #ef4444;
                                    -fx-font-size: 13px; -fx-padding: 10 18; -fx-cursor: hand;
                                    -fx-alignment: CENTER_LEFT;"/>
                     <Label text="PIDEV 2025-2026"

@@ -17,26 +17,7 @@
       fx:controller="com.hospismart.hospismartdesktop.controllers.EvenementFrontController"
       spacing="0" style="-fx-background-color: #f5f7fb;">
 
-    <!-- ══ White Top Navbar ══════════════════════════════════════ -->
-    <HBox styleClass="front-navbar">
-        <!-- Logo -->
-        <StackPane styleClass="front-logo-circle">
-            <Label text="H" styleClass="front-logo-letter"/>
-        </StackPane>
-        <Label text="Hospismart" styleClass="front-navbar-brand"/>
-
-        <Region HBox.hgrow="ALWAYS"/>
-
-        <!-- Nav links -->
-        <Label text="Accueil"       styleClass="front-nav-link"/>
-        <Label text="Evenements"    styleClass="front-nav-link-active"/>
-
-        <Region prefWidth="20"/>
-
-        <Button text="Mon Compte"   styleClass="btn-mon-compte"/>
-        <Region prefWidth="8"/>
-        <Button text="Deconnexion"  onAction="#onRetour" styleClass="btn-deconnexion"/>
-    </HBox>
+    <fx:include source="/Navbar.fxml" />
 
     <!-- ══ Search Strip ═════════════════════════════════════════ -->
     <HBox styleClass="front-search-strip">

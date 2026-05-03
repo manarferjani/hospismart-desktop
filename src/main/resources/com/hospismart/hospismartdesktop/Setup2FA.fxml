@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #f4f6f9;" stylesheets="@style-admin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.SetupTwoFactorController">
+<AnchorPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #f4f6f9;" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.SetupTwoFactorController">
    <children>
       <!-- Titre -->
       <Label layoutX="50.0" layoutY="20.0" text="Configuration de l'Authentification à Deux Facteurs (2FA)" textFill="#1565C0">
@@ -68,18 +68,8 @@
 
       <!-- Boutons d'action -->
       <HBox layoutX="200.0" layoutY="660.0" spacing="15.0">
-         <Button mnemonicParsing="false" onAction="#handleCancel" prefHeight="40.0" prefWidth="130.0" style="-fx-font-size: 12;" text="⬅️ Retour">
-            <style>
-               -fx-background-color: #757575;
-               -fx-text-fill: white;
-            </style>
-         </Button>
-         <Button fx:id="skipButton" mnemonicParsing="false" onAction="#handleSkip" prefHeight="40.0" prefWidth="130.0" style="-fx-font-size: 12;" text="⏭️ Passer">
-            <style>
-               -fx-background-color: #FF9800;
-               -fx-text-fill: white;
-            </style>
-         </Button>
+         <Button mnemonicParsing="false" onAction="#handleCancel" prefHeight="40.0" prefWidth="130.0" style="-fx-font-size: 12; -fx-background-color: #757575; -fx-text-fill: white;" text="⬅️ Retour" />
+         <Button fx:id="skipButton" mnemonicParsing="false" onAction="#handleSkip" prefHeight="40.0" prefWidth="130.0" style="-fx-font-size: 12; -fx-background-color: #FF9800; -fx-text-fill: white;" text="⏭️ Passer" />
          <Button fx:id="enableButton" mnemonicParsing="false" onAction="#handleEnable" prefHeight="40.0" prefWidth="150.0" style="-fx-font-size: 12;" text="✅ Activer 2FA" />
       </HBox>
    </children>

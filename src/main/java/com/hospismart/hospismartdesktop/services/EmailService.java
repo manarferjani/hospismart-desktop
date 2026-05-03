@@ -1,7 +1,7 @@
 package com.hospismart.hospismartdesktop.services;
 
-import javax.mail.*;
-import javax.mail.internet.*;
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
 import java.util.Properties;
 import java.io.File;
 
@@ -15,8 +15,8 @@ public class EmailService {
     private static final String SMTP_PORT = "587";
 
     // Identifiants (Utilisez des mots de passe d'application Google)
-    private static final String SMTP_USER = "tabeagle947@gmail.com";
-    private static final String SMTP_PASSWORD = "rcdf rczc tgbq wamw";
+    private static final String SMTP_USER = "arfaouimahmoud62@gmail.com";
+    private static final String SMTP_PASSWORD = "qese qvib bxst fvsn";
 
     /**
      * Envoie un email avec une pièce jointe (utile pour les ordonnances PDF).

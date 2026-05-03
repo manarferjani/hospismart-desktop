@@ -66,32 +66,19 @@ public class UserProfileController {
         showAlert(Alert.AlertType.INFORMATION, "Succès", "Profil mis à jour avec succès !");
     }
 
-    @FXML
-    void handleLogout(ActionEvent event) {
-        Session.getInstance().cleanUserSession();
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/Login.fxml"));
-            Scene scene = new Scene(loader.load());
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     @FXML
     void handleFacialRecognition(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/FaceRegister.fxml"));
-            Scene scene = new Scene(loader.load());
+            javafx.scene.Parent root = loader.load();
             FaceRegisterController controller = loader.getController();
             controller.setUserToRegister(currentUser);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
+            ((Node) event.getSource()).getScene().setRoot(root);
         } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la page de reconnaissance faciale.");
+            String details = e.getCause() != null ? e.getCause().toString() : e.getMessage();
+            showAlert(Alert.AlertType.ERROR, "Erreur FXML", "Impossible de charger la page de reconnaissance faciale.\nDétails: " + details);
             e.printStackTrace();
         }
     }
@@ -100,30 +87,20 @@ public class UserProfileController {
     void handleTwoFactorAuth(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/Setup2FA.fxml"));
-            Scene scene = new Scene(loader.load());
+            javafx.scene.Parent root = loader.load();
             SetupTwoFactorController controller = loader.getController();
             controller.setNewUserRegistration(currentUser);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
+            ((Node) event.getSource()).getScene().setRoot(root);
         } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la page de configuration 2FA.");
+            String details = e.getCause() != null ? e.getCause().toString() : e.getMessage();
+            showAlert(Alert.AlertType.ERROR, "Erreur FXML", "Impossible de charger la page de configuration 2FA.\nDétails: " + details);
             e.printStackTrace();
         }
     }
 
     @FXML
     void handleVoiceHealth(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/VoiceHealth.fxml"));
-            Scene scene = new Scene(loader.load());
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger la page de consultation vocale.");
-            e.printStackTrace();
-        }
+        com.hospismart.hospismartdesktop.main.JavaFxMain.setRoot("/com/hospismart/hospismartdesktop/VoiceHealth.fxml", null);
     }
 
     private void showAlert(Alert.AlertType type, String title, String content) {

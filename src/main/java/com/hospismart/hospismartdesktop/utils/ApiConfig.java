@@ -15,7 +15,7 @@ public final class ApiConfig {
 
     // ── Google Gemini (AI Description) ──────────────────────────
     // Free tier available — https://aistudio.google.com/apikey
-    public static final String GEMINI_API_KEY = "AIzaSyBqvsuP_yxbibSjfIdeP8RnooYup_w4UrU";
+    public static final String GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
 
     // ── Geoapify (Geocoding / Map Search) ───────────────────────
     // Free tier: 3000 req/day — https://www.geoapify.com/

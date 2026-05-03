@@ -1,6 +1,6 @@
 package com.hospismart.hospismartdesktop.controllers; // Package des controllers JavaFX
 
-import com.hospismart.hospismartdesktop.Services.ReponseDao; // DAO pour les operations sur les reponses
+import com.hospismart.hospismartdesktop.services.ReponseDao; // DAO pour les operations sur les reponses
 import com.hospismart.hospismartdesktop.models.Reponse; // Modele Reponse
 import javafx.animation.FadeTransition; // Animation de fondu
 import javafx.collections.FXCollections; // Fabrique de listes observables

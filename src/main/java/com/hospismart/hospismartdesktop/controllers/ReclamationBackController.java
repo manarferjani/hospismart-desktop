@@ -1,7 +1,7 @@
 package com.hospismart.hospismartdesktop.controllers;
 
-import com.hospismart.hospismartdesktop.Services.ReclamationDao;
-import com.hospismart.hospismartdesktop.Services.ReponseDao;
+import com.hospismart.hospismartdesktop.services.ReclamationDao;
+import com.hospismart.hospismartdesktop.services.ReponseDao;
 import com.hospismart.hospismartdesktop.models.Reclamation;
 import com.hospismart.hospismartdesktop.models.Reponse;
 import javafx.animation.FadeTransition;
@@ -136,7 +136,7 @@ public class ReclamationBackController implements Initializable { // Controller 
         // En l'absence d'un serveur tiers (ex: Firebase), nous creons un ecouteur local
         // qui "poll" (interroge) la BD toutes les 3 secondes pour detecter les ajouts.
         javafx.animation.Timeline timeline = new javafx.animation.Timeline(
-                new javafx.animation.KeyFrame(Duration.seconds(3), e -> checkForNewReclamations())
+            new javafx.animation.KeyFrame(Duration.seconds(3), e -> checkForNewReclamations())
         );
         timeline.setCycleCount(javafx.animation.Animation.INDEFINITE);
         timeline.play();
@@ -320,8 +320,8 @@ public class ReclamationBackController implements Initializable { // Controller 
         ObservableList<Reclamation> filteredData = FXCollections.observableArrayList();
         for (Reclamation r : reclamationList) {
             boolean match = (r.getTitre() != null && r.getTitre().toLowerCase().contains(lowerCaseFilter)) ||
-                            (r.getNomPatient() != null && r.getNomPatient().toLowerCase().contains(lowerCaseFilter)) ||
-                            (r.getStatut() != null && r.getStatut().toLowerCase().contains(lowerCaseFilter));
+                (r.getNomPatient() != null && r.getNomPatient().toLowerCase().contains(lowerCaseFilter)) ||
+                (r.getStatut() != null && r.getStatut().toLowerCase().contains(lowerCaseFilter));
             if (match) {
                 filteredData.add(r);
             }
@@ -349,9 +349,9 @@ public class ReclamationBackController implements Initializable { // Controller 
         }
 
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList(
-                new PieChart.Data("En attente (" + attente + ")", attente),
-                new PieChart.Data("En cours (" + enCours + ")", enCours),
-                new PieChart.Data("Traitées (" + traite + ")", traite)
+            new PieChart.Data("En attente (" + attente + ")", attente),
+            new PieChart.Data("En cours (" + enCours + ")", enCours),
+            new PieChart.Data("Traitées (" + traite + ")", traite)
         );
 
         // Evite un camembert vide
@@ -386,8 +386,16 @@ public class ReclamationBackController implements Initializable { // Controller 
                 txtAdminEmail.setText(currentReponse.getAdminEmail());
             } else {
                 txtReponse.setText("");
-                txtAdminNom.setText("");
-                txtAdminEmail.setText("");
+                
+                // Auto-fill admin data from session when creating a new reply
+                com.hospismart.hospismartdesktop.models.User currentUser = com.hospismart.hospismartdesktop.utils.Session.getInstance().getCurrentUser();
+                if (currentUser != null) {
+                    txtAdminNom.setText(currentUser.getPrenom() + " " + currentUser.getNom());
+                    txtAdminEmail.setText(currentUser.getEmail());
+                } else {
+                    txtAdminNom.setText("");
+                    txtAdminEmail.setText("");
+                }
             }
         }
     }
@@ -826,35 +834,3 @@ public class ReclamationBackController implements Initializable { // Controller 
         ftTable.play();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

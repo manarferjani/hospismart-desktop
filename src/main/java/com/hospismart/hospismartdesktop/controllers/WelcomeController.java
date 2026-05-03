@@ -28,7 +28,7 @@ public class WelcomeController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Scene scene = new Scene(loader.load(), 1200, 760);
             scene.getStylesheets().add(
-                    getClass().getResource("/com/hospismart/hospismartdesktop/styles.css").toExternalForm());
+                    getClass().getResource("/css/style.css").toExternalForm());
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setTitle(title);

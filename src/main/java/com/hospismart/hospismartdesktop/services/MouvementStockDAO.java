@@ -22,8 +22,8 @@ public class MouvementStockDAO {
     public List<MouvementStock> findAll() {
         List<MouvementStock> list = new ArrayList<>();
         String sql = "SELECT ms.*, m.nom AS medicament_nom FROM mouvement_stock ms " +
-                     "JOIN medicament m ON ms.medicament_id = m.id " +
-                     "ORDER BY ms.date_mouvement DESC";
+            "JOIN medicament m ON ms.medicament_id = m.id " +
+            "ORDER BY ms.date_mouvement DESC";
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
@@ -47,8 +47,8 @@ public class MouvementStockDAO {
     public boolean add(MouvementStock m) {
         String insertSql = "INSERT INTO mouvement_stock (type, quantite, date_mouvement, commentaire, medicament_id) VALUES (?, ?, NOW(), ?, ?)";
         String updateSql = m.getType().equalsIgnoreCase("ENTREE")
-                ? "UPDATE medicament SET quantite = quantite + ? WHERE id = ?"
-                : "UPDATE medicament SET quantite = quantite - ? WHERE id = ?";
+            ? "UPDATE medicament SET quantite = quantite + ? WHERE id = ?"
+            : "UPDATE medicament SET quantite = quantite - ? WHERE id = ?";
         try {
             connection.setAutoCommit(false);
 
@@ -97,8 +97,8 @@ public class MouvementStockDAO {
     public List<MouvementStock> findByMedicamentId(int medicamentId) {
         List<MouvementStock> list = new ArrayList<>();
         String sql = "SELECT ms.*, m.nom AS medicament_nom FROM mouvement_stock ms " +
-                     "JOIN medicament m ON ms.medicament_id = m.id " +
-                     "WHERE ms.medicament_id = ? ORDER BY ms.date_mouvement DESC";
+            "JOIN medicament m ON ms.medicament_id = m.id " +
+            "WHERE ms.medicament_id = ? ORDER BY ms.date_mouvement DESC";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, medicamentId);
             ResultSet rs = ps.executeQuery();

@@ -56,7 +56,7 @@ public class BackOfficeUsersController {
         colStatut.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().isActive() ? "Actif" : "Inactif"));
 
         setupActionColumn();
-        
+
         filterComboBox.setValue("TOUS");
         loadData();
     }
@@ -105,12 +105,12 @@ public class BackOfficeUsersController {
                     alert.setHeaderText("Supprimer l'utilisateur ?");
                     alert.setContentText("Êtes-vous sûr de vouloir supprimer " + user.getNom() + " ?");
                     Optional<ButtonType> result = alert.showAndWait();
-                        boolean deleted = userService.supprimer(user.getId());
-                        if (!deleted) {
-                            Alert err = new Alert(Alert.AlertType.ERROR, "La suppression a échoué. Le compte est potentiellement lié à d'autres données.");
-                            err.showAndWait();
-                        }
-                        loadData();
+                    boolean deleted = userService.supprimer(user.getId());
+                    if (!deleted) {
+                        Alert err = new Alert(Alert.AlertType.ERROR, "La suppression a échoué. Le compte est potentiellement lié à d'autres données.");
+                        err.showAndWait();
+                    }
+                    loadData();
                 });
             }
 
@@ -137,13 +137,13 @@ public class BackOfficeUsersController {
         String typeFilter = filterComboBox.getValue();
 
         List<User> filteredList = masterData.stream().filter(u -> {
-            boolean matchesKeyword = keyword.isEmpty() || 
-                u.getNom().toLowerCase().contains(keyword) || 
-                u.getPrenom().toLowerCase().contains(keyword) || 
+            boolean matchesKeyword = keyword.isEmpty() ||
+                u.getNom().toLowerCase().contains(keyword) ||
+                u.getPrenom().toLowerCase().contains(keyword) ||
                 u.getEmail().toLowerCase().contains(keyword);
-            
+
             boolean matchesType = "TOUS".equals(typeFilter) || (u.getType() != null && u.getType().toUpperCase().contains(typeFilter.toUpperCase()));
-            
+
             return matchesKeyword && matchesType;
         }).collect(Collectors.toList());
 
@@ -156,7 +156,7 @@ public class BackOfficeUsersController {
         fileChooser.setTitle("Enregistrer le rapport PDF");
         fileChooser.setInitialFileName("Liste_Utilisateurs_Hospismart.pdf");
         fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("Fichiers PDF (*.pdf)", "*.pdf"));
-        
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         File targetFile = fileChooser.showSaveDialog(stage);
 
@@ -166,7 +166,7 @@ public class BackOfficeUsersController {
         try {
             PdfWriter.getInstance(document, new FileOutputStream(targetFile));
             document.open();
-            
+
             com.itextpdf.text.Font titleFont = com.itextpdf.text.FontFactory.getFont(com.itextpdf.text.FontFactory.HELVETICA_BOLD, 22, new com.itextpdf.text.BaseColor(21, 101, 192)); // #1565C0
             com.itextpdf.text.Font headFont = com.itextpdf.text.FontFactory.getFont(com.itextpdf.text.FontFactory.HELVETICA_BOLD, 12, com.itextpdf.text.BaseColor.WHITE);
             com.itextpdf.text.Font dataFont = com.itextpdf.text.FontFactory.getFont(com.itextpdf.text.FontFactory.HELVETICA, 11, com.itextpdf.text.BaseColor.DARK_GRAY);
@@ -174,7 +174,7 @@ public class BackOfficeUsersController {
             Paragraph title = new Paragraph("Annuaire des Utilisateurs - HospiSmart\n\n", titleFont);
             title.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
             document.add(title);
-            
+
             PdfPTable table = new PdfPTable(5);
             table.setWidthPercentage(100);
             table.setSpacingBefore(15f);
@@ -199,7 +199,7 @@ public class BackOfficeUsersController {
                     new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Phrase(u.getType(), dataFont)),
                     new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Phrase(u.isActive() ? "Actif" : "Inactif", dataFont))
                 };
-                
+
                 for(int i=0; i<cells.length; i++) {
                     cells[i].setPadding(8f);
                     cells[i].setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
@@ -210,10 +210,10 @@ public class BackOfficeUsersController {
                     table.addCell(cells[i]);
                 }
             }
-            
+
             document.add(table);
             document.close();
-            
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Export PDF");
             alert.setHeaderText("Succès");
@@ -237,9 +237,9 @@ public class BackOfficeUsersController {
         long medecinCount = masterData.stream().filter(u -> u.getType() != null && u.getType().toUpperCase().contains("MEDECIN")).count();
 
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Admins (" + adminCount + ")", adminCount),
-                new PieChart.Data("Patients (" + patientCount + ")", patientCount),
-                new PieChart.Data("Médecins (" + medecinCount + ")", medecinCount)
+            new PieChart.Data("Admins (" + adminCount + ")", adminCount),
+            new PieChart.Data("Patients (" + patientCount + ")", patientCount),
+            new PieChart.Data("Médecins (" + medecinCount + ")", medecinCount)
         );
         PieChart chart = new PieChart(pieChartData);
 
@@ -269,10 +269,10 @@ public class BackOfficeUsersController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/EditUserBack.fxml"));
             Scene scene = new Scene(loader.load());
-            
+
             com.hospismart.hospismartdesktop.controllers.EditUserBackController controller = loader.getController();
             controller.setUser(user);
-            
+
             Stage stage = new Stage();
             stage.setTitle("Éditer l'utilisateur");
             stage.setScene(scene);

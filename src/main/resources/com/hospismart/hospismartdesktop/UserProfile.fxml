@@ -1,63 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f4f6f9;" stylesheets="@style-admin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.UserProfileController">
-   <children>
-      <!-- En-tête (Navbar simulée) -->
-      <AnchorPane prefHeight="60.0" prefWidth="800.0" style="-fx-background-color: #1a2a3a;">
-         <children>
-            <Label layoutX="20.0" layoutY="15.0" text="HospiSmart - Espace Utilisateur" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Button layoutX="680.0" layoutY="15.0" mnemonicParsing="false" onAction="#handleLogout" styleClass="btn-supprimer" text="Se Déconnecter" />
-         </children>
-      </AnchorPane>
+<BorderPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #f4f7f9;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.UserProfileController">
+    <!-- Navbar globale -->
+    <top>
+        <fx:include source="/Navbar.fxml" />
+    </top>
 
-      <AnchorPane layoutX="100.0" layoutY="100.0" prefHeight="580.0" prefWidth="600.0" styleClass="card-pane">
-         <children>
-            <Label layoutX="40.0" layoutY="30.0" text="Mon Profil" textFill="#1565C0">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-            </Label>
-            
-            <Label layoutX="40.0" layoutY="90.0" text="Nom :" />
-            <TextField fx:id="nomField" layoutX="150.0" layoutY="85.0" prefHeight="30.0" prefWidth="200.0" styleClass="text-input" />
-            
-            <Label layoutX="40.0" layoutY="140.0" text="Prénom :" />
-            <TextField fx:id="prenomField" layoutX="150.0" layoutY="135.0" prefHeight="30.0" prefWidth="200.0" styleClass="text-input" />
-            
-            <Label layoutX="40.0" layoutY="190.0" text="Email :" />
-            <TextField fx:id="emailField" layoutX="150.0" layoutY="185.0" prefHeight="30.0" prefWidth="200.0" styleClass="text-input" />
-            
-            <Label layoutX="40.0" layoutY="240.0" text="Téléphone :" />
-            <TextField fx:id="telephoneField" layoutX="150.0" layoutY="235.0" prefHeight="30.0" prefWidth="200.0" styleClass="text-input" />
-            
-            <Label layoutX="40.0" layoutY="290.0" text="Nouveau MDP :" />
-            <PasswordField fx:id="passwordField" layoutX="150.0" layoutY="285.0" prefHeight="30.0" prefWidth="200.0" promptText="(Laisser vide si inchangé)" styleClass="text-input" />
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20" style="-fx-padding: 40;">
+            <!-- Conteneur principal de type carte -->
+            <VBox maxWidth="700" spacing="25" styleClass="card-pane" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+                
+                <!-- Titre -->
+                <VBox spacing="5">
+                    <Label text="Mon Profil" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #152536;" />
+                    <Label text="Gérez vos informations personnelles et paramètres de sécurité" style="-fx-font-size: 14px; -fx-text-fill: #6e7a89;" />
+                </VBox>
 
-            <Button layoutX="150.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleUpdate" prefHeight="40.0" prefWidth="200.0" styleClass="btn-primary" text="Mettre à jour" />
-            
-            <!-- Boutons pour la sécurité et reconnaissance faciale -->
-            <Separator layoutX="40.0" layoutY="400.0" prefWidth="520.0" />
-            
-            <Label layoutX="40.0" layoutY="420.0" text="Sécurité &amp; Authentification" textFill="#1565C0">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Label>
-            
-            <Button layoutX="40.0" layoutY="450.0" mnemonicParsing="false" onAction="#handleFacialRecognition" prefHeight="35.0" prefWidth="240.0" styleClass="btn-secondary" text="📷 Ajouter reconnaissance faciale" />
-            
-            <Button layoutX="320.0" layoutY="450.0" mnemonicParsing="false" onAction="#handleTwoFactorAuth" prefHeight="35.0" prefWidth="240.0" styleClass="btn-secondary" text="🔐 Configurer 2FA" />
-            
-            <Button layoutX="40.0" layoutY="490.0" mnemonicParsing="false" onAction="#handleVoiceHealth" prefHeight="35.0" prefWidth="520.0" styleClass="btn-info" text="🎤 Consultation Vocale - Bilan de Santé par IA" />
-         </children>
-      </AnchorPane>
-   </children>
-</AnchorPane>
+                <Separator />
+
+                <!-- Formulaire (GridPane pour un alignement parfait) -->
+                <GridPane hgap="20" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" minWidth="120" />
+                        <ColumnConstraints hgrow="ALWAYS" />
+                    </columnConstraints>
+
+                    <Label text="Nom :" style="-fx-font-weight: bold; -fx-text-fill: #152536;" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <TextField fx:id="nomField" prefHeight="40.0" promptText="Votre nom" styleClass="text-input" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label text="Prénom :" style="-fx-font-weight: bold; -fx-text-fill: #152536;" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <TextField fx:id="prenomField" prefHeight="40.0" promptText="Votre prénom" styleClass="text-input" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label text="Email :" style="-fx-font-weight: bold; -fx-text-fill: #152536;" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <TextField fx:id="emailField" prefHeight="40.0" promptText="Votre email" styleClass="text-input" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                    <Label text="Téléphone :" style="-fx-font-weight: bold; -fx-text-fill: #152536;" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                    <TextField fx:id="telephoneField" prefHeight="40.0" promptText="Votre numéro de téléphone" styleClass="text-input" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                    <Label text="Nouveau MDP :" style="-fx-font-weight: bold; -fx-text-fill: #152536;" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                    <PasswordField fx:id="passwordField" prefHeight="40.0" promptText="(Laisser vide si inchangé)" styleClass="text-input" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                </GridPane>
+
+                <!-- Bouton de mise à jour -->
+                <HBox alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+                    <Button mnemonicParsing="false" onAction="#handleUpdate" prefHeight="45.0" prefWidth="200.0" styleClass="btn-primary" text="Enregistrer les modifications" />
+                </HBox>
+
+                <Separator />
+
+                <!-- Section Sécurité & Services -->
+                <VBox spacing="15">
+                    <Label text="Sécurité &amp; Services Avancés" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #152536;" />
+                    
+                    <HBox spacing="15">
+                        <Button mnemonicParsing="false" onAction="#handleFacialRecognition" prefHeight="45.0" style="-fx-background-color: #f1f5f9; -fx-text-fill: #3b82f6; -fx-border-color: #3b82f6; -fx-border-radius: 8; -fx-font-weight: bold;" text="📷 Face ID" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                        <Button mnemonicParsing="false" onAction="#handleTwoFactorAuth" prefHeight="45.0" style="-fx-background-color: #f1f5f9; -fx-text-fill: #f59e0b; -fx-border-color: #f59e0b; -fx-border-radius: 8; -fx-font-weight: bold;" text="🔐 Configurer 2FA" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+                    </HBox>
+                    
+                    <Button mnemonicParsing="false" onAction="#handleVoiceHealth" prefHeight="50.0" maxWidth="Infinity" style="-fx-background-color: #8b5cf6; -fx-text-fill: white; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-weight: bold;" text="🎤 Consultation Vocale &amp; IA" />
+                </VBox>
+                
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

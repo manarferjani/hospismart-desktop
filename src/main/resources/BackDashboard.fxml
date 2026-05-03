@@ -39,7 +39,7 @@
                 <Button fx:id="btnMesPatients" styleClass="menu-button" maxWidth="Infinity" text="👥 Mes Patients" onAction="#showMesPatients" />
             </VBox>
 
-            <Button styleClass="menu-button" maxWidth="Infinity" text="🚪 Déconnexion" />
+            <Button styleClass="menu-button" maxWidth="Infinity" text="🚪 Déconnexion" onAction="#handleLogout" />
         </VBox>
     </left>
 

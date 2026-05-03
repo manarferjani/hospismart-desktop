@@ -1,4 +1,4 @@
-package com.hospismart.hospismartdesktop.Services; // Package de la couche d'acces aux donnees
+package com.hospismart.hospismartdesktop.services; // Package de la couche d'acces aux donnees
 
 import com.hospismart.hospismartdesktop.models.Reponse; // Modele Reponse manipule par ce DAO
 import com.hospismart.hospismartdesktop.utils.MyDbConnexion; // Utilitaire singleton de connexion BD

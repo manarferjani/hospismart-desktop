@@ -30,7 +30,7 @@ public class EditUserBackController {
             prenomField.setText(user.getPrenom());
             emailField.setText(user.getEmail());
             telephoneField.setText(user.getTelephone());
-            
+
             // Format du rôle propre : ["ROLE_ADMIN"] -> ROLE_ADMIN dans le ComboBox
             String cleanRole = user.getType();
             if (cleanRole != null) {

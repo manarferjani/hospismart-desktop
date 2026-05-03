@@ -24,15 +24,15 @@ public class MedicamentDAO {
     /**
      * Récupère la liste complète de tous les médicaments enregistrés dans la base de données.
      * Effectue une jointure (LEFT JOIN) avec la table categorie pour récupérer le nom de la catégorie associée.
-     * 
+     *
      * @return Une liste (List) contenant tous les médicaments triés par ordre alphabétique.
      */
     public List<Medicament> findAll() {
         List<Medicament> list = new ArrayList<>();
         String sql = "SELECT m.*, c.nom AS categorie_nom " +
-                     "FROM medicament m " +
-                     "LEFT JOIN categorie c ON m.categorie_id = c.id " +
-                     "ORDER BY m.nom";
+            "FROM medicament m " +
+            "LEFT JOIN categorie c ON m.categorie_id = c.id " +
+            "ORDER BY m.nom";
         try (Statement st = connection.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
@@ -46,7 +46,7 @@ public class MedicamentDAO {
 
     /**
      * Récupère un médicament spécifique en fonction de son identifiant unique (id).
-     * 
+     *
      * @param id L'identifiant (clé primaire) du médicament à rechercher.
      * @return L'objet Medicament trouvé, ou null si aucun médicament ne correspond à cet ID.
      */
@@ -64,7 +64,7 @@ public class MedicamentDAO {
 
     /**
      * Ajoute (insère) un nouveau médicament dans la base de données.
-     * 
+     *
      * @param m L'objet Medicament contenant les données à insérer (nom, quantité, prix, etc.).
      * @return true si l'insertion a réussi, false en cas d'erreur SQL.
      */
@@ -90,7 +90,7 @@ public class MedicamentDAO {
 
     /**
      * Met à jour les informations d'un médicament existant dans la base de données.
-     * 
+     *
      * @param m L'objet Medicament mis à jour (doit contenir un ID valide).
      * @return true si la modification a réussi, false en cas d'erreur SQL.
      */
@@ -119,7 +119,7 @@ public class MedicamentDAO {
      * Supprime un médicament de la base de données ainsi que toutes ses dépendances.
      * Utilise une transaction (setAutoCommit(false)) pour garantir que les mouvements de stock
      * liés à ce médicament soient supprimés avant le médicament lui-même (principe de sécurité FK).
-     * 
+     *
      * @param id L'identifiant du médicament à supprimer.
      * @return true si la suppression intégrale a réussi, false en cas d'échec (rollback effectué).
      */
@@ -176,7 +176,7 @@ public class MedicamentDAO {
 
     /**
      * Récupère la liste des médicaments dont le stock actuel est inférieur ou égal à leur seuil d'alerte.
-     * 
+     *
      * @return Une liste de médicaments nécessitant un réapprovisionnement.
      */
     public List<Medicament> findEnAlerte() {
@@ -193,7 +193,7 @@ public class MedicamentDAO {
 
     /**
      * Méthode utilitaire interne pour transformer une ligne de résultat SQL (ResultSet) en un objet Java Medicament.
-     * 
+     *
      * @param rs Le ResultSet positionné sur la ligne courante.
      * @return Une instance de Medicament complètement hydratée avec les données de la base.
      * @throws SQLException Si une colonne demandée n'existe pas ou en cas d'erreur de lecture.

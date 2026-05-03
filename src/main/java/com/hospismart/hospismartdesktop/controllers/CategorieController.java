@@ -1,7 +1,7 @@
 package com.hospismart.hospismartdesktop.controllers;
 
-import com.hospismart.hospismartdesktop.services.CategorieDAO;
 import com.hospismart.hospismartdesktop.models.Categorie;
+import com.hospismart.hospismartdesktop.services.CategorieDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -182,7 +182,7 @@ public class CategorieController {
             search.isEmpty() ||
             c.getNom().toLowerCase().contains(search) ||
             (c.getDescription() != null && c.getDescription().toLowerCase().contains(search)));
-            
+
         // Wrapper pour le tri cliquant sur les colonnes
         javafx.collections.transformation.SortedList<Categorie> sortedData = new javafx.collections.transformation.SortedList<>(filteredList);
         sortedData.comparatorProperty().bind(categorieTable.comparatorProperty());

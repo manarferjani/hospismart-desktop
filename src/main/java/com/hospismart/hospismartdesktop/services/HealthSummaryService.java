@@ -156,7 +156,7 @@ public class HealthSummaryService {
                 "ai_summary LONGTEXT NOT NULL, " +
                 "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, " +
                 "updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, " +
-                "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE" +
+                "FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE" +
                 ")";
             
             stmt.executeUpdate(sql);
@@ -170,11 +170,6 @@ public class HealthSummaryService {
      * Obtient une connexion à la base de données
      */
     private Connection getConnection() throws SQLException {
-        // Configuration MySQL locale
-        String url = "jdbc:mysql://localhost:3306/hospismart?useSSL=false&serverTimezone=UTC";
-        String user = "root";
-        String password = "";
-        
-        return DriverManager.getConnection(url, user, password);
+        return com.hospismart.hospismartdesktop.utils.MyDbConnexion.getInstance().getCnx();
     }
 }

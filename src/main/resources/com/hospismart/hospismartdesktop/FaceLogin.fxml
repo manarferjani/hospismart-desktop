@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #f4f6f9;" stylesheets="@style-admin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.FaceLoginController">
+<AnchorPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #f4f6f9;" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.FaceLoginController">
     <children>
         <!-- Top Navbar -->
         <AnchorPane prefHeight="50.0" prefWidth="900.0" styleClass="top-navbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

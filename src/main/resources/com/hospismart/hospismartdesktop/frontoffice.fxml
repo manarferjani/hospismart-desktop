@@ -7,7 +7,7 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.hospismart.hospismartdesktop.controllers.FrontofficeController"
-      stylesheets="@hospismart.css"
+      stylesheets="/css/style.css"
       style="-fx-background-color: #eef4ff;">
 
     <!-- ===================== NAVBAR (style front.html.twig) ===================== -->

@@ -87,7 +87,8 @@ public class MedecinController {
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
 
-        String uploadPathMedecins = "C:/Users/manar/Desktop/JavaProjects/HospismartDesktop/public/uploads/medecins/";
+        String baseDir = System.getProperty("user.dir").replace("\\", "/");
+        String uploadPathMedecins = baseDir + "/public/uploads/medecins/";
 
         try {
             if (imageName != null && !imageName.isEmpty()) {

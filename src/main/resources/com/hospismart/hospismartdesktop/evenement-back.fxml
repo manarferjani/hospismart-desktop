@@ -12,67 +12,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.geometry.Insets?>
 
-<HBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.hospismart.hospismartdesktop.controllers.EvenementBackController"
-      spacing="0">
-
-    <!-- ══════════════════════════════════════════════════════════
-         LEFT SIDEBAR
-         ══════════════════════════════════════════════════════════ -->
-    <VBox styleClass="back-sidebar">
-
-        <!-- Logo -->
-        <HBox styleClass="sidebar-logo-area">
-            <Label text="HospiSmart" styleClass="sidebar-logo-text"/>
-            <Region prefWidth="8"/>
-            <Label text="ADMIN" styleClass="sidebar-badge"/>
-        </HBox>
-
-        <!-- Avatar Area -->
-        <VBox styleClass="sidebar-avatar-area">
-            <StackPane styleClass="sidebar-avatar">
-                <Label text="A" styleClass="sidebar-avatar-letter"/>
-            </StackPane>
-            <Label text="Administrateur" styleClass="sidebar-user-name"/>
-            <Label text="GESTIONNAIRE" styleClass="sidebar-user-role"/>
-        </VBox>
-
-        <!-- Overview Section -->
-        <Label text="OVERVIEW" styleClass="sidebar-section-header"/>
-
-        <!-- Dashboard / Evenements (active) -->
-        <HBox styleClass="sidebar-nav-item-active">
-            <padding><Insets left="14" right="14"/></padding>
-            <Label text="Evenements" styleClass="sidebar-nav-text-active"/>
-        </HBox>
-
-        <!-- Stats -->
-        <HBox styleClass="sidebar-nav-item" onMouseClicked="#onGoStats">
-            <padding><Insets left="14" right="14"/></padding>
-            <Label text="📊 Statistiques" styleClass="sidebar-nav-text"/>
-        </HBox>
-
-        <!-- Gestion Section -->
-        <Label text="GESTION" styleClass="sidebar-section-header"/>
-
-        <HBox styleClass="sidebar-nav-item" onMouseClicked="#onGoFront">
-            <Label text="Vue Publique" styleClass="sidebar-nav-text"/>
-        </HBox>
-
-        <!-- Spacer -->
-        <Region VBox.vgrow="ALWAYS"/>
-
-        <!-- Bottom -->
-        <Label text="Deconnexion" styleClass="sidebar-bottom-link" onMouseClicked="#onRetour"/>
-        <Label text="PIDEV 2025-2026" styleClass="sidebar-footer"/>
-
-    </VBox>
-
-    <!-- ══════════════════════════════════════════════════════════
-         MAIN CONTENT
-         ══════════════════════════════════════════════════════════ -->
-    <VBox styleClass="back-main" HBox.hgrow="ALWAYS">
+<VBox spacing="20" styleClass="back-main" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.EvenementBackController">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
         <!-- Title Row -->
         <HBox alignment="CENTER_LEFT" spacing="12">
@@ -86,19 +27,21 @@
         </HBox>
 
         <!-- Toolbar -->
-        <HBox styleClass="back-toolbar">
-            <ComboBox fx:id="typeFilter"   styleClass="combo-filter" promptText="Type"/>
-            <ComboBox fx:id="statutFilter" styleClass="combo-filter" promptText="Statut"/>
+        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="action-bar">
+            <ComboBox fx:id="typeFilter" prefHeight="35.0" styleClass="text-input" promptText="Type"/>
+            <ComboBox fx:id="statutFilter" prefHeight="35.0" styleClass="text-input" promptText="Statut"/>
             <Region HBox.hgrow="ALWAYS"/>
             <TextField fx:id="searchField"
+                       prefHeight="35.0"
+                       prefWidth="250.0"
                        promptText="Rechercher..."
-                       styleClass="back-search-field"
+                       styleClass="text-input"
                        onAction="#onSearch"/>
-            <Button text="Actualiser" onAction="#onReset" styleClass="btn-outlined"/>
+            <Button text="Actualiser" prefHeight="35.0" onAction="#onReset" styleClass="btn-secondary"/>
         </HBox>
 
         <!-- Data Table -->
-        <TableView fx:id="evenementTable" VBox.vgrow="ALWAYS">
+        <TableView fx:id="evenementTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
             <columns>
                 <TableColumn fx:id="colTitre"     text="Titre"        prefWidth="180" minWidth="120"/>
                 <TableColumn fx:id="colType"      text="Type"         prefWidth="100" minWidth="80"/>
@@ -126,6 +69,4 @@
         <!-- Footer -->
         <Label fx:id="footerLabel" text="0 evenements charges." styleClass="back-footer-label"/>
 
-    </VBox>
-
-</HBox>
+</VBox>

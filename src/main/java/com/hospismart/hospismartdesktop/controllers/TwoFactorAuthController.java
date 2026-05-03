@@ -39,7 +39,7 @@ public class TwoFactorAuthController {
         userService = new UserService();
         twoFactorService = new TwoFactorAuthService();
         errorLabel.setText("");
-        
+
         // Limiter le champ à 6 caractères numériques
         codeField.setTextFormatter(new javafx.scene.control.TextFormatter<>(change -> {
             if (change.getControlNewText().matches("\\d{0,6}")) {
@@ -98,29 +98,29 @@ public class TwoFactorAuthController {
             if (twoFactorService.verifyCode(secret, code)) {
                 System.out.println("[2FA] ✅ Code 2FA vérifié avec succès");
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Authentification 2FA réussie !");
-                
+
                 // Sauvegarder la session et naviguer vers le profil
                 Session.getInstance().setCurrentUser(userAwaitingVerification);
                 navigateToUserProfile(event);
             } else {
                 attemptCount++;
                 System.out.println("[2FA] ❌ Tentative échouée " + attemptCount + " / " + MAX_ATTEMPTS);
-                
+
                 if (attemptCount >= MAX_ATTEMPTS) {
                     // Désactiver le compte après trop de tentatives
                     System.out.println("[2FA] 🔒 Compte désactivé après " + MAX_ATTEMPTS + " tentatives pour: " + userAwaitingVerification.getEmail());
-                    
+
                     boolean deactivated = userService.setActive(userAwaitingVerification.getId(), false);
-                    
+
                     if (deactivated) {
-                        showAlert(Alert.AlertType.ERROR, "Compte Désactivé", 
+                        showAlert(Alert.AlertType.ERROR, "Compte Désactivé",
                             "Votre compte a été désactivé suite à trop de tentatives de vérification 2FA échouées.\n\n" +
-                            "Veuillez contacter l'administrateur pour réactiver votre compte.");
+                                "Veuillez contacter l'administrateur pour réactiver votre compte.");
                     } else {
-                        showAlert(Alert.AlertType.ERROR, "Erreur", 
+                        showAlert(Alert.AlertType.ERROR, "Erreur",
                             "Une erreur est survenue lors de la désactivation du compte.\n\nVeuillez contacter l'administrateur.");
                     }
-                    
+
                     // Rediriger vers la page de login
                     new Thread(() -> {
                         try {
@@ -146,7 +146,7 @@ public class TwoFactorAuthController {
     @FXML
     void handleUseBackupCode(ActionEvent event) {
         // TODO: Implémenter la vérification des codes de secours
-        showAlert(Alert.AlertType.INFORMATION, "Code de secours", 
+        showAlert(Alert.AlertType.INFORMATION, "Code de secours",
             "Fonctionnalité à venir.\n\nContactez l'administrateur pour obtenir un nouveau code.");
     }
 
@@ -170,8 +170,19 @@ public class TwoFactorAuthController {
      * Naviguer vers le profil utilisateur
      */
     private void navigateToUserProfile(ActionEvent event) {
-        // Utilisation de la navigation centralisée selon le rôle
-        com.hospismart.hospismartdesktop.main.JavaFxMain.showDashboard(userAwaitingVerification);
+        try {
+            String userRole = userAwaitingVerification.getType();
+            String viewPath = "/com/hospismart/hospismartdesktop/UserProfile.fxml";
+
+            if (userRole != null && (userRole.contains("ROLE_ADMIN") || userRole.contains("ROLE_MEDECIN"))) {
+                viewPath = "/com/hospismart/hospismartdesktop/BackOfficeUsers.fxml";
+            }
+
+            navigate(event, viewPath);
+        } catch (Exception e) {
+            System.err.println("[2FA] Erreur navigation: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la navigation: " + e.getMessage());
+        }
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.hospismart.hospismartdesktop.controllers;
 
-import com.hospismart.hospismartdesktop.main.HelloApplication;
+import com.hospismart.hospismartdesktop.main.JavaFxMain;
 import com.hospismart.hospismartdesktop.models.Medicament;
 import com.hospismart.hospismartdesktop.services.MedicamentDAO;
 import javafx.collections.FXCollections;
@@ -60,7 +60,7 @@ public class FrontofficeController {
         }
         ObservableList<Medicament> filtered = FXCollections.observableArrayList(
             medicamentList.filtered(m -> m.getNom().toLowerCase().contains(query.toLowerCase())
-                    || (m.getCategorieNom() != null && m.getCategorieNom().toLowerCase().contains(query.toLowerCase())))
+                || (m.getCategorieNom() != null && m.getCategorieNom().toLowerCase().contains(query.toLowerCase())))
         );
         displayCards(filtered);
         lblTotal.setText(filtered.size() + " résultat(s) pour \"" + query + "\"");
@@ -83,10 +83,10 @@ public class FrontofficeController {
         card.setPrefHeight(160);
         card.setStyle(
             "-fx-background-color: white;" +
-            "-fx-background-radius: 14;" +
-            "-fx-padding: 16;" +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);" +
-            "-fx-cursor: hand;"
+                "-fx-background-radius: 14;" +
+                "-fx-padding: 16;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);" +
+                "-fx-cursor: hand;"
         );
 
         // Indicateur couleur haut de carte
@@ -132,18 +132,18 @@ public class FrontofficeController {
         // Hover effect
         card.setOnMouseEntered(e -> card.setStyle(
             "-fx-background-color: white;" +
-            "-fx-background-radius: 14;" +
-            "-fx-padding: 16;" +
-            "-fx-effect: dropshadow(gaussian, rgba(13,110,253,0.2), 16, 0, 0, 5);" +
-            "-fx-cursor: hand;" +
-            "-fx-border-color: #0d6efd; -fx-border-width: 1; -fx-border-radius: 14;"
+                "-fx-background-radius: 14;" +
+                "-fx-padding: 16;" +
+                "-fx-effect: dropshadow(gaussian, rgba(13,110,253,0.2), 16, 0, 0, 5);" +
+                "-fx-cursor: hand;" +
+                "-fx-border-color: #0d6efd; -fx-border-width: 1; -fx-border-radius: 14;"
         ));
         card.setOnMouseExited(e -> card.setStyle(
             "-fx-background-color: white;" +
-            "-fx-background-radius: 14;" +
-            "-fx-padding: 16;" +
-            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);" +
-            "-fx-cursor: hand;"
+                "-fx-background-radius: 14;" +
+                "-fx-padding: 16;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);" +
+                "-fx-cursor: hand;"
         ));
 
         return card;
@@ -157,6 +157,6 @@ public class FrontofficeController {
 
     @FXML
     public void handleGoAdmin() {
-        HelloApplication.showAdmin();
+        JavaFxMain.setRoot("/com/hospismart/hospismartdesktop/main.fxml", "OASIS — Backoffice Admin");
     }
 }

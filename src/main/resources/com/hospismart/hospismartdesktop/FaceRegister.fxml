@@ -45,24 +45,12 @@
         <!-- Boutons -->
         <HBox layoutX="250.0" layoutY="640.0" spacing="20.0">
             <Button fx:id="captureButton" mnemonicParsing="false" onAction="#handleCapture" 
-                prefHeight="40.0" prefWidth="200.0" style="-fx-font-size: 14; -fx-padding: 10;" 
-                text="📷 Enregistrer mon visage">
-                <style>
-                    -fx-background-color: #4CAF50;
-                    -fx-text-fill: white;
-                    -fx-font-weight: bold;
-                </style>
-            </Button>
+                prefHeight="40.0" prefWidth="200.0" style="-fx-font-size: 14; -fx-padding: 10; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" 
+                text="📷 Enregistrer mon visage" />
             
             <Button fx:id="skipButton" mnemonicParsing="false" onAction="#handleSkip" 
-                prefHeight="40.0" prefWidth="150.0" style="-fx-font-size: 14; -fx-padding: 10;" 
-                text="⏭️ Passer">
-                <style>
-                    -fx-background-color: #757575;
-                    -fx-text-fill: white;
-                    -fx-font-weight: bold;
-                </style>
-            </Button>
+                prefHeight="40.0" prefWidth="150.0" style="-fx-font-size: 14; -fx-padding: 10; -fx-background-color: #757575; -fx-text-fill: white; -fx-font-weight: bold;" 
+                text="⏭️ Passer" />
         </HBox>
     </children>
 </AnchorPane>

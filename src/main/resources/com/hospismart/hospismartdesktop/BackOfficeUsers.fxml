@@ -5,60 +5,51 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.collections.*?>
+<?import javafx.geometry.*?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #f4f6f9;" stylesheets="@style-admin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.BackOfficeUsersController">
-   <children>
-      <!-- Top Navbar -->
-      <AnchorPane prefHeight="50.0" prefWidth="1000.0" styleClass="top-navbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <Label layoutX="20.0" layoutY="12.0" styleClass="navbar-title" text="HospiSmart — Gestion des Utilisateurs" />
-            <Button layoutX="850.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleLogout" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 4px; -fx-text-fill: white; -fx-cursor: hand;" text="Se Déconnecter" AnchorPane.rightAnchor="20.0" />
-         </children>
-      </AnchorPane>
+<VBox prefHeight="700.0" prefWidth="1000.0" spacing="20" styleClass="back-main" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.BackOfficeUsersController">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    
+    <VBox spacing="5">
+        <Label text="Gestion des Utilisateurs" styleClass="back-page-title" />
+        <Label text="Recherchez, filtrez et gérez les comptes de l'application." styleClass="back-page-subtitle" />
+    </VBox>
 
-      <!-- Sub Navbar (Tabs) -->
-      <AnchorPane layoutY="50.0" prefHeight="50.0" prefWidth="1000.0" styleClass="sub-navbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <Button layoutX="0.0" layoutY="0.0" prefHeight="50.0" prefWidth="150.0" styleClass="tab-active" text="Administration" />
-            <Button layoutX="150.0" layoutY="0.0" prefHeight="50.0" prefWidth="150.0" styleClass="tab-inactive" text="Statistiques" onAction="#handleShowStats" />
-         </children>
-      </AnchorPane>
+    <!-- Action Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="15" styleClass="action-bar">
+        <TextField fx:id="searchField" prefHeight="35.0" prefWidth="250.0" promptText="Rechercher par nom, email..." styleClass="text-input" />
+        
+        <ComboBox fx:id="filterComboBox" prefHeight="35.0" prefWidth="150.0" promptText="Tous">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="TOUS" />
+                    <String fx:value="ADMIN" />
+                    <String fx:value="PATIENT" />
+                    <String fx:value="MEDECIN" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+        
+        <Button prefHeight="35.0" mnemonicParsing="false" onAction="#handleSearch" styleClass="btn-secondary" text="Filtrer" />
+        <Button prefHeight="35.0" mnemonicParsing="false" onAction="#handleExportPDF" styleClass="btn-tertiary" text="Export PDF" />
+        
+        <Region HBox.hgrow="ALWAYS" />
+        
+        <Button prefHeight="35.0" mnemonicParsing="false" onAction="#handleOpenAddDialog" styleClass="btn-primary" text="+ Ajouter un Utilisateur" />
+    </HBox>
 
-      <!-- Action Bar -->
-      <AnchorPane layoutY="100.0" prefHeight="60.0" prefWidth="1000.0" styleClass="action-bar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <TextField fx:id="searchField" layoutX="20.0" layoutY="15.0" prefHeight="30.0" prefWidth="250.0" promptText="Rechercher par nom, email..." styleClass="text-input" />
-            
-            <ComboBox fx:id="filterComboBox" layoutX="280.0" layoutY="15.0" prefHeight="30.0" prefWidth="150.0" promptText="Tous">
-               <items>
-                  <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="TOUS" />
-                     <String fx:value="ADMIN" />
-                     <String fx:value="PATIENT" />
-                     <String fx:value="MEDECIN" />
-                  </FXCollections>
-               </items>
-            </ComboBox>
-            
-            <Button layoutX="440.0" layoutY="15.0" prefHeight="30.0" mnemonicParsing="false" onAction="#handleSearch" styleClass="btn-secondary" text="Filtrer" />
-            <Button layoutX="505.0" layoutY="15.0" prefHeight="30.0" mnemonicParsing="false" onAction="#handleExportPDF" styleClass="btn-tertiary" text="Export PDF" />
-            
-            <Label layoutX="700.0" layoutY="20.0" style="-fx-text-fill: #7f8c8d; -fx-font-style: italic;" text="Utilisateurs trouvés" AnchorPane.rightAnchor="200.0" />
-            
-            <Button layoutX="820.0" layoutY="15.0" prefHeight="30.0" mnemonicParsing="false" onAction="#handleOpenAddDialog" styleClass="btn-primary" text="+ Ajouter un Utilisateur" AnchorPane.rightAnchor="20.0" />
-         </children>
-      </AnchorPane>
-
-      <!-- Table View -->
-      <TableView fx:id="usersTable" layoutX="20.0" layoutY="160.0" prefHeight="500.0" prefWidth="960.0" styleClass="table-view">
+    <!-- Table View -->
+    <TableView fx:id="usersTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
         <columns>
-          <TableColumn fx:id="colId" prefWidth="50.0" text="ID" />
-          <TableColumn fx:id="colNom" prefWidth="150.0" text="Nom Complet" />
-            <TableColumn fx:id="colEmail" prefWidth="200.0" text="Email" />
+            <TableColumn fx:id="colId" prefWidth="50.0" text="ID" />
+            <TableColumn fx:id="colNom" prefWidth="200.0" text="Nom Complet" />
+            <TableColumn fx:id="colEmail" prefWidth="250.0" text="Email" />
             <TableColumn fx:id="colType" prefWidth="100.0" text="Type" />
-            <TableColumn fx:id="colStatut" prefWidth="80.0" text="Statut" />
-            <TableColumn fx:id="colActions" prefWidth="350.0" text="Actions" />
+            <TableColumn fx:id="colStatut" prefWidth="100.0" text="Statut" />
+            <TableColumn fx:id="colActions" prefWidth="200.0" text="Actions" />
         </columns>
-      </TableView>
-   </children>
-</AnchorPane>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </TableView>
+</VBox>

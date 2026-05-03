@@ -1,7 +1,6 @@
 package com.hospismart.hospismartdesktop.controllers;
 
 import com.hospismart.hospismartdesktop.services.MedicamentDAO;
-import com.hospismart.hospismartdesktop.services.CategorieDAO;
 import com.hospismart.hospismartdesktop.services.MouvementStockDAO;
 import com.hospismart.hospismartdesktop.services.MailService;
 import com.hospismart.hospismartdesktop.services.ImageAIService;
@@ -24,8 +23,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
+import com.hospismart.hospismartdesktop.services.CategorieDAO;
 
 public class MedicamentController {
 
@@ -277,7 +276,7 @@ public class MedicamentController {
     /** Applique à la fois le filtre texte ET le filtre catégorie */
     private void applyFilters() {
         if (filteredList == null) return;
-        
+
         String search  = txtSearch  != null ? txtSearch.getText().toLowerCase()  : "";
         Categorie cat  = cbFilterCategorie != null ? cbFilterCategorie.getValue() : null;
         int catId      = (cat != null && cat.getId() != 0) ? cat.getId() : 0;
@@ -292,7 +291,7 @@ public class MedicamentController {
 
         // Wrapper pour activer le tri en cliquant sur les en-têtes de colonnes OU via ComboBox
         javafx.collections.transformation.SortedList<Medicament> sortedData = new javafx.collections.transformation.SortedList<>(filteredList);
-        
+
         String sortMode = cbSortMode != null ? cbSortMode.getValue() : "Tri libre";
         if (!"Tri libre".equals(sortMode)) {
             sortedData.setComparator((m1, m2) -> {
@@ -307,7 +306,7 @@ public class MedicamentController {
             // Mode normal : l'utilisateur clique sur les en-têtes des colonnes
             sortedData.comparatorProperty().bind(medicamentTable.comparatorProperty());
         }
-        
+
         medicamentTable.setItems(sortedData);
     }
 
@@ -622,14 +621,14 @@ public class MedicamentController {
         javafx.scene.layout.VBox rapportBox = new javafx.scene.layout.VBox(10);
         Label lblRapport = new Label("📝 Décryptage et Recommandations (Généré par IA)");
         lblRapport.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
-        
+
         javafx.scene.control.TextArea txtRapport = new javafx.scene.control.TextArea();
         txtRapport.setWrapText(true);
         txtRapport.setEditable(false);
         txtRapport.setPrefHeight(180);
         txtRapport.setStyle("-fx-font-size: 13px; -fx-text-fill: #334155; -fx-background-color: transparent; -fx-control-inner-background: white; -fx-border-color: #cbd5e1; -fx-border-radius: 12; -fx-background-radius: 12;");
         txtRapport.setText(rapportIA != null && !rapportIA.isEmpty() ? rapportIA.trim() : "⚠️ Impossible de générer le rapport textuel intelligent. Veuillez vérifier votre connexion.");
-        
+
         rapportBox.getChildren().addAll(lblRapport, txtRapport);
         mainBox.getChildren().add(rapportBox);
 
@@ -637,31 +636,31 @@ public class MedicamentController {
         javafx.scene.layout.VBox tableBox = new javafx.scene.layout.VBox(10);
         Label lblTableau = new Label("📊 Détails Mathématiques des Prédictions");
         lblTableau.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
-        
+
         javafx.scene.control.TableView<PredictionService.PredictionResult> table = new javafx.scene.control.TableView<>();
         table.setPrefHeight(230);
         table.setStyle("-fx-background-color: white; -fx-border-color: #cbd5e1; -fx-border-radius: 12; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);");
-        
+
         javafx.scene.control.TableColumn<PredictionService.PredictionResult, String> colMed = new javafx.scene.control.TableColumn<>("Médicament");
         colMed.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().nomMedicament));
         colMed.setPrefWidth(200);
         colMed.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-alignment: center-left; -fx-padding: 0 0 0 10;");
-        
+
         javafx.scene.control.TableColumn<PredictionService.PredictionResult, Number> colStock = new javafx.scene.control.TableColumn<>("Stock");
         colStock.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().stockActuel));
         colStock.setPrefWidth(80);
         colStock.setStyle("-fx-alignment: center;");
-        
+
         javafx.scene.control.TableColumn<PredictionService.PredictionResult, String> colConso = new javafx.scene.control.TableColumn<>("Conso/Jour");
         colConso.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(String.format("%.1f", data.getValue().consommationJour)));
         colConso.setPrefWidth(100);
         colConso.setStyle("-fx-alignment: center;");
-        
+
         javafx.scene.control.TableColumn<PredictionService.PredictionResult, String> colJours = new javafx.scene.control.TableColumn<>("Autonomie");
         colJours.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().joursAvantRupture >= 0 ? data.getValue().joursAvantRupture + " j" : "N/A"));
         colJours.setPrefWidth(100);
         colJours.setStyle("-fx-alignment: center; -fx-font-weight: bold;");
-        
+
         javafx.scene.control.TableColumn<PredictionService.PredictionResult, String> colDate = new javafx.scene.control.TableColumn<>("Date Rupture");
         colDate.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().dateRuptureEstimee));
         colDate.setPrefWidth(120);
@@ -682,7 +681,7 @@ public class MedicamentController {
                         String color = p.couleurRisque.equals("red") ? "#dc3545" : (p.couleurRisque.equals("orange") ? "#d97706" : "#059669");
                         String bg = p.couleurRisque.equals("red") ? "#fee2e2" : (p.couleurRisque.equals("orange") ? "#fef3c7" : "#d1fae5");
                         badge.setStyle("-fx-background-color: " + bg + "; -fx-text-fill: " + color + "; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 4 12; -fx-font-size: 11px;");
-                        
+
                         javafx.scene.layout.HBox box = new javafx.scene.layout.HBox(badge);
                         box.setAlignment(javafx.geometry.Pos.CENTER);
                         setGraphic(box);
@@ -694,7 +693,7 @@ public class MedicamentController {
 
         table.getColumns().addAll(colMed, colStock, colConso, colJours, colDate, colRisque);
         table.getItems().addAll(predictions);
-        
+
         tableBox.getChildren().addAll(lblTableau, table);
         mainBox.getChildren().add(tableBox);
 
@@ -702,7 +701,7 @@ public class MedicamentController {
         scroll.setFitToWidth(true);
         scroll.setStyle("-fx-background-color: transparent; -fx-background: #f8fafc;");
         dialog.getDialogPane().setContent(scroll);
-        
+
         dialog.showAndWait();
     }
 
@@ -724,11 +723,11 @@ public class MedicamentController {
             javafx.scene.image.ImageView imgView = new javafx.scene.image.ImageView(img);
             imgView.setFitWidth(500);
             imgView.setPreserveRatio(true);
-            
+
             javafx.scene.layout.VBox box = new javafx.scene.layout.VBox(10, imgView);
             box.setAlignment(javafx.geometry.Pos.CENTER);
             box.setPadding(new Insets(10));
-            
+
             dialog.getDialogPane().setContent(box);
             dialog.showAndWait();
         } catch (Exception e) {

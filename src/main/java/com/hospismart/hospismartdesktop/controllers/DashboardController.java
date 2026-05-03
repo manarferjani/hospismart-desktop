@@ -2,14 +2,14 @@ package com.hospismart.hospismartdesktop.controllers;
 
 import com.hospismart.hospismartdesktop.models.RendezVous;
 import com.hospismart.hospismartdesktop.models.User;
+import com.hospismart.hospismartdesktop.services.CategorieDAO;
 import com.hospismart.hospismartdesktop.services.RendezVousService;
-import com.hospismart.hospismartdesktop.utils.UserSession;
+import com.hospismart.hospismartdesktop.utils.Session;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import com.hospismart.hospismartdesktop.models.Medicament;
 import com.hospismart.hospismartdesktop.models.MouvementStock;
 import com.hospismart.hospismartdesktop.services.MedicamentDAO;
-import com.hospismart.hospismartdesktop.services.CategorieDAO;
 import com.hospismart.hospismartdesktop.services.MouvementStockDAO;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -80,23 +80,19 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
-        // 1. Initialisation Session (Uniquement si vide)
-        if (UserSession.getUser() == null) {
-            User user = new User();
-            user.setId(4);
-            user.setNom("Ferjani");
-            user.setPrenom("Nour");
-            UserSession.login(user);
+        // 2. Sidebar (Éléments statiques)
+        if (lblSidebarName != null) {
+            User u = Session.getInstance().getCurrentUser();
+            if (u != null) {
+                lblSidebarName.setText("Dr. " + u.getPrenom() + " " + u.getNom());
+            } else {
+                lblSidebarName.setText("Dr. Inconnu");
+            }
         }
 
         // Date du jour
         if (lblDate != null) {
             lblDate.setText("📅 " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy  —  HH:mm")));
-        }
-
-        // 2. Sidebar (Éléments statiques)
-        if (lblSidebarName != null) {
-            lblSidebarName.setText("Dr. " + UserSession.getUser().getPrenom() + " " + UserSession.getUser().getNom());
         }
 
         // 3. Charger l'accueil par défaut au premier lancement
@@ -144,14 +140,16 @@ public class DashboardController {
     private void refreshDashboardData() {
         // 1. Données de Bienvenue
         if (lblWelcome != null) {
-            lblWelcome.setText("Bienvenue, Dr. " + UserSession.getUser().getPrenom());
+            User u = Session.getInstance().getCurrentUser();
+            lblWelcome.setText("Bienvenue, " + (u != null ? "Dr. " + u.getPrenom() : "Docteur"));
         }
         if (lblDate != null) {
             lblDate.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
         }
 
         try {
-            int medecinId = UserSession.getUser().getId();
+            User u = Session.getInstance().getCurrentUser();
+            int medecinId = (u != null) ? u.getId() : -1;
 
             // 2. Prochain Patient
             RendezVous nextRdv = rdvService.findNextByMedecin(medecinId);
@@ -188,7 +186,7 @@ public class DashboardController {
             loadBarStock(medicaments);
             loadBarEntreesSorties(medicaments, mouvements);
             loadTableAlertes(medicaments);
-            
+
             // 5. Charger la table des RDV en attente
             setupTable();
 
@@ -200,7 +198,7 @@ public class DashboardController {
 
     private void loadKPIs(List<Medicament> medicaments, List<MouvementStock> mouvements) {
         if (lblTotalMed != null) lblTotalMed.setText(String.valueOf(medicaments.size()));
-        
+
         if (lblTotalCat != null) {
             int nbCat = categorieDAO.findAll().size();
             lblTotalCat.setText(String.valueOf(nbCat));
@@ -391,7 +389,8 @@ public class DashboardController {
         });
 
         try {
-            int medecinId = UserSession.getUser().getId();
+            User u = Session.getInstance().getCurrentUser();
+            int medecinId = (u != null) ? u.getId() : -1;
             List<RendezVous> data = rdvService.findPendingByMedecin(medecinId);
             tableRdv.setItems(FXCollections.observableArrayList(data));
         } catch (Exception e) {
@@ -464,6 +463,24 @@ public class DashboardController {
             contentArea.getChildren().setAll(root);
         } catch (IOException e) {
             System.err.println("Erreur chargement NewConsultation.fxml : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleLogout(ActionEvent event) {
+        try {
+            com.hospismart.hospismartdesktop.utils.Session.getInstance().cleanUserSession();
+            
+            URL fxmlLocation = getClass().getResource("/com/hospismart/hospismartdesktop/Login.fxml");
+            FXMLLoader loader = new FXMLLoader(fxmlLocation);
+            Parent root = loader.load();
+            
+            javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new javafx.scene.Scene(root, 1200, 768));
+            stage.centerOnScreen();
+        } catch (Exception e) {
+            System.err.println("Erreur de déconnexion : " + e.getMessage());
             e.printStackTrace();
         }
     }

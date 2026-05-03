@@ -96,7 +96,7 @@ public class MailService {
             // ===== BADGE STATUT =====
             "  <div style='padding:25px 35px 0;'>" +
             "    <span style='background:" + couleurStatut + ";color:white;padding:6px 18px;border-radius:20px;font-weight:bold;font-size:13px;'>" +
-                    statut +
+            statut +
             "    </span>" +
             "  </div>" +
 

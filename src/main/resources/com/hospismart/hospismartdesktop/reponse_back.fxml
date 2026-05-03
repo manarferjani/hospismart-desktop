@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Font?>
 
 <!-- Vue Back Office reponses: historique, stats et edition -->
-<BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@styles.css" styleClass="app-bg" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.ReponseBackController">
+<BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="/css/style.css" styleClass="app-bg" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.ReponseBackController">
     <left>
         <VBox prefWidth="250" style="-fx-background-color: #1a2533; -fx-padding: 20 0 20 0;" spacing="10">
             <!-- Header Logo -->

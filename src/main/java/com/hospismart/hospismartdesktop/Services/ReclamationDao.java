@@ -1,4 +1,4 @@
-package com.hospismart.hospismartdesktop.Services; // Package de la couche DAO
+package com.hospismart.hospismartdesktop.services; // Package de la couche DAO
 
 import com.hospismart.hospismartdesktop.models.Reclamation; // Modele Reclamation
 import com.hospismart.hospismartdesktop.utils.MyDbConnexion; // Gestionnaire singleton de connexion BD

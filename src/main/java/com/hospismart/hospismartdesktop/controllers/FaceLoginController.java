@@ -29,13 +29,13 @@ import java.util.List;
 public class FaceLoginController {
     @FXML
     private ImageView cameraView;
-    
+
     @FXML
     private Label statusLabel;
-    
+
     @FXML
     private Button captureButton;
-    
+
     @FXML
     private Button cancelButton;
 
@@ -50,10 +50,10 @@ public class FaceLoginController {
         try {
             this.faceService = new FaceRecognitionService();
             this.userService = new UserService();
-            
+
             // Vérifier que la caméra est disponible
             if (!FaceRecognitionService.isCameraAvailable()) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", 
+                showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Aucune caméra détectée.\n\nVeuillez brancher une caméra et réessayer.");
                 statusLabel.setText("❌ Caméra non disponible");
                 captureButton.setDisable(true);
@@ -62,7 +62,7 @@ public class FaceLoginController {
 
             // Initialiser la caméra
             if (!faceService.initializeCamera()) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", 
+                showAlert(Alert.AlertType.ERROR, "Erreur",
                     "Impossible d'accéder à la caméra.");
                 statusLabel.setText("❌ Erreur d'accès caméra");
                 captureButton.setDisable(true);
@@ -74,7 +74,7 @@ public class FaceLoginController {
         } catch (Exception e) {
             System.err.println("[FaceLogin] Erreur initialisation: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", 
+            showAlert(Alert.AlertType.ERROR, "Erreur",
                 "Erreur lors de l'initialisation: " + e.getMessage());
         }
     }
@@ -91,10 +91,10 @@ public class FaceLoginController {
                     if (frame != null && !frame.empty()) {
                         // Détecter les visages
                         MatOfRect faceDetections = faceService.detectFaces(frame);
-                        
+
                         // Dessiner les rectangles autour des visages détectés
                         faceService.drawFaceDetections(frame, faceDetections);
-                        
+
                         if (faceDetections.toArray().length > 0) {
                             statusLabel.setText("👤 " + faceDetections.toArray().length + " visage(s) détecté(s)");
                         } else {
@@ -106,7 +106,7 @@ public class FaceLoginController {
                         if (image != null) {
                             cameraView.setImage(image);
                         }
-                        
+
                         frame.release();
                     }
                 } catch (Exception e) {
@@ -125,7 +125,7 @@ public class FaceLoginController {
         try {
             Mat frame = faceService.captureFrame();
             if (frame == null || frame.empty()) {
-                showAlert(Alert.AlertType.WARNING, "Erreur", 
+                showAlert(Alert.AlertType.WARNING, "Erreur",
                     "Impossible de capturer l'image.");
                 return;
             }
@@ -133,7 +133,7 @@ public class FaceLoginController {
             // Détecter les visages dans le cadre
             MatOfRect faceDetections = faceService.detectFaces(frame);
             if (faceDetections.toArray().length == 0) {
-                showAlert(Alert.AlertType.WARNING, "Erreur", 
+                showAlert(Alert.AlertType.WARNING, "Erreur",
                     "Aucun visage détecté.\n\nVeuillez repositionner votre visage et réessayer.");
                 return;
             }
@@ -143,7 +143,7 @@ public class FaceLoginController {
             Mat faceImage = faceService.extractFaceRegion(frame, faceRect);
 
             if (faceImage == null) {
-                showAlert(Alert.AlertType.WARNING, "Erreur", 
+                showAlert(Alert.AlertType.WARNING, "Erreur",
                     "Erreur lors de l'extraction du visage.");
                 return;
             }
@@ -159,13 +159,13 @@ public class FaceLoginController {
 
             // Vérifier le visage contre les utilisateurs enregistrés
             verifyFaceAgainstDatabase(faceImage);
-            
+
             frame.release();
             faceImage.release();
         } catch (Exception e) {
             System.err.println("[FaceLogin] Erreur capture: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", 
+            showAlert(Alert.AlertType.ERROR, "Erreur",
                 "Erreur lors de la capture: " + e.getMessage());
             isCapturing = false;
             captureButton.setDisable(false);
@@ -181,15 +181,15 @@ public class FaceLoginController {
     private void verifyFaceAgainstDatabase(Mat capturedFace) {
         try {
             List<User> allUsers = userService.afficher();
-            
+
             for (User user : allUsers) {
                 if (user.isActive() && faceService.verifyFace(user.getId(), capturedFace)) {
                     // Visage reconnu !
                     detectedUser = user;
                     Session.getInstance().setCurrentUser(user);
-                    
+
                     statusLabel.setText("✅ Bienvenue " + user.getPrenom() + " " + user.getNom() + "!");
-                    
+
                     // Naviguer vers le tableau de bord approprié
                     navigateToUserDashboard(user);
                     return;
@@ -197,17 +197,17 @@ public class FaceLoginController {
             }
 
             // Aucun visage reconnu
-            showAlert(Alert.AlertType.WARNING, "Authentification échouée", 
+            showAlert(Alert.AlertType.WARNING, "Authentification échouée",
                 "Visage non reconnu.\n\nVeuillez vous enregistrer d'abord ou réessayer.");
             statusLabel.setText("❌ Visage non reconnu");
-            
+
             isCapturing = false;
             captureButton.setDisable(false);
             startCameraStream();
         } catch (Exception e) {
             System.err.println("[FaceLogin] Erreur vérification: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", 
+            showAlert(Alert.AlertType.ERROR, "Erreur",
                 "Erreur lors de la vérification: " + e.getMessage());
             isCapturing = false;
             captureButton.setDisable(false);
@@ -220,21 +220,8 @@ public class FaceLoginController {
      */
     private void navigateToUserDashboard(User user) {
         try {
-            String viewPath = "";
-            String userRole = user.getType();
-            
-            if (userRole != null && (userRole.contains("ROLE_ADMIN") || userRole.contains("ROLE_MEDECIN"))) {
-                viewPath = "/com/hospismart/hospismartdesktop/BackOfficeUsers.fxml";
-            } else {
-                viewPath = "/com/hospismart/hospismartdesktop/UserProfile.fxml";
-            }
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(viewPath));
-            Scene scene = new Scene(loader.load());
-            Stage stage = (Stage) cameraView.getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
+            com.hospismart.hospismartdesktop.main.JavaFxMain.showDashboard(user);
+        } catch (Exception e) {
             System.err.println("[FaceLogin] Erreur navigation: " + e.getMessage());
             e.printStackTrace();
         }
@@ -251,13 +238,8 @@ public class FaceLoginController {
             }
             faceService.closeCamera();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "/com/hospismart/hospismartdesktop/Login.fxml"));
-            Scene scene = new Scene(loader.load());
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
+            com.hospismart.hospismartdesktop.main.JavaFxMain.setRoot("/com/hospismart/hospismartdesktop/Login.fxml", null);
+        } catch (Exception e) {
             System.err.println("[FaceLogin] Erreur retour: " + e.getMessage());
             e.printStackTrace();
         }

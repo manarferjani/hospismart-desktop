@@ -33,8 +33,7 @@ public class FinaliserRdvController {
     private final AIService aiService;
 
     public FinaliserRdvController() {
-        String geminiKey = "AIzaSyDRCEDFU7DgjmjtvXsrtynmP1koBm7i-xk";
-        this.aiService = new AIService(geminiKey);
+        this.aiService = new AIService(com.hospismart.hospismartdesktop.utils.ApiConfig.GEMINI_API_KEY);
     }
 
     @FXML

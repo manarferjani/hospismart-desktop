@@ -33,8 +33,8 @@ public class QRCodeService {
      * @return Le chemin absolu du fichier QR Code généré, ou null en cas d'erreur.
      */
     public String genererQRCode(String nom, int quantite, int seuilAlerte,
-                                 double prixUnitaire, String datePeremption,
-                                 String categorie, int medicamentId) {
+                                double prixUnitaire, String datePeremption,
+                                String categorie, int medicamentId) {
         try {
             // 1. Construire le contenu du QR Code
             String statut = quantite <= seuilAlerte ? "⚠️ ALERTE STOCK" : "✅ Stock OK";

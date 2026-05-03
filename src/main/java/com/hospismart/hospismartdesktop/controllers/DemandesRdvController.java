@@ -57,9 +57,7 @@ public class DemandesRdvController {
     private final ObservableList<RendezVous> masterData = FXCollections.observableArrayList();
 
     public DemandesRdvController() {
-        // Récupération de la clé API Gemini depuis les variables d'environnement
-        String geminiKey = System.getenv("GEMINI_API_KEY");
-        this.aiService = new AIService(geminiKey != null ? geminiKey : "");
+        this.aiService = new AIService(com.hospismart.hospismartdesktop.utils.ApiConfig.GEMINI_API_KEY);
     }
 
     @FXML
@@ -210,10 +208,20 @@ public class DemandesRdvController {
             int medecinId = UserSession.getUser().getId();
             List<RendezVous> pendingRdv = rdvService.findPendingByMedecin(medecinId);
 
-            // Calculer la priorité IA pour chaque rendez-vous (toujours recalculer)
+            // Calcul de priorité local et ultra-rapide sans épuiser le quota Gemini
             for (RendezVous rdv : pendingRdv) {
-                int prioriteIA = aiService.calculerPriorite(rdv.getMotif());
-                rdv.setPriorite(prioriteIA);
+                int priorite = 2; // Standard par défaut
+                String motif = rdv.getMotif() != null ? rdv.getMotif().toLowerCase() : "";
+                if (motif.contains("urgence") || motif.contains("douleur intense") || motif.contains("saignement") || motif.contains("crise")) {
+                    priorite = 5; // Critique
+                } else if (motif.contains("fièvre") || motif.contains("fievre") || motif.contains("infection") || motif.contains("vertige")) {
+                    priorite = 4; // Urgent
+                } else if (motif.contains("contrôle") || motif.contains("controle") || motif.contains("suivi") || motif.contains("renouvellement")) {
+                    priorite = 1; // Non urgent
+                } else if (motif.contains("douleur") || motif.contains("fatigue")) {
+                    priorite = 3; // Moyen
+                }
+                rdv.setPriorite(priorite);
             }
 
             masterData.setAll(pendingRdv);

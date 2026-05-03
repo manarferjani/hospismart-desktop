@@ -1,9 +1,11 @@
 package com.hospismart.hospismartdesktop.controllers; // Package des controllers JavaFX
 
-import com.hospismart.hospismartdesktop.Services.ReclamationDao; // DAO des reclamations
-import com.hospismart.hospismartdesktop.Services.ReponseDao; // DAO des reponses
+import com.hospismart.hospismartdesktop.services.ReclamationDao; // DAO des reclamations
+import com.hospismart.hospismartdesktop.services.ReponseDao; // DAO des reponses
 import com.hospismart.hospismartdesktop.models.Reclamation; // Modele Reclamation
 import com.hospismart.hospismartdesktop.models.Reponse; // Modele Reponse
+import com.hospismart.hospismartdesktop.models.User; // Modele User
+import com.hospismart.hospismartdesktop.utils.Session; // Gestion session
 import javafx.animation.FadeTransition; // Animation de fondu
 import javafx.animation.ScaleTransition; // Animation de zoom
 import javafx.collections.FXCollections; // Fabrique de listes observables
@@ -105,6 +107,17 @@ public class ReclamationFrontController implements Initializable { // Controller
                 }
             };
         });
+
+        // Autofill with logged-in user data
+        User currentUser = Session.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String fullName = (currentUser.getNom() != null ? currentUser.getNom() : "") + " " +
+                              (currentUser.getPrenom() != null ? currentUser.getPrenom() : "");
+            txtPatient.setText(fullName.trim());
+            if (currentUser.getEmail() != null) {
+                txtEmail.setText(currentUser.getEmail());
+            }
+        }
 
         loadTable(); // Charge les reclamations existantes
         activerModeAjout(); // Met l'UI en mode ajout par defaut
@@ -418,16 +431,18 @@ public class ReclamationFrontController implements Initializable { // Controller
     // =============================================
 
     private void callGeminiAPI(String prompt, java.util.function.Consumer<String> callback) {
-        String apiKey = "AIzaSyBeockjPx07_gt35XIaSQG1GLx5Riz22a0";
-        String urlStr = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey;
+        String apiKey = com.hospismart.hospismartdesktop.utils.ApiConfig.GEMINI_API_KEY;
+        String urlStr = "https://api.x.ai/v1/chat/completions";
 
         String escapedPrompt = escapeJson(prompt);
-        String body = "{\"contents\":[{\"parts\":[{\"text\":\"" + escapedPrompt + "\"}]}]}";
+        String body = "{\"model\": \"grok-2-1212\", \"messages\": [{\"role\": \"user\", \"content\": \"" + escapedPrompt + "\"}]}";
+
 
         java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
         java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
                 .uri(java.net.URI.create(urlStr))
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + apiKey)
                 .POST(java.net.http.HttpRequest.BodyPublishers.ofString(body, java.nio.charset.StandardCharsets.UTF_8))
                 .build();
 
@@ -441,7 +456,7 @@ public class ReclamationFrontController implements Initializable { // Controller
 
                     String reply = parseGeminiResponse(responseBody);
                     if (reply.trim().isEmpty()) {
-                        reply = "Réponse Gemini vide ou non reconnue.";
+                        reply = "Réponse AI vide ou non reconnue.";
                     }
                     callback.accept(reply);
                 }))
@@ -466,7 +481,7 @@ public class ReclamationFrontController implements Initializable { // Controller
         if (json == null || json.isBlank()) return "";
 
         java.util.regex.Matcher matcher = java.util.regex.Pattern
-                .compile("\"text\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"", java.util.regex.Pattern.DOTALL)
+                .compile("\"content\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"", java.util.regex.Pattern.DOTALL)
                 .matcher(json);
 
         if (matcher.find()) {
@@ -482,10 +497,10 @@ public class ReclamationFrontController implements Initializable { // Controller
                     .compile("\"message\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"", java.util.regex.Pattern.DOTALL)
                     .matcher(json);
             if (matcher.find()) {
-                return "Erreur Gemini HTTP " + statusCode + ": " + unescapeJsonString(matcher.group(1));
+                return "Erreur Grok HTTP " + statusCode + ": " + unescapeJsonString(matcher.group(1));
             }
         }
-        return "Erreur Gemini HTTP " + statusCode + ": " + (json == null ? "réponse vide" : json);
+        return "Erreur Grok HTTP " + statusCode + ": " + (json == null ? "réponse vide" : json);
     }
 
     private String unescapeJsonString(String value) {
@@ -531,7 +546,7 @@ public class ReclamationFrontController implements Initializable { // Controller
 
         callGeminiAPI(prompt, reply -> {
             txtChatbot.setText(txtChatbot.getText().replace("Bot AI : ... (réflexion en cours)\n", ""));
-            txtChatbot.appendText("Bot Gemini : " + reply + "\n\n");
+            txtChatbot.appendText("Bot Grok : " + reply + "\n\n");
             btnChatSendMessage.setDisable(false);
         });
     }
@@ -539,7 +554,7 @@ public class ReclamationFrontController implements Initializable { // Controller
     @FXML
     void autoFillForm() {
         btnAutoFill.setDisable(true);
-        txtChatbot.appendText("Bot Gemini : (Analyse de notre discussion pour remplir les champs...)\n");
+        txtChatbot.appendText("Bot Grok : (Analyse de notre discussion pour remplir les champs...)\n");
 
         String conversationSnapshot = txtChatbot.getText();
         String prompt = "Analyse cette conversation: \n" + conversationSnapshot + "\n" +
@@ -551,17 +566,17 @@ public class ReclamationFrontController implements Initializable { // Controller
                 "ETAT_MENTAL: <Calme, Frustré, Paniqué, En Colère, Inquiet>";
 
         callGeminiAPI(prompt, reply -> {
-            txtChatbot.setText(txtChatbot.getText().replace("Bot Gemini : (Analyse de notre discussion pour remplir les champs...)\n", ""));
+            txtChatbot.setText(txtChatbot.getText().replace("Bot Grok : (Analyse de notre discussion pour remplir les champs...)\n", ""));
 
-            boolean filled = reply != null && !reply.startsWith("Erreur Gemini HTTP") && applyAutoFillFromGemini(reply);
+            boolean filled = reply != null && !reply.startsWith("Erreur Grok HTTP") && applyAutoFillFromGemini(reply);
             if (!filled) {
                 filled = applyLocalAutoFillFallback(lastUserMessage + "\n" + conversationSnapshot + "\n" + reply);
             }
 
             if (filled) {
-                txtChatbot.appendText("Bot Gemini : ✅ Voilà ! J'ai pré-rempli vos champs. Vous pouvez les vérifier et Sauvegarder.\n\n");
+                txtChatbot.appendText("Bot Grok : ✅ Voilà ! J'ai pré-rempli vos champs. Vous pouvez les vérifier et Sauvegarder.\n\n");
             } else {
-                txtChatbot.appendText("Bot Gemini : ⚠️ Je n'ai pas pu extraire les champs automatiquement. Essayez avec plus de détails.\n\n");
+                txtChatbot.appendText("Bot Grok : ⚠️ Je n'ai pas pu extraire les champs automatiquement. Essayez avec plus de détails.\n\n");
             }
 
             btnAutoFill.setDisable(false);

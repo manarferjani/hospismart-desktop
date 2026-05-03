@@ -18,16 +18,16 @@ public class MainClass {
 
         UserService us = new UserService();
 
-        try {
-            // 3. Tester l'insertion
-            us.insertOne(testUser);
-            System.out.println("Insertion réussie !");
-
-            // 4. Tester la récupération
-            System.out.println("Liste des utilisateurs : " + us.findALL());
-
-        } catch (SQLException e) {
-            System.err.println("Erreur SQL : " + e.getMessage());
-        }
+//        try {
+//            // 3. Tester l'insertion
+//            testUser.(testUser);
+//            System.out.println("Insertion réussie !");
+//
+//            // 4. Tester la récupération
+//            System.out.println("Liste des utilisateurs : " + us.findALL());
+//
+//        } catch (SQLException e) {
+//            System.err.println("Erreur SQL : " + e.getMessage());
+//        }
     }
 }

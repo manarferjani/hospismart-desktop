@@ -8,7 +8,7 @@
 <VBox spacing="24" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.hospismart.hospismartdesktop.controllers.DashboardController"
-      stylesheets="@hospismart.css"
+      stylesheets="/css/style.css"
       style="-fx-background-color: #f3f4f6;">
     <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
 

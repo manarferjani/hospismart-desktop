@@ -7,7 +7,7 @@
 <VBox spacing="12" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.hospismart.hospismartdesktop.controllers.MedicamentController"
-      stylesheets="@hospismart.css"
+      stylesheets="/css/style.css"
       style="-fx-background-color: #f8fafc;">
     <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
 

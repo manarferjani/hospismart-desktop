@@ -1,5 +1,6 @@
 package com.hospismart.hospismartdesktop.controllers;
 
+import com.hospismart.hospismartdesktop.main.JavaFxMain;
 import com.hospismart.hospismartdesktop.models.Notification;
 import com.hospismart.hospismartdesktop.services.NotificationService;
 import com.hospismart.hospismartdesktop.utils.UserSession;
@@ -37,6 +38,7 @@ public class NavbarController {
     @FXML private Hyperlink linkServices;
     @FXML private Hyperlink linkRdvs;
     @FXML private Hyperlink linkEvenements;
+    @FXML private Hyperlink linkReclamations;
 
     // Notification bell elements
     @FXML private StackPane bellContainer;
@@ -62,6 +64,7 @@ public class NavbarController {
         setupHoverEffect(linkServices);
         setupHoverEffect(linkRdvs);
         setupHoverEffect(linkEvenements);
+        setupHoverEffect(linkReclamations);
 
         javafx.application.Platform.runLater(() -> {
             // Détection dynamique de la page active via le contenu de la scène
@@ -419,43 +422,50 @@ public class NavbarController {
         linkServices.setUserData(null);
         if (linkRdvs != null) linkRdvs.setUserData(null);
         linkEvenements.setUserData(null);
+        if (linkReclamations != null) linkReclamations.setUserData(null);
 
         linkAccueil.setStyle(STYLE_NORMAL);
         linkServices.setStyle(STYLE_NORMAL);
         if (linkRdvs != null) linkRdvs.setStyle(STYLE_NORMAL);
         linkEvenements.setStyle(STYLE_NORMAL);
+        if (linkReclamations != null) linkReclamations.setStyle(STYLE_NORMAL);
     }
 
     @FXML
     private void goToServices(ActionEvent event) {
-        try {
-            switchScene(event, "/TrouverMedecin.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(event, "/TrouverMedecin.fxml");
     }
 
     @FXML
     private void goToAccueil(ActionEvent event) {
-        try {
-            switchScene(event, "/TrouverMedecin.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(event, "/TrouverMedecin.fxml");
     }
 
-    private void switchScene(ActionEvent event, String fxmlPath) throws IOException {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-        stage.setScene(new Scene(root));
-        stage.show();
+    private void switchScene(ActionEvent event, String fxmlPath) {
+        JavaFxMain.setRoot(fxmlPath, null);
     }
 
     public void goToRdvs(ActionEvent event) {
-        try {
-            switchScene(event, "/MesRdv.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        switchScene(event, "/MesRdv.fxml");
+    }
+
+    @FXML
+    public void goToReclamations(ActionEvent event) {
+        switchScene(event, "/com/hospismart/hospismartdesktop/reclamation_front.fxml");
+    }
+    @FXML
+    public void goToEvenements(ActionEvent event) {
+        switchScene(event, "/com/hospismart/hospismartdesktop/evenement-front.fxml");
+    }
+
+    @FXML
+    public void goToMonCompte(ActionEvent event) {
+        switchScene(event, "/com/hospismart/hospismartdesktop/UserProfile.fxml");
+    }
+
+    @FXML
+    public void handleLogout(ActionEvent event) {
+        com.hospismart.hospismartdesktop.utils.Session.getInstance().cleanUserSession();
+        switchScene(event, "/com/hospismart/hospismartdesktop/Login.fxml");
     }
 }

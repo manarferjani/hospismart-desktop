@@ -58,7 +58,8 @@ public class PatientController implements Initializable {
         imageView.setFitHeight(150);
         imageView.setPreserveRatio(false);
 
-        String uploadPath = "C:/Users/manar/Desktop/JavaProjects/HospismartDesktop/public/uploads/services/";
+        String baseDir = System.getProperty("user.dir").replace("\\", "/");
+        String uploadPath = baseDir + "/public/uploads/services/";
 
         try {
             String imageName = s.getImage();
@@ -98,9 +99,13 @@ public class PatientController implements Initializable {
                 MedecinController controller = loader.getController();
                 controller.listerMedecins(s.getId(), s.getNom());
 
-                // Changement de scène
+                // Changement de scène tout en préservant la fenêtre (taille, plein écran)
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setScene(new Scene(root));
+                if (stage.getScene() != null) {
+                    stage.getScene().setRoot(root);
+                } else {
+                    stage.setScene(new Scene(root));
+                }
                 stage.show();
 
             } catch (IOException e) {

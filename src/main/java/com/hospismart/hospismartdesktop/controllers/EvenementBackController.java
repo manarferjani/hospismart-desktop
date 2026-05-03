@@ -25,6 +25,7 @@ import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.scene.layout.StackPane;
 
 public class EvenementBackController implements Initializable {
 
@@ -269,7 +270,7 @@ public class EvenementBackController implements Initializable {
                     getClass().getResource("/com/hospismart/hospismartdesktop/evenement-front.fxml"));
             Scene scene = new Scene(loader.load(), 1200, 760);
             scene.getStylesheets().add(
-                    getClass().getResource("/com/hospismart/hospismartdesktop/styles.css").toExternalForm());
+                    getClass().getResource("/css/style.css").toExternalForm());
             Stage stage = (Stage) evenementTable.getScene().getWindow();
             stage.setTitle("HospiSmart — Espace Public");
             stage.setScene(scene);
@@ -282,12 +283,11 @@ public class EvenementBackController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/hospismart/hospismartdesktop/evenement-stats.fxml"));
-            Scene scene = new Scene(loader.load(), 1200, 760);
-            scene.getStylesheets().add(
-                    getClass().getResource("/com/hospismart/hospismartdesktop/styles.css").toExternalForm());
-            Stage stage = (Stage) evenementTable.getScene().getWindow();
-            stage.setTitle("HospiSmart — Statistiques Événements");
-            stage.setScene(scene);
+            javafx.scene.Parent root = loader.load();
+            StackPane contentArea = (StackPane) evenementTable.getScene().lookup("#contentArea");
+            if (contentArea != null) {
+                contentArea.getChildren().setAll(root);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -296,13 +296,12 @@ public class EvenementBackController implements Initializable {
     private void navigateToWelcome() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/hospismart/hospismartdesktop/welcome-view.fxml"));
-            Scene scene = new Scene(loader.load(), 900, 620);
-            scene.getStylesheets().add(
-                    getClass().getResource("/com/hospismart/hospismartdesktop/styles.css").toExternalForm());
-            Stage stage = (Stage) evenementTable.getScene().getWindow();
-            stage.setTitle("HospiSmart — Bienvenue");
-            stage.setScene(scene);
+                    getClass().getResource("/com/hospismart/hospismartdesktop/dashboard.fxml")); // Default to Dashboard if welcome isn't meant for contentArea
+            javafx.scene.Parent root = loader.load();
+            StackPane contentArea = (StackPane) evenementTable.getScene().lookup("#contentArea");
+            if (contentArea != null) {
+                contentArea.getChildren().setAll(root);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -349,7 +348,7 @@ public class EvenementBackController implements Initializable {
             Stage stage = new Stage();
             Scene scene = new Scene(loader.load(), 750, 750);
             scene.getStylesheets().add(
-                    getClass().getResource("/com/hospismart/hospismartdesktop/styles.css").toExternalForm());
+                    getClass().getResource("/css/style.css").toExternalForm());
             stage.setScene(scene);
             stage.setTitle(evenement == null ? "Ajouter un Evenement" : "Modifier - " + evenement.getTitre());
             stage.initModality(Modality.APPLICATION_MODAL);

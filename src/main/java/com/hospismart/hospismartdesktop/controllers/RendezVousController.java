@@ -63,7 +63,8 @@ public class RendezVousController {
         imgMedecin.setSmooth(true);
 
         try {
-            String path = "file:C:/Users/manar/Desktop/JavaProjects/HospismartDesktop/public/uploads/medecins/" + imageName;
+            String baseDir = System.getProperty("user.dir").replace("\\", "/");
+            String path = "file:" + baseDir + "/public/uploads/medecins/" + imageName;
             // On charge l'image en grand pour avoir de la qualité
             Image img = new Image(path, 0, 400, true, true);
 

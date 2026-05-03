@@ -185,12 +185,11 @@ public class EvenementStatsController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/hospismart/hospismartdesktop/evenement-back.fxml"));
-            Scene scene = new Scene(loader.load(), 1200, 760);
-            scene.getStylesheets().add(
-                    getClass().getResource("/com/hospismart/hospismartdesktop/styles.css").toExternalForm());
-            Stage stage = (Stage) statsCardsPane.getScene().getWindow();
-            stage.setTitle("HospiSmart — Back Office");
-            stage.setScene(scene);
+            javafx.scene.Parent root = loader.load();
+            StackPane contentArea = (StackPane) statsCardsPane.getScene().lookup("#contentArea");
+            if (contentArea != null) {
+                contentArea.getChildren().setAll(root);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
