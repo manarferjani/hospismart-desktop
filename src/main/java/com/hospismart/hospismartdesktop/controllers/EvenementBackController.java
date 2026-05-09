@@ -140,19 +140,26 @@ public class EvenementBackController implements Initializable {
             }
         });
 
-        // Actions — Voir + Modifier + Supprimer + PDF
+        // Actions — Voir + Modifier + Supprimer + PDF (Boutons modernes avec emojis/icônes)
         colActions.setCellFactory(col -> new TableCell<>() {
-            private final Button viewBtn   = new Button("Voir");
-            private final Button editBtn   = new Button("Modifier");
-            private final Button deleteBtn = new Button("Supprimer");
-            private final Button pdfBtn    = new Button("PDF");
-            private final HBox   box       = new HBox(6, viewBtn, editBtn, deleteBtn, pdfBtn);
+            private final Button viewBtn   = new Button("👁️");
+            private final Button editBtn   = new Button("✏️");
+            private final Button deleteBtn = new Button("🗑️");
+            private final Button pdfBtn    = new Button("📄");
+            private final HBox   box       = new HBox(8, viewBtn, editBtn, deleteBtn, pdfBtn);
             {
-                viewBtn.getStyleClass().add("btn-view");
-                editBtn.getStyleClass().add("btn-edit");
-                deleteBtn.getStyleClass().add("btn-delete");
-                pdfBtn.getStyleClass().add("btn-pdf");
+                viewBtn.setStyle("-fx-background-color: #f1f5f9; -fx-text-fill: #475569; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                editBtn.setStyle("-fx-background-color: #e0e7ff; -fx-text-fill: #4f46e5; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                deleteBtn.setStyle("-fx-background-color: #fee2e2; -fx-text-fill: #dc2626; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                pdfBtn.setStyle("-fx-background-color: #dbeafe; -fx-text-fill: #2563eb; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                
+                viewBtn.setTooltip(new Tooltip("Voir les détails"));
+                editBtn.setTooltip(new Tooltip("Modifier"));
+                deleteBtn.setTooltip(new Tooltip("Supprimer"));
+                pdfBtn.setTooltip(new Tooltip("Exporter PDF"));
+                
                 box.setAlignment(Pos.CENTER_LEFT);
+                
                 editBtn.setOnAction(ev -> {
                     Evenement item = getTableView().getItems().get(getIndex());
                     if (item != null) openForm(item);
@@ -375,16 +382,26 @@ public class EvenementBackController implements Initializable {
     // ── PDF Export ─────────────────────────────────────────────────────────────
 
     private void exportPdf(Evenement e) {
+        javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+        fileChooser.setTitle("Enregistrer le PDF de l'événement");
+        fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
+        
+        String safeName = e.getTitre() != null ? e.getTitre().replaceAll("[^a-zA-Z0-9À-ÿ]", "_").replaceAll("_+", "_") : "Event";
+        fileChooser.setInitialFileName("Evenement_" + safeName + "_" + e.getId() + ".pdf");
+        
+        java.io.File targetFile = fileChooser.showSaveDialog(evenementTable.getScene().getWindow());
+        if (targetFile == null) return; // User cancelled
+
         PdfExportService pdfService = new PdfExportService();
         InscriptionService inscService = new InscriptionService();
         java.util.List<Inscription> participants = inscService.findByEvenement(e.getId());
 
-        java.io.File file = pdfService.exportEvent(e, participants);
+        java.io.File file = pdfService.exportEvent(e, participants, targetFile);
         if (file != null && file.exists()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("PDF Exporté");
             alert.setHeaderText(null);
-            alert.setContentText("Le fichier PDF a été enregistré sur le Bureau :\n\n" + file.getName());
+            alert.setContentText("Le fichier PDF a été enregistré avec succès :\n\n" + file.getAbsolutePath());
             alert.showAndWait();
 
             // Open the file

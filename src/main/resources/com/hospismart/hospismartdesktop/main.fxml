@@ -11,63 +11,73 @@
 
     <!-- ===================== SIDEBAR ===================== -->
     <left>
-        <VBox styleClass="sidebar" spacing="2">
+        <VBox styleClass="sidebar-pro" spacing="0">
 
             <!-- Brand / Logo -->
-            <VBox styleClass="sidebar-brand" alignment="CENTER_LEFT" spacing="2">
-                <Label text="❤️  Hospismart" styleClass="sidebar-brand-label"/>
-                <Label text="Admin - Back Office" styleClass="sidebar-brand-sub"/>
+            <VBox styleClass="sidebar-pro-brand" alignment="CENTER_LEFT" spacing="4">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="🏥" style="-fx-font-size:26px;"/>
+                    <VBox spacing="1">
+                        <Label text="HospiSmart" styleClass="sidebar-pro-brand-label"/>
+                        <Label text="BACK OFFICE  •  ADMIN" styleClass="sidebar-pro-brand-sub"/>
+                    </VBox>
+                </HBox>
             </VBox>
 
-            <VBox VBox.vgrow="ALWAYS" spacing="2" style="-fx-padding: 12 8 8 8;">
+            
 
-                <!-- Section: Navigation -->
+            <!-- Nav Sections -->
+            <VBox VBox.vgrow="ALWAYS" spacing="2" style="-fx-padding: 18 10 10 10;">
+
                 <!-- Section: Pharmacie & Stocks -->
-                <Label text="PHARMACIE &amp; STOCKS" styleClass="menu-header"/>
-                <Button fx:id="btnDashboard" text="📊  Tableau de Bord"
+                <Label text="PHARMACIE &amp; STOCKS" styleClass="sidebar-pro-section-label"/>
+
+                <Button fx:id="btnDashboard" text="📊   Tableau de Bord"
                         onAction="#showDashboard"
-                        styleClass="nav-button" maxWidth="Infinity"/>
-                <Button fx:id="btnMedicaments" text="💊  Médicaments"
+                        styleClass="sidebar-pro-nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnMedicaments" text="💊   Médicaments"
                         onAction="#showMedicaments"
-                        styleClass="nav-button" maxWidth="Infinity"/>
-                <Button fx:id="btnCategories" text="🏷️  Catégories"
+                        styleClass="sidebar-pro-nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnCategories" text="🏷️   Catégories"
                         onAction="#showCategories"
-                        styleClass="nav-button" maxWidth="Infinity"/>
-                <Button fx:id="btnMouvements" text="📦  Mouvements Stock"
+                        styleClass="sidebar-pro-nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnMouvements" text="📦   Mouvements Stock"
                         onAction="#showMouvements"
-                        styleClass="nav-button" maxWidth="Infinity"/>
+                        styleClass="sidebar-pro-nav-btn" maxWidth="Infinity"/>
 
                 <!-- Section: Administration -->
-                <Label text="ADMINISTRATION" styleClass="menu-header"/>
-                <Button fx:id="btnUsers" text="👥  Utilisateurs"
+                <Label text="ADMINISTRATION" styleClass="sidebar-pro-section-label" style="-fx-padding: 20 0 5 15;"/>
+                <Button fx:id="btnUsers" text="👥   Utilisateurs"
                         onAction="#showUsers"
-                        styleClass="nav-button" maxWidth="Infinity"/>
-                <Button fx:id="btnReclamations" text="📋  Réclamations"
+                        styleClass="sidebar-pro-nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnReclamations" text="📋   Réclamations"
                         onAction="#showReclamations"
-                        styleClass="nav-button" maxWidth="Infinity"/>
-                <Button fx:id="btnEvenements" text="📅  Événements"
+                        styleClass="sidebar-pro-nav-btn" maxWidth="Infinity"/>
+                <Button fx:id="btnEvenements" text="📅   Événements"
                         onAction="#showEvenements"
-                        styleClass="nav-button" maxWidth="Infinity"/>
+                        styleClass="sidebar-pro-nav-btn" maxWidth="Infinity"/>
 
                 <!-- Spacer -->
                 <Region VBox.vgrow="ALWAYS"/>
 
-                <!-- Footer (équivalent "Voir le site" du back.html.twig) -->
-                <VBox styleClass="sidebar-footer" spacing="4">
-                    <Button text="🌐  Catalogue Public"
+                <!-- Status Card -->
+                <VBox styleClass="sidebar-pro-status-card" spacing="5" alignment="CENTER_LEFT">
+                    <Label text="🟢  Système opérationnel" style="-fx-text-fill:#34d399;-fx-font-size:11px;-fx-font-weight:700;"/>
+                    <Label text="Base de données connectée" style="-fx-text-fill:rgba(255,255,255,0.45);-fx-font-size:10px;"/>
+                </VBox>
+
+                <!-- Footer actions -->
+                <VBox styleClass="sidebar-pro-footer" spacing="4">
+                    <Button text="🌐   Catalogue Public"
                             onAction="#handleGoFront"
-                            styleClass="nav-button" maxWidth="Infinity"
-                            style="-fx-background-color: transparent; -fx-text-fill: #38bdf8;
-                                   -fx-font-size: 13px; -fx-padding: 10 18; -fx-cursor: hand;
-                                   -fx-alignment: CENTER_LEFT;"/>
-                    <Button text="🚪  Déconnexion"
+                            styleClass="sidebar-pro-nav-btn" maxWidth="Infinity"
+                            style="-fx-text-fill: #38bdf8;"/>
+                    <Button text="🚪   Déconnexion"
                             onAction="#handleLogout"
-                            styleClass="nav-button" maxWidth="Infinity"
-                            style="-fx-background-color: transparent; -fx-text-fill: #ef4444;
-                                   -fx-font-size: 13px; -fx-padding: 10 18; -fx-cursor: hand;
-                                   -fx-alignment: CENTER_LEFT;"/>
-                    <Label text="PIDEV 2025-2026"
-                           style="-fx-text-fill: #475569; -fx-font-size: 10px; -fx-padding: 0 0 0 10;"/>
+                            styleClass="sidebar-pro-nav-btn" maxWidth="Infinity"
+                            style="-fx-text-fill: #f87171;"/>
+                    <Label text="PIDEV 2025 – 2026"
+                           style="-fx-text-fill: rgba(255,255,255,0.2); -fx-font-size: 9px; -fx-padding: 4 0 0 12;"/>
                 </VBox>
             </VBox>
         </VBox>
@@ -75,6 +85,6 @@
 
     <!-- ===================== CONTENU ===================== -->
     <center>
-        <StackPane fx:id="contentArea" styleClass="main-content"/>
+        <StackPane fx:id="contentArea" styleClass="main-content-pro"/>
     </center>
 </BorderPane>

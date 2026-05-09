@@ -569,6 +569,9 @@ public class EvenementFrontController implements Initializable {
         emailField.textProperty().addListener((obs, o, n) -> validate.run());
         telField.textProperty().addListener((obs, o, n) -> validate.run());
 
+        // Validate initially in case fields are pre-filled
+        validate.run();
+
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == inscrireType) {
                 Inscription insc = new Inscription();

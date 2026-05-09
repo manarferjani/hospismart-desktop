@@ -207,11 +207,20 @@ public class ReponseBackController implements Initializable { // Controller Back
     @FXML // Handler navigation vers ecran reclamations
     void goToReclamations(ActionEvent event) { // Ouvre la vue back reclamation avec fondu
         try { // Debut bloc navigation
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow(); // Recupere fenetre courante
+            javafx.scene.Node source = (javafx.scene.Node) event.getSource();
+            javafx.scene.Scene scene = source.getScene();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/reclamation_back.fxml")); // Charge FXML cible
             Parent root = loader.load(); // Construit l'arbre de noeuds
             root.setOpacity(0); // Rend la vue transparente au depart
-            stage.setScene(new Scene(root, 1000, 700)); // Remplace la scene courante
+
+            javafx.scene.layout.StackPane contentArea = (javafx.scene.layout.StackPane) scene.lookup("#contentArea");
+            if (contentArea != null) {
+                contentArea.getChildren().setAll(root);
+            } else {
+                Stage stage = (Stage) scene.getWindow();
+                stage.setScene(new Scene(root, 1000, 700));
+            }
+
             FadeTransition fade = new FadeTransition(Duration.millis(280), root); // Cree animation fondu
             fade.setFromValue(0); // Debut transparent
             fade.setToValue(1); // Fin opaque

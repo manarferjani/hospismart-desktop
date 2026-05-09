@@ -13,9 +13,9 @@ public class AIService {
     private final String apiKey;
     private final HttpClient client;
 
-    // URL de base de l'API Grok
-    private static final String GROK_API_URL =
-            "https://api.x.ai/v1/chat/completions";
+    // URL de base de l'API Gemini
+    private static final String GEMINI_API_URL =
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
 
     public AIService(String apiKey) {
         this.apiKey = apiKey;
@@ -49,31 +49,26 @@ public class AIService {
                     .replace("\r", "\\r")
                     .replace("\t", "\\t");
 
-            // Construction du corps JSON au format Grok/OpenAI API
+            // Construction du corps JSON au format Gemini API
             String jsonBody = """
                     {
-                        "model": "grok-2-1212",
-                        "messages": [
-                            {
-                                "role": "system",
-                                "content": "Tu es un algorithme de triage medical de haute precision. Ton unique but est de classer le motif de consultation selon l echelle de priorite suivante :\\n5 (CRITIQUE) : Danger vital immediat (ex: bebe inconscient, arret respiratoire, hemorragie massive, detresse respiratoire, levres bleues).\\n4 (URGENT) : Cas grave nécessitant une attention rapide (ex: fievre grave/elevee, douleur intense, enfant avec mal a respirer, blessure grave).\\n3 (MOYEN) : Symptomes moderes (ex: fievre, migraine, mal de dos normal, vomissement).\\n2 (STANDARD) : Symptomes legers et supportables (ex: mal de dos leger, rhume mineur, douleur faible, petit inconvenient).\\n1 (NON-URGENT) : Administratif, suivi, routine (ex: certificat, renouvellement, bilan).\\n\\nReponds UNIQUEMENT par le chiffre correspondant (1, 2, 3, 4 ou 5), sans aucun texte supplementaire."
-                            },
-                            {
-                                "role": "user",
-                                "content": "Analyse ce motif medical : %s"
-                            }
-                        ],
+                      "contents": [{
+                        "parts": [{
+                          "text": "Tu es un algorithme de triage medical de haute precision. Ton unique but est de classer le motif de consultation selon l echelle de priorite suivante :\\n5 (CRITIQUE) : Danger vital immediat.\\n4 (URGENT) : Cas grave nécessitant une attention rapide.\\n3 (MOYEN) : Symptomes moderes.\\n2 (STANDARD) : Symptomes legers et supportables.\\n1 (NON-URGENT) : Administratif, suivi, routine.\\n\\nReponds UNIQUEMENT par le chiffre correspondant (1, 2, 3, 4 ou 5), sans aucun texte supplementaire.\\n\\nAnalyse ce motif medical : %s"
+                        }]
+                      }],
+                      "generationConfig": {
                         "temperature": 0,
-                        "max_tokens": 10
+                        "maxOutputTokens": 10
+                      }
                     }
                     """
                     .formatted(motifEscaped);
 
-            // Fetch vers l'API Grok avec header d'autorisation
+            // Fetch vers l'API Gemini
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(GROK_API_URL))
+                    .uri(URI.create(GEMINI_API_URL + apiKey))
                     .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer " + apiKey)
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();
 
@@ -81,10 +76,10 @@ public class AIService {
 
             if (response.statusCode() == 200) {
                 int result = extractScore(response.body());
-                System.out.println("[AIService] API Grok -> priorite " + result + " pour: " + motif);
+                System.out.println("[AIService] API Gemini -> priorite " + result + " pour: " + motif);
                 return result;
             } else {
-                System.err.println("Erreur API Grok (HTTP " + response.statusCode() + "): " + response.body());
+                System.err.println("Erreur API Gemini (HTTP " + response.statusCode() + "): " + response.body());
                 return calculerPrioriteLocale(motif);
             }
 
@@ -113,22 +108,21 @@ public class AIService {
 
             String jsonBody = """
             {
-                "model": "grok-2-1212",
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": "Tu es un correcteur strict de médicaments. Analyse:\\nDiagnostic: %s\\nTraitement: %s\\n\\nRègles STRICTES:\\n1. Compare CHAQUE mot du traitement avec le nom exact du médicament.\\n2. Si UN SEUL caractère est différent du nom correct -> estCorrect=false OBLIGATOIREMENT.\\n3. Exemples de fautes: doliprale/dolipramm/dolipranne -> Doliprane (faute), amoxiciline -> Amoxicilline (faute).\\n4. 'suggestion' = traitement avec TOUTES les fautes corrigées.\\n5. 'coherent' = true si le médicament correspond au diagnostic, false sinon.\\n6. Si faute détectée: estCorrect=false ET coherent=true (sauf si aussi incohérent).\\nJSON strict sans markdown:\\n{\\"estCorrect\\": boolean, \\"coherent\\": boolean, \\"suggestion\\": \\"traitement corrigé\\", \\"analyse\\": \\"liste des corrections faites\\"}"
-                    }
-                ],
+              "contents": [{
+                "parts": [{
+                  "text": "Tu es un correcteur strict de médicaments. Analyse:\\nDiagnostic: %s\\nTraitement: %s\\n\\nRègles STRICTES:\\n1. Compare CHAQUE mot du traitement avec le nom exact du médicament.\\n2. Si UN SEUL caractère est différent du nom correct -> estCorrect=false OBLIGATOIREMENT.\\n3. Exemples de fautes: doliprale/dolipramm/dolipranne -> Doliprane (faute), amoxiciline -> Amoxicilline (faute).\\n4. 'suggestion' = traitement avec TOUTES les fautes corrigées.\\n5. 'coherent' = true si le médicament correspond au diagnostic, false sinon.\\n6. Si faute détectée: estCorrect=false ET coherent=true (sauf si aussi incohérent).\\nJSON strict sans markdown:\\n{\\"estCorrect\\": boolean, \\"coherent\\": boolean, \\"suggestion\\": \\"traitement corrigé\\", \\"analyse\\": \\"liste des corrections faites\\"}"
+                }]
+              }],
+              "generationConfig": {
                 "temperature": 0,
-                "max_tokens": 2048
+                "maxOutputTokens": 2048
+              }
             }
             """.formatted(diagSafe, traitSafe);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(GROK_API_URL))
+                    .uri(URI.create(GEMINI_API_URL + apiKey))
                     .header("Content-Type", "application/json")
-                    .header("Authorization", "Bearer " + apiKey)
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .timeout(Duration.ofSeconds(15))
                     .build();
@@ -139,8 +133,8 @@ public class AIService {
             System.out.println("[AIService] Body: " + response.body());
 
             if (response.statusCode() == 200) {
-                // Extraire le bloc "content" de la reponse Grok
-                Pattern pText = Pattern.compile("\"content\"\\s*:\\s*\"([\\s\\S]*?)\"");
+                // Extraire le bloc "text" de la reponse Gemini
+                Pattern pText = Pattern.compile("\"text\"\\s*:\\s*\"([\\s\\S]*?)\"");
                 Matcher mText = pText.matcher(response.body());
                 if (mText.find()) {
                     String raw = mText.group(1)
@@ -174,7 +168,7 @@ public class AIService {
      * Extrait le score de priorite de la reponse JSON Gemini.
      */
     private int extractScore(String jsonResponse) {
-        Pattern pattern = Pattern.compile("\"content\"\\s*:\\s*\"\\s*(\\d)\\s*\"");
+        Pattern pattern = Pattern.compile("\"text\"\\s*:\\s*\"\\s*(\\d)\\s*\"");
         Matcher matcher = pattern.matcher(jsonResponse);
 
         String lastMatch = null;
@@ -190,7 +184,7 @@ public class AIService {
         }
 
         // Fallback : chercher un chiffre isole dans la reponse
-        Pattern fallbackPattern = Pattern.compile("\"content\"\\s*:\\s*\"[^\"]*?(\\d)[^\"]*?\"");
+        Pattern fallbackPattern = Pattern.compile("\"text\"\\s*:\\s*\"[^\"]*?(\\d)[^\"]*?\"");
         Matcher fallbackMatcher = fallbackPattern.matcher(jsonResponse);
         if (fallbackMatcher.find()) {
             String digit = null;

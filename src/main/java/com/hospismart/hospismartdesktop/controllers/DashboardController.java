@@ -43,6 +43,7 @@ public class DashboardController {
 
     @FXML private Label lblSidebarName, lblWelcome, lblDate;
     @FXML private StackPane contentArea;
+    @FXML private Button btnDashboard, btnDispo, btnMesPatients, btnPharmacie;
     @FXML private Label statRdvJour, statAttente, statPatients;
     @FXML private Label lblNextPatientName, lblNextPatientTime, lblNextPatientMotif;
     @FXML private ImageView imgNextPatient;
@@ -95,10 +96,13 @@ public class DashboardController {
             lblDate.setText("📅 " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy  —  HH:mm")));
         }
 
-        // 3. Charger l'accueil par défaut au premier lancement
+        // 3. Charger l'accueil par défaut au premier lancement (si applicable)
         Platform.runLater(() -> {
             if (contentArea != null && contentArea.getChildren().isEmpty()) {
                 loadPage("HomeDashboard.fxml");
+            } else {
+                // Si on est dans le dashboard admin direct (dashboard.fxml)
+                refreshDashboardData();
             }
         });
     }
@@ -111,6 +115,7 @@ public class DashboardController {
             System.out.println("🔄 Tentative de navigation vers : " + fxmlFileName);
 
             URL fxmlLocation = getClass().getResource("/com/hospismart/hospismartdesktop/views/" + fxmlFileName);
+            if (fxmlLocation == null) fxmlLocation = getClass().getResource("/com/hospismart/hospismartdesktop/" + fxmlFileName);
             if (fxmlLocation == null) fxmlLocation = getClass().getResource("/" + fxmlFileName);
             if (fxmlLocation == null) throw new IOException("FXML introuvable : " + fxmlFileName);
 
@@ -440,7 +445,33 @@ public class DashboardController {
     @FXML public void showDashboard(ActionEvent e) { loadPage("HomeDashboard.fxml"); }
     @FXML public void showDemandesRdv(ActionEvent e) { loadPage("mesDemandesRDV.fxml"); }
     @FXML public void showDisponibilites(ActionEvent e) { loadPage("MedecinDisponibilites.fxml"); }
-    @FXML public void showMesPatients(ActionEvent e) { loadPage("MesPatients.fxml"); }
+    @FXML
+    public void showMesPatients(ActionEvent event) {
+        setActiveMenu(btnMesPatients);
+        loadPage("MesPatients.fxml");
+    }
+
+    @FXML
+    public void showPharmacie(ActionEvent event) {
+        setActiveMenu(btnPharmacie);
+        loadPage("medicament_medecin.fxml");
+    }
+
+    private void setActiveMenu(Button activeBtn) {
+        if (btnDashboard != null) btnDashboard.getStyleClass().remove("menu-button-active");
+        if (btnDispo != null) btnDispo.getStyleClass().remove("menu-button-active");
+        if (btnMesPatients != null) btnMesPatients.getStyleClass().remove("menu-button-active");
+        if (btnPharmacie != null) btnPharmacie.getStyleClass().remove("menu-button-active");
+
+        if (btnDashboard != null && !btnDashboard.getStyleClass().contains("menu-button")) btnDashboard.getStyleClass().add("menu-button");
+        if (btnDispo != null && !btnDispo.getStyleClass().contains("menu-button")) btnDispo.getStyleClass().add("menu-button");
+        if (btnMesPatients != null && !btnMesPatients.getStyleClass().contains("menu-button")) btnMesPatients.getStyleClass().add("menu-button");
+        if (btnPharmacie != null && !btnPharmacie.getStyleClass().contains("menu-button")) btnPharmacie.getStyleClass().add("menu-button");
+
+        if (activeBtn != null) {
+            activeBtn.getStyleClass().add("menu-button-active");
+        }
+    }
 
     @FXML
     public void handleStartConsultation(ActionEvent event) {

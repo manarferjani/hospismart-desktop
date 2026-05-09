@@ -5,113 +5,121 @@
 <?import javafx.scene.chart.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="24" xmlns="http://javafx.com/javafx"
+<VBox spacing="0" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.hospismart.hospismartdesktop.controllers.DashboardController"
       stylesheets="/css/style.css"
-      style="-fx-background-color: #f3f4f6;">
-    <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+      styleClass="back-page-root">
 
-    <!-- HEADER -->
-    <HBox alignment="CENTER_LEFT" spacing="12">
-        <Label text="📊  Tableau de Bord" style="-fx-font-size:22px;-fx-font-weight:bold;-fx-text-fill:#1e293b;"/>
+    <!-- ── TOP BAR ──────────────────────────────────────────────── -->
+    <HBox styleClass="back-topbar" alignment="CENTER_LEFT" spacing="12">
+        <VBox spacing="2">
+            <Label text="📊  Tableau de Bord" styleClass="back-topbar-title"/>
+            <Label text="Vue d'ensemble de la pharmacie et des stocks" styleClass="back-topbar-subtitle"/>
+        </VBox>
         <Region HBox.hgrow="ALWAYS"/>
-        <Label fx:id="lblDate" style="-fx-text-fill:#64748b;-fx-font-size:12px;"/>
+        <HBox spacing="10" alignment="CENTER">
+            <Label fx:id="lblDate" style="-fx-text-fill:#64748b;-fx-font-weight:bold;"/>
+        </HBox>
     </HBox>
 
-    <!-- KPI CARDS ROW 1 -->
-    <HBox spacing="20">
-        <!-- Total Médicaments -->
-        <VBox fx:id="cardTotal" alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
-              style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:20;
-                     -fx-effect:dropshadow(gaussian,rgba(148,163,184,0.15),10,0,0,4);">
-            <Label text="💊 MÉDICAMENTS" style="-fx-text-fill:#64748b;-fx-font-size:11px;-fx-font-weight:bold;"/>
-            <Label fx:id="lblTotalMed" text="—" style="-fx-text-fill:#1e293b;-fx-font-size:28px;-fx-font-weight:bold;"/>
-            <Label text="Total en base" style="-fx-text-fill:#94a3b8;-fx-font-size:10px;"/>
-        </VBox>
-        <!-- Catégories -->
-        <VBox fx:id="cardCategories" alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
-              style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:20;
-                     -fx-effect:dropshadow(gaussian,rgba(148,163,184,0.15),10,0,0,4);">
-            <Label text="🏷️ CATÉGORIES" style="-fx-text-fill:#64748b;-fx-font-size:11px;-fx-font-weight:bold;"/>
-            <Label fx:id="lblTotalCat" text="—" style="-fx-text-fill:#0d6efd;-fx-font-size:28px;-fx-font-weight:bold;"/>
-            <Label text="Types de médicaments" style="-fx-text-fill:#94a3b8;-fx-font-size:10px;"/>
-        </VBox>
-        <!-- Valeur du Stock -->
-        <VBox fx:id="cardValeur" alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
-              style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:20;
-                     -fx-effect:dropshadow(gaussian,rgba(148,163,184,0.15),10,0,0,4);">
-            <Label text="💰 VALEUR DU STOCK" style="-fx-text-fill:#64748b;-fx-font-size:11px;-fx-font-weight:bold;"/>
-            <Label fx:id="lblValeurStock" text="—" style="-fx-text-fill:#198754;-fx-font-size:22px;-fx-font-weight:bold;"/>
-            <Label text="Estimation totale" style="-fx-text-fill:#94a3b8;-fx-font-size:10px;"/>
-        </VBox>
-        <!-- Alertes -->
-        <VBox fx:id="cardAlertes" alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
-              style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:20;
-                     -fx-effect:dropshadow(gaussian,rgba(148,163,184,0.15),10,0,0,4);">
-            <Label text="⚠️ EN ALERTE" style="-fx-text-fill:#64748b;-fx-font-size:11px;-fx-font-weight:bold;"/>
-            <Label fx:id="lblAlertes" text="—" style="-fx-text-fill:#dc3545;-fx-font-size:28px;-fx-font-weight:bold;"/>
-            <Label text="Stock critique" style="-fx-text-fill:#94a3b8;-fx-font-size:10px;"/>
-        </VBox>
-        <!-- Mouvements -->
-        <VBox fx:id="cardMouvements" alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
-              style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:20;
-                     -fx-effect:dropshadow(gaussian,rgba(148,163,184,0.15),10,0,0,4);">
-            <Label text="📦 MOUVEMENTS" style="-fx-text-fill:#64748b;-fx-font-size:11px;-fx-font-weight:bold;"/>
-            <Label fx:id="lblTotalMouv" text="—" style="-fx-text-fill:#7c3aed;-fx-font-size:28px;-fx-font-weight:bold;"/>
-            <Label text="Entrées + Sorties" style="-fx-text-fill:#94a3b8;-fx-font-size:10px;"/>
-        </VBox>
-    </HBox>
+    <!-- ── BODY (SCROLLABLE) ────────────────────────────────────── -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color:transparent;-fx-border-color:transparent;">
+        <VBox spacing="16" styleClass="back-page-body">
+            <padding><Insets top="20" right="22" bottom="16" left="22"/></padding>
 
-    <!-- CHARTS ROW -->
-    <HBox spacing="20" VBox.vgrow="ALWAYS">
-        <!-- Pie Chart : Répartition par catégorie -->
-        <VBox HBox.hgrow="ALWAYS"
-              style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:20;
-                     -fx-effect:dropshadow(gaussian,rgba(148,163,184,0.15),10,0,0,4);">
-            <Label text="📊 Répartition par catégorie" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#0f172a;"/>
-            <PieChart fx:id="pieCategories" prefHeight="250" legendVisible="false"
-                      styleClass="custom-pie"/>
-        </VBox>
-        <!-- Bar Chart : Top 5 médicaments par stock -->
-        <VBox HBox.hgrow="ALWAYS"
-              style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:20;
-                     -fx-effect:dropshadow(gaussian,rgba(148,163,184,0.15),10,0,0,4);">
-            <Label text="📈 Top 10 — Stock par médicament" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#0f172a;"/>
-            <BarChart fx:id="barStock" prefHeight="250" styleClass="custom-bar">
-                <xAxis><CategoryAxis label="Médicament"/></xAxis>
-                <yAxis><NumberAxis label="Quantité"/></yAxis>
-            </BarChart>
-        </VBox>
-    </HBox>
+            <!-- ── STATS ROW ────────────────────────────────────── -->
+            <HBox spacing="14">
+                <VBox styleClass="back-stats-card" alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="💊" style="-fx-font-size:22px;"/>
+                    <Label text="MÉDICAMENTS" styleClass="back-stats-label"/>
+                    <Label fx:id="lblTotalMed" text="—" styleClass="back-stats-value back-stats-value-blue"/>
+                    <Label text="Total en stock" styleClass="back-stats-sub"/>
+                </VBox>
+                <VBox styleClass="back-stats-card" alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="🏷️" style="-fx-font-size:22px;"/>
+                    <Label text="CATÉGORIES" styleClass="back-stats-label"/>
+                    <Label fx:id="lblTotalCat" text="—" styleClass="back-stats-value back-stats-value-violet"/>
+                    <Label text="Types référencés" styleClass="back-stats-sub"/>
+                </VBox>
+                <VBox styleClass="back-stats-card" alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="💰" style="-fx-font-size:22px;"/>
+                    <Label text="VALEUR DU STOCK" styleClass="back-stats-label"/>
+                    <Label fx:id="lblValeurStock" text="—" styleClass="back-stats-value back-stats-value-green"/>
+                    <Label text="Estimation totale" styleClass="back-stats-sub"/>
+                </VBox>
+                <VBox styleClass="back-stats-card" alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="⚠️" style="-fx-font-size:22px;"/>
+                    <Label text="EN ALERTE" styleClass="back-stats-label"/>
+                    <Label fx:id="lblAlertes" text="—" styleClass="back-stats-value back-stats-value-red"/>
+                    <Label text="Stock critique" styleClass="back-stats-sub"/>
+                </VBox>
+                <VBox styleClass="back-stats-card" alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="📦" style="-fx-font-size:22px;"/>
+                    <Label text="MOUVEMENTS" styleClass="back-stats-label"/>
+                    <Label fx:id="lblTotalMouv" text="—" styleClass="back-stats-value back-stats-value-amber"/>
+                    <Label text="Entrées + Sorties" styleClass="back-stats-sub"/>
+                </VBox>
+            </HBox>
 
-    <!-- BOTTOM ROW -->
-    <HBox spacing="20" VBox.vgrow="ALWAYS">
-        <!-- Bar Chart : Entrées vs Sorties -->
-        <VBox HBox.hgrow="ALWAYS"
-              style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:20;
-                     -fx-effect:dropshadow(gaussian,rgba(148,163,184,0.15),10,0,0,4);">
-            <Label text="📦 Flux Entrées vs Sorties" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#0f172a;"/>
-            <BarChart fx:id="barEntreesSorties" prefHeight="220" styleClass="custom-bar">
-                <xAxis><CategoryAxis label="Médicament"/></xAxis>
-                <yAxis><NumberAxis label="Quantité"/></yAxis>
-            </BarChart>
-        </VBox>
-        <!-- Table : Médicaments en alerte -->
-        <VBox HBox.hgrow="ALWAYS" spacing="12"
-              style="-fx-background-color:white;-fx-background-radius:16;-fx-padding:20;
-                     -fx-effect:dropshadow(gaussian,rgba(148,163,184,0.15),10,0,0,4);">
-            <Label text="🚨 Médicaments en Stock Critique" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#dc3545;"/>
-            <TableView fx:id="tableAlertes" prefHeight="200" styleClass="modern-table">
-                <columns>
-                    <TableColumn fx:id="colAlNom" text="Nom" prefWidth="140"/>
-                    <TableColumn fx:id="colAlStock" text="Stock" prefWidth="60"/>
-                    <TableColumn fx:id="colAlSeuil" text="Seuil" prefWidth="60"/>
-                    <TableColumn fx:id="colAlPeremption" text="Péremption" prefWidth="100"/>
-                </columns>
-                <placeholder><Label text="✅ Aucun médicament en alerte !" style="-fx-text-fill:#198754;"/></placeholder>
-            </TableView>
-        </VBox>
-    </HBox>
+            <!-- ── CHARTS ROW ───────────────────────────────────── -->
+            <HBox spacing="14" VBox.vgrow="ALWAYS">
+                <!-- Pie Chart -->
+                <VBox HBox.hgrow="ALWAYS" styleClass="back-table-card" spacing="10" style="-fx-padding: 16;">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="🍩" style="-fx-font-size:16px;"/>
+                        <Label text="Répartition par catégorie" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#0f172a;"/>
+                    </HBox>
+                    <PieChart fx:id="pieCategories" prefHeight="250" legendVisible="true" legendSide="BOTTOM" VBox.vgrow="ALWAYS"/>
+                </VBox>
 
+                <!-- Bar Chart -->
+                <VBox HBox.hgrow="ALWAYS" styleClass="back-table-card" spacing="10" style="-fx-padding: 16;">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="📈" style="-fx-font-size:16px;"/>
+                        <Label text="Top 10 — Stock par médicament" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#0f172a;"/>
+                    </HBox>
+                    <BarChart fx:id="barStock" prefHeight="250" VBox.vgrow="ALWAYS" animated="true" legendVisible="false">
+                        <xAxis><CategoryAxis label="Médicament"/></xAxis>
+                        <yAxis><NumberAxis label="Qté"/></yAxis>
+                    </BarChart>
+                </VBox>
+            </HBox>
+
+            <!-- ── BOTTOM ROW ────────────────────────────────────── -->
+            <HBox spacing="14">
+                <!-- Entrées vs Sorties -->
+                <VBox HBox.hgrow="ALWAYS" styleClass="back-table-card" spacing="10" style="-fx-padding: 16;">
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label text="📦" style="-fx-font-size:16px;"/>
+                        <Label text="Flux — Entrées vs Sorties" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#0f172a;"/>
+                    </HBox>
+                    <BarChart fx:id="barEntreesSorties" prefHeight="220" animated="true" legendVisible="true">
+                        <xAxis><CategoryAxis label="Médicament"/></xAxis>
+                        <yAxis><NumberAxis label="Quantité"/></yAxis>
+                    </BarChart>
+                </VBox>
+
+                <!-- Table Alertes -->
+                <VBox HBox.hgrow="ALWAYS" styleClass="back-table-card" spacing="0" style="-fx-padding: 0;">
+                    <HBox alignment="CENTER_LEFT" spacing="8" style="-fx-padding: 16 16 8 16;">
+                        <Label text="🚨" style="-fx-font-size:16px;"/>
+                        <Label text="Médicaments en Stock Critique" style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#dc2626;"/>
+                    </HBox>
+                    <TableView fx:id="tableAlertes" prefHeight="220" VBox.vgrow="ALWAYS" styleClass="modern-table">
+                        <columns>
+                            <TableColumn fx:id="colAlNom" text="Nom" prefWidth="140"/>
+                            <TableColumn fx:id="colAlStock" text="Stock" prefWidth="70"/>
+                            <TableColumn fx:id="colAlSeuil" text="Seuil Min." prefWidth="80"/>
+                            <TableColumn fx:id="colAlPeremption" text="Péremption" prefWidth="120"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="✅  Aucun médicament en alerte critique !" style="-fx-text-fill:#059669;-fx-font-weight:bold;"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+            </HBox>
+
+        </VBox>
+    </ScrollPane>
 </VBox>

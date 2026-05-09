@@ -74,7 +74,9 @@ public class PdfService {
 
     public String generateOrdonnancePdf(Consultation consultation) throws Exception {
         String outputFileName = "Ordonnance_" + consultation.getId() + "_" + System.currentTimeMillis() + ".pdf";
-        String outputPath = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + outputFileName;
+        File downloadDir = new File(System.getProperty("user.home") + File.separator + "Downloads");
+        if (!downloadDir.exists()) downloadDir.mkdirs();
+        String outputPath = downloadDir.getAbsolutePath() + File.separator + outputFileName;
 
         String htmlContent = getCompiledHtml(consultation);
         List<String> lines = buildPdfLines(htmlContent);

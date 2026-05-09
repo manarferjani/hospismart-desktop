@@ -49,12 +49,11 @@ public class LoginController {
                 System.out.println("[2FA] Redirection vers vérification 2FA pour: " + user.getEmail());
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/TwoFactorVerification.fxml"));
-                    Scene scene = new Scene(loader.load());
+                    javafx.scene.Parent root = loader.load();
                     TwoFactorAuthController controller = loader.getController();
                     controller.setUserAwaitingVerification(user);
-                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    stage.setScene(scene);
-                    stage.show();
+                    Scene currentScene = ((Node) event.getSource()).getScene();
+                    currentScene.setRoot(root);
                 } catch (IOException e) {
                     System.err.println("[2FA] Erreur lors du chargement de la vérification 2FA: " + e.getMessage());
                     e.printStackTrace();

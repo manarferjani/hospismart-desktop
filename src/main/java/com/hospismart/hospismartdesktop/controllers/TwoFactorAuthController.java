@@ -166,58 +166,21 @@ public class TwoFactorAuthController {
         errorLabel.setStyle("-fx-text-fill: #d32f2f;");
     }
 
-    /**
-     * Naviguer vers le profil utilisateur
-     */
     private void navigateToUserProfile(ActionEvent event) {
         try {
-            String userRole = userAwaitingVerification.getType();
-            String viewPath = "/com/hospismart/hospismartdesktop/UserProfile.fxml";
-
-            if (userRole != null && (userRole.contains("ROLE_ADMIN") || userRole.contains("ROLE_MEDECIN"))) {
-                viewPath = "/com/hospismart/hospismartdesktop/BackOfficeUsers.fxml";
-            }
-
-            navigate(event, viewPath);
+            com.hospismart.hospismartdesktop.main.JavaFxMain.showDashboard(userAwaitingVerification);
         } catch (Exception e) {
             System.err.println("[2FA] Erreur navigation: " + e.getMessage());
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la navigation: " + e.getMessage());
         }
     }
 
-    /**
-     * Naviguer vers une autre page avec ActionEvent
-     */
     private void navigate(ActionEvent event, String path) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-            Scene scene = new Scene(loader.load());
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            System.err.println("[2FA] Erreur navigation: " + e.getMessage());
-            e.printStackTrace();
-        }
+        com.hospismart.hospismartdesktop.main.JavaFxMain.setRoot(path, null);
     }
 
-    /**
-     * Naviguer vers une autre page sans ActionEvent (utilise la stage stockée)
-     */
     private void navigateToScene(String path) {
-        try {
-            if (currentStage == null) {
-                System.err.println("[2FA] Erreur: Stage non disponible");
-                return;
-            }
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-            Scene scene = new Scene(loader.load());
-            currentStage.setScene(scene);
-            currentStage.show();
-        } catch (IOException e) {
-            System.err.println("[2FA] Erreur navigation: " + e.getMessage());
-            e.printStackTrace();
-        }
+        com.hospismart.hospismartdesktop.main.JavaFxMain.setRoot(path, null);
     }
 
     /**

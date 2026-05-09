@@ -144,7 +144,22 @@ public class ReclamationFrontController implements Initializable { // Controller
 
     private void loadTable() { // Recharge les donnees de la table UI
         reclamationList.clear(); // Vide la liste locale
-        reclamationList.addAll(dao.getAllReclamations()); // Recharge depuis la base
+        java.util.List<Reclamation> allReclamations = dao.getAllReclamations(); // Charge toutes les reclamations de la base
+
+        // Filtre client : on ne garde que ses propres reclamations
+        User currentUser = Session.getInstance().getCurrentUser();
+        if (currentUser != null && currentUser.getEmail() != null && !currentUser.getEmail().isEmpty()) {
+            String userEmail = currentUser.getEmail().trim().toLowerCase();
+            for (Reclamation r : allReclamations) {
+                if (r.getEmail() != null && r.getEmail().trim().toLowerCase().equals(userEmail)) {
+                    reclamationList.add(r);
+                }
+            }
+        } else {
+            // Mode sans session ou admin (par defaut affiche tout)
+            reclamationList.addAll(allReclamations);
+        }
+
         tableReclamation.setItems(reclamationList); // Rebranche la liste dans la table
         refreshKpis(); // Met a jour les compteurs
     }
@@ -432,17 +447,15 @@ public class ReclamationFrontController implements Initializable { // Controller
 
     private void callGeminiAPI(String prompt, java.util.function.Consumer<String> callback) {
         String apiKey = com.hospismart.hospismartdesktop.utils.ApiConfig.GEMINI_API_KEY;
-        String urlStr = "https://api.x.ai/v1/chat/completions";
+        String urlStr = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + apiKey;
 
         String escapedPrompt = escapeJson(prompt);
-        String body = "{\"model\": \"grok-2-1212\", \"messages\": [{\"role\": \"user\", \"content\": \"" + escapedPrompt + "\"}]}";
-
+        String body = "{\"contents\": [{\"parts\": [{\"text\": \"" + escapedPrompt + "\"}]}]}";
 
         java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
         java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
                 .uri(java.net.URI.create(urlStr))
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + apiKey)
                 .POST(java.net.http.HttpRequest.BodyPublishers.ofString(body, java.nio.charset.StandardCharsets.UTF_8))
                 .build();
 
@@ -481,7 +494,7 @@ public class ReclamationFrontController implements Initializable { // Controller
         if (json == null || json.isBlank()) return "";
 
         java.util.regex.Matcher matcher = java.util.regex.Pattern
-                .compile("\"content\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"", java.util.regex.Pattern.DOTALL)
+                .compile("\"text\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"", java.util.regex.Pattern.DOTALL)
                 .matcher(json);
 
         if (matcher.find()) {
@@ -497,10 +510,10 @@ public class ReclamationFrontController implements Initializable { // Controller
                     .compile("\"message\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"", java.util.regex.Pattern.DOTALL)
                     .matcher(json);
             if (matcher.find()) {
-                return "Erreur Grok HTTP " + statusCode + ": " + unescapeJsonString(matcher.group(1));
+                return "Erreur Gemini HTTP " + statusCode + ": " + unescapeJsonString(matcher.group(1));
             }
         }
-        return "Erreur Grok HTTP " + statusCode + ": " + (json == null ? "réponse vide" : json);
+        return "Erreur Gemini HTTP " + statusCode + ": " + (json == null ? "réponse vide" : json);
     }
 
     private String unescapeJsonString(String value) {
@@ -546,9 +559,74 @@ public class ReclamationFrontController implements Initializable { // Controller
 
         callGeminiAPI(prompt, reply -> {
             txtChatbot.setText(txtChatbot.getText().replace("Bot AI : ... (réflexion en cours)\n", ""));
-            txtChatbot.appendText("Bot Grok : " + reply + "\n\n");
+
+            // Si l'API échoue (quota, réseau, etc.), utiliser un fallback local
+            if (reply != null && (reply.startsWith("Erreur Gemini") || reply.startsWith("Erreur réseau"))) {
+                String localReply = generateLocalChatReply(msg);
+                txtChatbot.appendText("Bot Grok : " + localReply + "\n\n");
+            } else {
+                txtChatbot.appendText("Bot Grok : " + reply + "\n\n");
+            }
             btnChatSendMessage.setDisable(false);
         });
+    }
+
+    /**
+     * Génère une réponse locale intelligente quand l'API Gemini est indisponible.
+     * Utilise le scoring par mots-clés pour fournir des réponses empathiques et contextuelles.
+     */
+    private String generateLocalChatReply(String userMessage) {
+        String msg = userMessage == null ? "" : userMessage.toLowerCase().trim();
+
+        if (msg.isEmpty() || msg.equals("salut") || msg.equals("bonjour") || msg.equals("hello") || msg.equals("hi") || msg.equals("slt") || msg.equals("bonsoir")) {
+            return "Bonjour ! 👋 Je suis votre assistant HospiSmart. Décrivez-moi votre souci en détail (ex: \"l'infirmier était impoli et j'ai attendu 3h\") et je vous aiderai à remplir le formulaire automatiquement avec le bouton ✨ Remplissage Rapide.";
+        }
+
+        if (msg.contains("merci") || msg.contains("thanks") || msg.contains("super") || msg.contains("parfait") || msg.contains("génial")) {
+            return "De rien ! 😊 N'hésitez pas à cliquer sur ✨ Remplissage Rapide pour que je pré-remplisse votre formulaire.";
+        }
+
+        if (msg.contains("aide") || msg.contains("help") || msg.contains("comment")) {
+            return "Voici comment ça marche :\n1️⃣ Décrivez votre problème ici dans le chat\n2️⃣ Cliquez sur « ✨ Remplissage Rapide »\n3️⃣ Vérifiez les champs et cliquez sur 💾 Sauvegarder\n\nPlus vous donnez de détails, mieux je pré-remplirai le formulaire !";
+        }
+
+        // Analyse par scoring pour réponse contextuelle
+        String[][] urgenceKw = {{"urgent","+3"},{"critique","+3"},{"grave","+3"},{"danger","+3"},{"douleur","+2"},{"sang","+2"},{"mourir","+3"},{"hémorragie","+3"}};
+        String[][] proprKw = {{"propre","+2"},{"sale","+3"},{"hygiène","+3"},{"nettoyage","+2"},{"odeur","+2"},{"toilette","+2"},{"cafard","+2"},{"moisi","+2"},{"dégueulasse","+3"}};
+        String[][] persoKw = {{"personnel","+2"},{"infirmier","+2"},{"médecin","+2"},{"accueil","+2"},{"impoli","+3"},{"désagréable","+3"},{"irrespect","+3"},{"incompétent","+3"},{"maltraitance","+3"},{"agressif","+3"},{"insulte","+3"},{"humili","+3"}};
+        String[][] serviceKw = {{"rendez","+2"},{"rdv","+2"},{"retard","+2"},{"attente","+2"},{"délai","+2"},{"factur","+2"},{"paiement","+1"},{"annul","+1"}};
+        String[][] colereKw = {{"colère","+3"},{"furieux","+3"},{"scandale","+3"},{"inacceptable","+3"},{"marre","+2"},{"ras le bol","+3"},{"porter plainte","+3"},{"avocat","+2"}};
+
+        int sUrg = scoreKeywords(msg, urgenceKw);
+        int sPro = scoreKeywords(msg, proprKw);
+        int sPer = scoreKeywords(msg, persoKw);
+        int sSer = scoreKeywords(msg, serviceKw);
+        int sCol = scoreKeywords(msg, colereKw);
+
+        StringBuilder reply = new StringBuilder();
+
+        if (sCol >= 3) {
+            reply.append("Je comprends votre colère et votre frustration. 😔 Votre ressenti est totalement légitime. ");
+        } else if (sUrg >= 3) {
+            reply.append("Je prends très au sérieux l'urgence de votre situation. 🚨 ");
+        }
+
+        if (sPro > sPer && sPro > sSer && sPro > 0) {
+            reply.append("Le problème de propreté que vous décrivez est inacceptable dans un établissement de santé. 🧹 ");
+            reply.append("J'ai bien identifié votre souci — catégorie Propreté.");
+        } else if (sPer > sSer && sPer > 0) {
+            reply.append("Le comportement du personnel que vous décrivez est navrant. 😞 ");
+            reply.append("J'ai bien noté votre signalement — catégorie Personnel.");
+        } else if (sSer > 0) {
+            reply.append("Les dysfonctionnements de service que vous décrivez méritent attention. ⏰ ");
+            reply.append("J'ai bien identifié votre problème — catégorie Service.");
+        } else {
+            reply.append("📝 J'ai bien pris note de votre message. ");
+        }
+
+        reply.append("\n\n👉 Cliquez maintenant sur ✨ Remplissage Rapide et je pré-remplirai intelligemment votre formulaire (titre, catégorie, priorité et description) !");
+
+        return reply.toString();
     }
 
     @FXML
@@ -568,9 +646,9 @@ public class ReclamationFrontController implements Initializable { // Controller
         callGeminiAPI(prompt, reply -> {
             txtChatbot.setText(txtChatbot.getText().replace("Bot Grok : (Analyse de notre discussion pour remplir les champs...)\n", ""));
 
-            boolean filled = reply != null && !reply.startsWith("Erreur Grok HTTP") && applyAutoFillFromGemini(reply);
+            boolean filled = reply != null && !reply.startsWith("Erreur Gemini") && !reply.startsWith("Erreur Grok HTTP") && !reply.startsWith("Erreur réseau") && applyAutoFillFromGemini(reply);
             if (!filled) {
-                filled = applyLocalAutoFillFallback(lastUserMessage + "\n" + conversationSnapshot + "\n" + reply);
+                filled = applyLocalAutoFillFallback(lastUserMessage + "\n" + conversationSnapshot + "\n" + (reply != null && !reply.startsWith("Erreur") ? reply : ""));
             }
 
             if (filled) {
@@ -631,40 +709,97 @@ public class ReclamationFrontController implements Initializable { // Controller
         String source = text == null ? "" : text.toLowerCase();
         if (source.isBlank()) return false;
 
-        if ((source.contains("rendez") || source.contains("rdv") || source.contains("rendez-vous")) &&
-                (source.contains("urgent") || source.contains("critique") || source.contains("sang") || source.contains("douleur") || source.contains("mortel") || source.contains("mortelle") || source.contains("personne n'est disponible") || source.contains("personne n est disponible") || source.contains("impossible") || source.contains("n'arrive pas") || source.contains("n arrive pas"))) {
-            txtTitre.setText("Demande de rendez-vous urgent");
-            cmbCategorie.setValue("Service");
-            cmbPriorite.setValue("Haute");
-            txtDescription.setText("Le patient signale une situation critique nécessitant un rendez-vous urgent.");
-            lastPredictedMentalState = "Paniqué / Stressé";
-            return true;
-        }
+        // ── 1. Score-based Category Detection ──
+        int sService = 0, sPropr = 0, sPerso = 0;
+        String[][] serviceKw = {{"rendez","+2"},{"rdv","+2"},{"retard","+2"},{"attente","+2"},{"délai","+2"},{"horaire","+1"},{"annul","+1"},{"report","+1"},{"patienter","+1"},{"service","+1"},{"facturation","+1"},{"facture","+1"},{"tarif","+1"},{"prix","+1"},{"paiement","+1"},{"résultat","+1"},{"examen","+1"},{"analyse","+1"},{"dossier","+1"},{"prescription","+1"},{"médicament","+1"},{"ordonnance","+1"},{"urgence","+2"},{"ambulance","+2"}};
+        String[][] proprKw = {{"propre","+2"},{"sale","+3"},{"hygiène","+3"},{"nettoyage","+2"},{"odeur","+2"},{"poubelle","+1"},{"déchet","+1"},{"toilette","+2"},{"souill","+2"},{"insecte","+2"},{"cafard","+2"},{"moisi","+2"},{"sang","+1"},{"contamin","+2"},{"infect","+1"},{"dégueulasse","+3"},{"dégoût","+2"}};
+        String[][] persoKw = {{"personnel","+2"},{"infirmier","+2"},{"médecin","+2"},{"accueil","+2"},{"impoli","+3"},{"désagréable","+3"},{"irrespect","+3"},{"arrogant","+2"},{"incompétent","+3"},{"maltraitance","+3"},{"agressif","+3"},{"froid","+1"},{"indifférent","+2"},{"ignore","+2"},{"négligent","+2"},{"absent","+1"},{"brusque","+2"},{"cri","+2"},{"hurle","+2"},{"insulte","+3"},{"racis","+3"},{"humili","+3"},{"menaç","+3"}};
+        sService = scoreKeywords(source, serviceKw);
+        sPropr = scoreKeywords(source, proprKw);
+        sPerso = scoreKeywords(source, persoKw);
 
-        if (source.contains("retard") || source.contains("attente") || source.contains("patienter") || source.contains("pas de rendez") || source.contains("pas de rdv")) {
-            txtTitre.setText("Retard de prise en charge");
-            cmbCategorie.setValue("Service");
-            cmbPriorite.setValue("Moyenne");
-            txtDescription.setText("Le patient signale un retard de prise en charge ou d'obtention de rendez-vous.");
+        String categorie;
+        if (sPropr >= sService && sPropr >= sPerso && sPropr > 0) categorie = "Propreté";
+        else if (sPerso >= sService && sPerso > 0) categorie = "Personnel";
+        else if (sService > 0) categorie = "Service";
+        else categorie = "Autre";
+
+        // ── 2. Score-based Priority Detection ──
+        int pHaute = 0, pMoy = 0;
+        String[][] hauteKw = {{"urgent","+3"},{"critique","+3"},{"grave","+3"},{"danger","+3"},{"mortel","+3"},{"inacceptable","+2"},{"scandale","+2"},{"honteux","+2"},{"insupportable","+2"},{"immédiat","+2"},{"douleur","+2"},{"sang","+2"},{"blessure","+2"},{"agression","+3"},{"menace","+2"},{"intoxication","+3"},{"allergi","+2"},{"hémorragie","+3"},{"chute","+2"},{"évanouissement","+2"},{"impossible","+1"},{"traumatis","+2"}};
+        String[][] moyKw = {{"retard","+2"},{"attente","+2"},{"long","+1"},{"lent","+1"},{"frustrant","+1"},{"problème","+1"},{"souci","+1"},{"pénible","+1"},{"gêne","+1"},{"ennui","+1"},{"désagréable","+1"},{"incorrect","+1"},{"erreur","+1"},{"oubli","+1"},{"manque","+1"}};
+        pHaute = scoreKeywords(source, hauteKw);
+        pMoy = scoreKeywords(source, moyKw);
+
+        String priorite;
+        if (pHaute >= 3) priorite = "Haute";
+        else if (pHaute > 0 || pMoy >= 3) priorite = "Moyenne";
+        else if (pMoy > 0) priorite = "Moyenne";
+        else priorite = "Basse";
+
+        // ── 3. Mental State Analysis ──
+        int sFrustré = 0, sEnColere = 0, sPanique = 0, sInquiet = 0, sTriste = 0;
+        String[][] frustreKw = {{"frustré","+3"},{"frustrant","+2"},{"agacé","+2"},{"énervé","+2"},{"marre","+2"},{"ras le bol","+3"},{"lassé","+2"},{"excédé","+3"},{"exaspéré","+3"},{"insupportable","+2"},{"inadmissible","+2"},{"inacceptable","+2"},{"déçu","+2"},{"pénible","+1"}};
+        String[][] colereKw = {{"colère","+3"},{"furieux","+3"},{"scandale","+3"},{"honteux","+3"},{"révolté","+3"},{"indigné","+3"},{"enrag","+3"},{"putain","+3"},{"merde","+3"},{"fuck","+3"},{"insulte","+2"},{"cri","+2"},{"hurle","+2"},{"injuste","+2"},{"je vais porter plainte","+3"},{"porter plainte","+3"},{"avocat","+2"},{"justice","+2"}};
+        String[][] paniqueKw = {{"panique","+3"},{"paniqué","+3"},{"peur","+2"},{"terrifié","+3"},{"au secours","+3"},{"sos","+3"},{"urgence","+2"},{"aide","+1"},{"mourir","+3"},{"mort","+2"},{"vie en danger","+3"},{"hémorragie","+3"},{"étouff","+3"},{"douleur intense","+3"},{"insoutenable","+3"},{"vite","+1"},{"tout de suite","+2"}};
+        String[][] inquietKw = {{"inquiet","+3"},{"anxieux","+3"},{"angoiss","+3"},{"soucieux","+2"},{"préoccupé","+2"},{"stressé","+2"},{"nerveux","+2"},{"doute","+1"},{"peur","+1"},{"crainte","+2"},{"incertain","+1"},{"symptôme","+1"},{"diagnostic","+1"},{"résultat","+1"},{"grave","+1"}};
+        String[][] tristeKw = {{"triste","+3"},{"déprimé","+3"},{"découragé","+2"},{"désespéré","+3"},{"seul","+1"},{"abandonné","+2"},{"mal","+1"},{"souffr","+2"},{"pleur","+2"},{"larme","+2"},{"malheureux","+2"}};
+        sFrustré = scoreKeywords(source, frustreKw);
+        sEnColere = scoreKeywords(source, colereKw);
+        sPanique = scoreKeywords(source, paniqueKw);
+        sInquiet = scoreKeywords(source, inquietKw);
+        sTriste = scoreKeywords(source, tristeKw);
+
+        int maxEmotion = Math.max(Math.max(Math.max(sFrustré, sEnColere), Math.max(sPanique, sInquiet)), sTriste);
+        if (maxEmotion == 0) {
+            lastPredictedMentalState = "Calme";
+        } else if (maxEmotion == sEnColere) {
+            lastPredictedMentalState = "En Colère";
+        } else if (maxEmotion == sPanique) {
+            lastPredictedMentalState = "Paniqué";
+        } else if (maxEmotion == sFrustré) {
             lastPredictedMentalState = "Frustré";
-            return true;
+        } else if (maxEmotion == sInquiet) {
+            lastPredictedMentalState = "Inquiet";
+        } else {
+            lastPredictedMentalState = "Triste";
         }
 
-        if (source.contains("propret") || source.contains("sale") || source.contains("nettoyage")) {
-            txtTitre.setText("Problème de propreté");
-            cmbCategorie.setValue("Propreté");
-            cmbPriorite.setValue("Basse");
-            txtDescription.setText("Le patient signale un problème de propreté ou d'hygiène.");
-            lastPredictedMentalState = "Mécontent";
-            return true;
-        }
+        // ── 4. Dynamic Title ──
+        String titre;
+        if (categorie.equals("Propreté")) titre = "Problème de propreté / hygiène";
+        else if (categorie.equals("Personnel")) titre = "Réclamation concernant le personnel";
+        else if (categorie.equals("Service") && source.contains("rdv") || source.contains("rendez")) titre = "Problème de rendez-vous";
+        else if (categorie.equals("Service") && (source.contains("retard") || source.contains("attente"))) titre = "Retard de prise en charge";
+        else if (categorie.equals("Service") && (source.contains("factur") || source.contains("prix") || source.contains("tarif"))) titre = "Problème de facturation";
+        else if (categorie.equals("Service")) titre = "Problème avec le service";
+        else titre = "Réclamation générale";
+        if (priorite.equals("Haute")) titre = "⚠️ " + titre;
 
-        txtTitre.setText("Demande d'information");
-        cmbCategorie.setValue("Autre");
-        cmbPriorite.setValue("Basse");
-        txtDescription.setText("Demande générale de renseignements concernant le service.");
-        lastPredictedMentalState = "Calme";
+        // ── 5. Dynamic Description (mental state is NOT shown to client — admin only) ──
+        StringBuilder desc = new StringBuilder("Le patient signale ");
+        if (categorie.equals("Propreté")) desc.append("un problème de propreté ou d'hygiène dans l'établissement.");
+        else if (categorie.equals("Personnel")) desc.append("un comportement inapproprié ou insatisfaisant du personnel soignant.");
+        else if (categorie.equals("Service")) desc.append("un dysfonctionnement dans le service de la clinique.");
+        else desc.append("une préoccupation nécessitant l'attention de l'administration.");
+        if (priorite.equals("Haute")) desc.append(" Traitement prioritaire recommandé.");
+
+        // ── Apply ──
+        txtTitre.setText(titre);
+        cmbCategorie.setValue(categorie);
+        cmbPriorite.setValue(priorite);
+        txtDescription.setText(desc.toString());
         return true;
+    }
+
+    private int scoreKeywords(String source, String[][] keywords) {
+        int score = 0;
+        for (String[] kw : keywords) {
+            if (source.contains(kw[0])) {
+                score += Integer.parseInt(kw[1].replace("+", ""));
+            }
+        }
+        return score;
     }
 
     private String extractField(String text, String label) {

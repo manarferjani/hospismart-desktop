@@ -46,6 +46,8 @@ public class ReclamationBackController implements Initializable { // Controller 
     @FXML
     private TableColumn<Reclamation, String> colPriorite;
     @FXML
+    private TableColumn<Reclamation, String> colEtatMental;
+    @FXML
     private TableColumn<Reclamation, LocalDateTime> colDate;
 
     @FXML
@@ -109,6 +111,9 @@ public class ReclamationBackController implements Initializable { // Controller 
         colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
         colCategorie.setCellValueFactory(new PropertyValueFactory<>("categorie"));
         colPriorite.setCellValueFactory(new PropertyValueFactory<>("priorite"));
+        if (colEtatMental != null) {
+            colEtatMental.setCellValueFactory(new PropertyValueFactory<>("etatMental"));
+        }
         colDate.setCellValueFactory(new PropertyValueFactory<>("dateCreation"));
         setupStatusBadgeCells();
 
@@ -489,11 +494,20 @@ public class ReclamationBackController implements Initializable { // Controller 
     @FXML
     void goToReponses(ActionEvent event) { // Navigation vers l'ecran de gestion des reponses
         try {
-            javafx.stage.Stage stage = (javafx.stage.Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            javafx.scene.Node source = (javafx.scene.Node) event.getSource();
+            javafx.scene.Scene scene = source.getScene();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/hospismart/hospismartdesktop/reponse_back.fxml"));
             Parent root = loader.load();
             root.setOpacity(0);
-            stage.setScene(new javafx.scene.Scene(root, 1000, 700));
+
+            javafx.scene.layout.StackPane contentArea = (javafx.scene.layout.StackPane) scene.lookup("#contentArea");
+            if (contentArea != null) {
+                contentArea.getChildren().setAll(root);
+            } else {
+                javafx.stage.Stage stage = (javafx.stage.Stage) scene.getWindow();
+                stage.setScene(new javafx.scene.Scene(root, 1000, 700));
+            }
+
             FadeTransition fade = new FadeTransition(Duration.millis(280), root);
             fade.setFromValue(0);
             fade.setToValue(1);
@@ -698,7 +712,7 @@ public class ReclamationBackController implements Initializable { // Controller 
 
                 // En-tête
                 org.apache.poi.xssf.usermodel.XSSFRow headerRow = sheet.createRow(0);
-                String[] columns = {"ID", "Titre", "Patient", "Email", "Catégorie", "Priorité", "Statut", "Date"};
+                String[] columns = {"ID", "Titre", "Patient", "Email", "Catégorie", "Priorité", "État Mental", "Statut", "Date"};
                 for (int i = 0; i < columns.length; i++) {
                     org.apache.poi.xssf.usermodel.XSSFCell cell = headerRow.createCell(i);
                     cell.setCellValue(columns[i]);
@@ -715,8 +729,9 @@ public class ReclamationBackController implements Initializable { // Controller 
                     row.createCell(3).setCellValue(r.getEmail());
                     row.createCell(4).setCellValue(r.getCategorie());
                     row.createCell(5).setCellValue(r.getPriorite());
-                    row.createCell(6).setCellValue(r.getStatut());
-                    row.createCell(7).setCellValue(r.getDateCreation() != null ? r.getDateCreation().format(dtFormatter) : "N/A");
+                    row.createCell(6).setCellValue(r.getEtatMental() != null ? r.getEtatMental() : "Non évalué");
+                    row.createCell(7).setCellValue(r.getStatut());
+                    row.createCell(8).setCellValue(r.getDateCreation() != null ? r.getDateCreation().format(dtFormatter) : "N/A");
                 }
 
                 try (java.io.FileOutputStream fileOut = new java.io.FileOutputStream(file)) {
@@ -784,7 +799,7 @@ public class ReclamationBackController implements Initializable { // Controller 
             if (!nom.matches("^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\\s'-]{2,49}$")) {
                 return "Le nom admin est invalide (minimum 3 lettres, sans chiffres).";
             }
-            if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-ZaZ]{2,}$")) {
+            if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
                 return "L'email admin est invalide.";
             }
         }

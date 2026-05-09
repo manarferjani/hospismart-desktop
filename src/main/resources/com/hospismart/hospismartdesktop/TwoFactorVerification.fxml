@@ -1,60 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: #f4f6f9;" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.TwoFactorAuthController">
-   <children>
-      <AnchorPane layoutX="100.0" layoutY="50.0" prefHeight="400.0" prefWidth="400.0" styleClass="card-pane">
-         <children>
-            <!-- Titre -->
-            <Label layoutX="80.0" layoutY="20.0" text="Vérification 2FA" textFill="#1565C0">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-            </Label>
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #f4f6f9;" stylesheets="/css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospismart.hospismartdesktop.controllers.TwoFactorAuthController">
+    <children>
+        <!-- Top Navbar -->
+        <AnchorPane prefHeight="60.0" styleClass="top-navbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Label layoutX="30.0" layoutY="18.0" styleClass="navbar-title" text="HospiSmart — Sécurité" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
 
-            <!-- Description -->
-            <Label layoutX="20.0" layoutY="60.0" prefHeight="60.0" prefWidth="360.0" text="Veuillez entrer le code à 6 chiffres généré par votre application Google Authenticator" textFill="#666666" wrapText="true">
-               <font>
-                  <Font size="12.0" />
-               </font>
-            </Label>
+        <!-- Main Content Centered -->
+        <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+            <children>
+                <VBox alignment="CENTER" maxWidth="500.0" prefWidth="500.0" spacing="25.0" styleClass="card-pane" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+                    <children>
+                        <!-- Icône 2FA -->
+                        <Label style="-fx-font-size: 50;" text="🔐" />
 
-            <!-- Icône 2FA -->
-            <Label layoutX="170.0" layoutY="130.0" text="🔐" style="-fx-font-size: 40;">
-            </Label>
+                        <VBox alignment="CENTER" spacing="10.0">
+                            <children>
+                                <Label text="Vérification 2FA" textFill="#1565c0">
+                                    <font>
+                                        <Font name="System Bold" size="28.0" />
+                                    </font>
+                                </Label>
+                                <Label text="Veuillez entrer le code à 6 chiffres généré par votre application Google Authenticator" textAlignment="CENTER" textFill="#666666" wrapText="true">
+                                    <font>
+                                        <Font size="15.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
 
-            <!-- Champ de saisie du code -->
-            <TextField fx:id="codeField" layoutX="50.0" layoutY="190.0" prefHeight="50.0" prefWidth="300.0" promptText="Entrez le code 6 chiffres" style="-fx-font-size: 20; -fx-text-alignment: CENTER;" styleClass="text-input">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </TextField>
+                        <!-- Champ de saisie du code -->
+                        <TextField fx:id="codeField" alignment="CENTER" maxWidth="300.0" prefHeight="60.0" promptText="Entrez le code" style="-fx-font-size: 24; -fx-letter-spacing: 5px; -fx-background-radius: 8; -fx-border-color: #bbdefb; -fx-border-radius: 8;" styleClass="text-input">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                        </TextField>
 
-            <!-- Message d'erreur -->
-            <Label fx:id="errorLabel" layoutX="50.0" layoutY="250.0" prefHeight="30.0" prefWidth="300.0" textFill="#d32f2f" wrapText="true">
-               <font>
-                  <Font size="12.0" />
-               </font>
-            </Label>
+                        <!-- Message d'erreur -->
+                        <Label fx:id="errorLabel" alignment="CENTER" prefHeight="30.0" textFill="#d32f2f" wrapText="true">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
 
-            <!-- Bouton de vérification -->
-            <Button layoutX="50.0" layoutY="290.0" mnemonicParsing="false" onAction="#handleVerify" prefHeight="40.0" prefWidth="300.0" style="-fx-font-size: 14;" styleClass="btn-primary" text="✅ Vérifier le code" />
+                        <VBox alignment="CENTER" spacing="15.0">
+                            <children>
+                                <!-- Bouton de vérification -->
+                                <Button maxWidth="300.0" mnemonicParsing="false" onAction="#handleVerify" prefHeight="50.0" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 8;" styleClass="btn-primary" text="✅ Vérifier le code" />
 
-            <!-- Lien pour utiliser un code de secours -->
-            <Hyperlink layoutX="100.0" layoutY="340.0" onAction="#handleUseBackupCode" text="Utiliser un code de secours ?" />
+                                <!-- Lien pour utiliser un code de secours -->
+                                <Hyperlink onAction="#handleUseBackupCode" text="Utiliser un code de secours ?" textFill="#1565c0">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Hyperlink>
 
-            <!-- Bouton retour -->
-            <Button layoutX="50.0" layoutY="360.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="35.0" prefWidth="300.0" style="-fx-font-size: 12;" text="⬅️ Retour à la connexion">
-               <style>
-                  -fx-background-color: #757575;
-                  -fx-text-fill: white;
-               </style>
-            </Button>
-         </children>
-      </AnchorPane>
-   </children>
+                                <!-- Bouton retour -->
+                                <Button maxWidth="300.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="45.0" style="-fx-background-color: #f5f5f5; -fx-text-fill: #424242; -fx-font-size: 14px; -fx-background-radius: 8; -fx-border-color: #e0e0e0; -fx-border-radius: 8;" text="⬅️ Retour à la connexion" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>

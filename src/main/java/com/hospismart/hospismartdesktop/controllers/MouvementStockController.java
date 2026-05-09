@@ -63,14 +63,13 @@ public class MouvementStockController {
 
         // Colonne Actions (Supprimer uniquement)
         TableColumn<MouvementStock, Void> colActions = new TableColumn<>("Actions");
-        colActions.setPrefWidth(120);
+        colActions.setPrefWidth(90);
         colActions.setResizable(false);
         colActions.setCellFactory(col -> new TableCell<>() {
-            private final Button btnDelete = new Button("✕  Supprimer");
+            private final Button btnDelete = new Button("🗑️");
             {
-                btnDelete.setStyle("-fx-background-color:#fee2e2;-fx-text-fill:#dc3545;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;");
-                btnDelete.setOnMouseEntered(e -> btnDelete.setStyle("-fx-background-color:#dc3545;-fx-text-fill:white;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
-                btnDelete.setOnMouseExited (e -> btnDelete.setStyle("-fx-background-color:#fee2e2;-fx-text-fill:#dc3545;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
+                btnDelete.setStyle("-fx-background-color: #fee2e2; -fx-text-fill: #dc2626; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                btnDelete.setTooltip(new Tooltip("Supprimer"));
 
                 btnDelete.setOnAction(e -> {
                     MouvementStock ms = getTableRow().getItem();

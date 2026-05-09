@@ -69,17 +69,22 @@ public class BackOfficeUsersController {
 
     private void setupActionColumn() {
         colActions.setCellFactory(param -> new TableCell<User, Void>() {
-            private final Button btnEditer = new Button("Éditer");
-            private final Button btnActiver = new Button("Activer");
-            private final Button btnDesactiver = new Button("Désactiv.");
-            private final Button btnSupprimer = new Button("Suppr.");
-            private final HBox pane = new HBox(5, btnEditer, btnActiver, btnDesactiver, btnSupprimer);
+            private final Button btnEditer = new Button("✏️");
+            private final Button btnActiver = new Button("✅");
+            private final Button btnDesactiver = new Button("🚫");
+            private final Button btnSupprimer = new Button("🗑️");
+            private final HBox pane = new HBox(8, btnEditer, btnActiver, btnDesactiver, btnSupprimer);
 
             {
-                btnEditer.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
-                btnActiver.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-                btnDesactiver.setStyle("-fx-background-color: #FF9800; -fx-text-fill: white;");
-                btnSupprimer.setStyle("-fx-background-color: #F44336; -fx-text-fill: white;");
+                btnEditer.setStyle("-fx-background-color: #e0e7ff; -fx-text-fill: #4f46e5; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                btnActiver.setStyle("-fx-background-color: #dcfce7; -fx-text-fill: #16a34a; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                btnDesactiver.setStyle("-fx-background-color: #ffedd5; -fx-text-fill: #ea580c; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                btnSupprimer.setStyle("-fx-background-color: #fee2e2; -fx-text-fill: #dc2626; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+
+                btnEditer.setTooltip(new Tooltip("Éditer"));
+                btnActiver.setTooltip(new Tooltip("Activer le compte"));
+                btnDesactiver.setTooltip(new Tooltip("Désactiver le compte"));
+                btnSupprimer.setTooltip(new Tooltip("Supprimer"));
 
                 btnEditer.setOnAction(e -> {
                     User user = getTableView().getItems().get(getIndex());
@@ -105,12 +110,14 @@ public class BackOfficeUsersController {
                     alert.setHeaderText("Supprimer l'utilisateur ?");
                     alert.setContentText("Êtes-vous sûr de vouloir supprimer " + user.getNom() + " ?");
                     Optional<ButtonType> result = alert.showAndWait();
-                    boolean deleted = userService.supprimer(user.getId());
-                    if (!deleted) {
-                        Alert err = new Alert(Alert.AlertType.ERROR, "La suppression a échoué. Le compte est potentiellement lié à d'autres données.");
-                        err.showAndWait();
+                    if (result.isPresent() && result.get() == ButtonType.OK) {
+                        boolean deleted = userService.supprimer(user.getId());
+                        if (!deleted) {
+                            Alert err = new Alert(Alert.AlertType.ERROR, "La suppression a échoué. Le compte est potentiellement lié à d'autres données.");
+                            err.showAndWait();
+                        }
+                        loadData();
                     }
-                    loadData();
                 });
             }
 

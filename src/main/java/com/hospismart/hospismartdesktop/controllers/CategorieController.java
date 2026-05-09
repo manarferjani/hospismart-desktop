@@ -35,21 +35,18 @@ public class CategorieController {
             txtSearch.textProperty().addListener((obs, o, n) -> applyFilters());
         // Colonne Actions
         TableColumn<Categorie, Void> colActions = new TableColumn<>("Actions");
-        colActions.setPrefWidth(175);
+        colActions.setPrefWidth(120);
         colActions.setResizable(false);
         colActions.setCellFactory(col -> new TableCell<>() {
-            private final Button btnEdit   = new Button("✎  Modifier");
-            private final Button btnDelete = new Button("✕  Supprimer");
-            private final javafx.scene.layout.HBox box =
-                new javafx.scene.layout.HBox(6, btnEdit, btnDelete);
+            private final Button btnEdit   = new Button("✏️");
+            private final Button btnDelete = new Button("🗑️");
+            private final javafx.scene.layout.HBox box = new javafx.scene.layout.HBox(8, btnEdit, btnDelete);
             {
-                btnEdit.setStyle("-fx-background-color:#dbeafe;-fx-text-fill:#1d4ed8;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;");
-                btnEdit.setOnMouseEntered(e -> btnEdit.setStyle("-fx-background-color:#0d6efd;-fx-text-fill:white;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
-                btnEdit.setOnMouseExited (e -> btnEdit.setStyle("-fx-background-color:#dbeafe;-fx-text-fill:#1d4ed8;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
-
-                btnDelete.setStyle("-fx-background-color:#fee2e2;-fx-text-fill:#dc3545;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;");
-                btnDelete.setOnMouseEntered(e -> btnDelete.setStyle("-fx-background-color:#dc3545;-fx-text-fill:white;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
-                btnDelete.setOnMouseExited (e -> btnDelete.setStyle("-fx-background-color:#fee2e2;-fx-text-fill:#dc3545;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
+                btnEdit.setStyle("-fx-background-color: #e0e7ff; -fx-text-fill: #4f46e5; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                btnDelete.setStyle("-fx-background-color: #fee2e2; -fx-text-fill: #dc2626; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                
+                btnEdit.setTooltip(new Tooltip("Modifier"));
+                btnDelete.setTooltip(new Tooltip("Supprimer"));
 
                 box.setAlignment(javafx.geometry.Pos.CENTER);
 

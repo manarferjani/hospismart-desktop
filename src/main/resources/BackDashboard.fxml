@@ -37,6 +37,7 @@
                 <Button styleClass="menu-button" maxWidth="Infinity" text="📅 Mes RDV" onAction="#showDemandesRdv" />
                 <Button fx:id="btnDispo" styleClass="menu-button" maxWidth="Infinity" text="👥 Mes disponibilités" onAction="#showDisponibilites" />
                 <Button fx:id="btnMesPatients" styleClass="menu-button" maxWidth="Infinity" text="👥 Mes Patients" onAction="#showMesPatients" />
+                <Button fx:id="btnPharmacie" styleClass="menu-button" maxWidth="Infinity" text="💊 Pharmacie" onAction="#showPharmacie" />
             </VBox>
 
             <Button styleClass="menu-button" maxWidth="Infinity" text="🚪 Déconnexion" onAction="#handleLogout" />

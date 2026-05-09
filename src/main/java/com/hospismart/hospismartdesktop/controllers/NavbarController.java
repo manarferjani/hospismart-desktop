@@ -39,6 +39,7 @@ public class NavbarController {
     @FXML private Hyperlink linkRdvs;
     @FXML private Hyperlink linkEvenements;
     @FXML private Hyperlink linkReclamations;
+    @FXML private Hyperlink linkMedicaments;
 
     // Notification bell elements
     @FXML private StackPane bellContainer;
@@ -65,6 +66,11 @@ public class NavbarController {
         setupHoverEffect(linkRdvs);
         setupHoverEffect(linkEvenements);
         setupHoverEffect(linkReclamations);
+        if (linkMedicaments != null) {
+            setupHoverEffect(linkMedicaments);
+            linkMedicaments.setVisible(true);
+            linkMedicaments.setManaged(true);
+        }
 
         javafx.application.Platform.runLater(() -> {
             // Détection dynamique de la page active via le contenu de la scène
@@ -72,8 +78,16 @@ public class NavbarController {
                 Parent root = bellContainer.getScene().getRoot();
                 if (root.lookup("#gridRdv") != null) {
                     setActive(linkRdvs);
-                } else if (root.lookup("#searchField") != null || root.lookup("#lblNomMedecin") != null || root.lookup("#listMedecins") != null) {
-                    setActive(linkServices);
+                } else if (root.lookup("#flowPaneMedicaments") != null) {
+                    if (linkMedicaments != null) setActive(linkMedicaments);
+                } else if (root.lookup("#tableReclamation") != null) {
+                    setActive(linkReclamations);
+                } else if (root.lookup("#typeFilter") != null && root.lookup("#cardsContainer") != null) {
+                    // evenement-front.fxml a un #typeFilter
+                    setActive(linkEvenements);
+                } else if (root.lookup("#servicesContainer") != null) {
+                    // TrouverMedecin.fxml a un #servicesContainer
+                    setActive(linkAccueil); // Ou linkServices selon ce qu'on préfère (Accueil par defaut)
                 } else if (linkAccueil != null) {
                     setActive(linkAccueil);
                 }
@@ -423,12 +437,14 @@ public class NavbarController {
         if (linkRdvs != null) linkRdvs.setUserData(null);
         linkEvenements.setUserData(null);
         if (linkReclamations != null) linkReclamations.setUserData(null);
+        if (linkMedicaments != null) linkMedicaments.setUserData(null);
 
         linkAccueil.setStyle(STYLE_NORMAL);
         linkServices.setStyle(STYLE_NORMAL);
         if (linkRdvs != null) linkRdvs.setStyle(STYLE_NORMAL);
         linkEvenements.setStyle(STYLE_NORMAL);
         if (linkReclamations != null) linkReclamations.setStyle(STYLE_NORMAL);
+        if (linkMedicaments != null) linkMedicaments.setStyle(STYLE_NORMAL);
     }
 
     @FXML
@@ -456,6 +472,11 @@ public class NavbarController {
     @FXML
     public void goToEvenements(ActionEvent event) {
         switchScene(event, "/com/hospismart/hospismartdesktop/evenement-front.fxml");
+    }
+
+    @FXML
+    public void goToMedicaments(ActionEvent event) {
+        switchScene(event, "/com/hospismart/hospismartdesktop/medicament_front.fxml");
     }
 
     @FXML

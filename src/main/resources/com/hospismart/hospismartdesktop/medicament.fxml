@@ -4,88 +4,75 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="12" xmlns="http://javafx.com/javafx"
+<VBox spacing="0" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.hospismart.hospismartdesktop.controllers.MedicamentController"
       stylesheets="/css/style.css"
-      style="-fx-background-color: #f8fafc;">
-    <padding><Insets top="18" right="18" bottom="18" left="18"/></padding>
+      styleClass="back-page-root">
 
-    <!-- HEADER -->
-    <HBox styleClass="page-header" alignment="CENTER_LEFT" spacing="12">
-        <Label text="💊  Médicaments" styleClass="page-header-title"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Label fx:id="lblAlerte" style="-fx-text-fill:#fbbf24;-fx-font-weight:bold;-fx-font-size:12px;"/>
-    </HBox>
-
-    <!-- ── BARRE STATISTIQUES ─────────────────────────────────────── -->
-    <HBox spacing="12">
-        <!-- Carte : Total médicaments -->
-        <VBox alignment="CENTER" spacing="3"
-              style="-fx-background-color:white;-fx-background-radius:10;-fx-padding:10 20;
-                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),6,0,0,2);" HBox.hgrow="ALWAYS">
-            <Label text="MÉDICAMENTS" style="-fx-text-fill:#94a3b8;-fx-font-size:10px;-fx-font-weight:bold;"/>
-            <Label fx:id="lblStatTotal" text="—"
-                   style="-fx-text-fill:#1e293b;-fx-font-size:18px;-fx-font-weight:bold;"/>
+    <!-- ── TOP BAR ──────────────────────────────────────────────── -->
+    <HBox styleClass="back-topbar" alignment="CENTER_LEFT" spacing="12">
+        <VBox spacing="2">
+            <Label text="💊  Médicaments" styleClass="back-topbar-title"/>
+            <Label text="Gestion du stock de médicaments" styleClass="back-topbar-subtitle"/>
         </VBox>
-        <!-- Carte : Valeur stock -->
-        <VBox alignment="CENTER" spacing="3"
-              style="-fx-background-color:white;-fx-background-radius:10;-fx-padding:10 20;
-                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),6,0,0,2);" HBox.hgrow="ALWAYS">
-            <Label text="VALEUR DU STOCK" style="-fx-text-fill:#94a3b8;-fx-font-size:10px;-fx-font-weight:bold;"/>
-            <Label fx:id="lblStatValeur" text="—"
-                   style="-fx-text-fill:#0d6efd;-fx-font-size:15px;-fx-font-weight:bold;"/>
-        </VBox>
-    </HBox>
-
-    <!-- ── BARRE OUTILS ───────────────────────────────────────────── -->
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Button text="➕  Nouveau"
-                onAction="#handleShowAddDialog"
-                style="-fx-background-color:#198754;-fx-text-fill:white;-fx-font-weight:bold;
-                       -fx-background-radius:22;-fx-padding:8 18;-fx-cursor:hand;
-                       -fx-effect:dropshadow(gaussian,rgba(25,135,84,0.3),6,0,0,2);"/>
-        <Button text="📥  Export CSV"
-                onAction="#handleExportCSV"
-                style="-fx-background-color:#0d6efd;-fx-text-fill:white;-fx-font-weight:bold;
-                       -fx-background-radius:22;-fx-padding:8 18;-fx-cursor:hand;
-                       -fx-effect:dropshadow(gaussian,rgba(13,110,253,0.25),6,0,0,2);"/>
-        <Button text="🧠  Prédiction IA"
-                onAction="#handlePrediction"
-                style="-fx-background-color:#7c3aed;-fx-text-fill:white;-fx-font-weight:bold;
-                       -fx-background-radius:22;-fx-padding:8 18;-fx-cursor:hand;
-                       -fx-effect:dropshadow(gaussian,rgba(124,58,237,0.3),6,0,0,2);"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <!-- Filtre catégorie -->
-        <ComboBox fx:id="cbFilterCategorie" prefWidth="175"
-                  style="-fx-background-radius:20;-fx-border-radius:20;-fx-border-color:#cbd5e1;
-                         -fx-background-color:#f1f5f9;-fx-padding:4 10;"/>
-        <ComboBox fx:id="cbSortMode" prefWidth="150" promptText="Trier par..."
-                  style="-fx-background-radius:20;-fx-border-radius:20;-fx-border-color:#cbd5e1;
-                         -fx-background-color:#f1f5f9;-fx-padding:4 10;"/>
-        <TextField fx:id="txtSearch" promptText="🔍  Rechercher..."
-                   prefWidth="190"
-                   style="-fx-background-radius:20;-fx-border-radius:20;-fx-border-color:#cbd5e1;
-                          -fx-background-color:#f1f5f9;-fx-padding:6 14;"/>
-        <Button text="🔄" onAction="#handleRefresh"
-                style="-fx-background-color:#e2e8f0;-fx-text-fill:#475569;-fx-background-radius:20;
-                       -fx-padding:8 14;-fx-cursor:hand;"/>
+        <Label fx:id="lblAlerte" styleClass="back-notif-badge"/>
     </HBox>
 
-    <!-- TABLE -->
-    <TableView fx:id="medicamentTable" VBox.vgrow="ALWAYS" styleClass="table-view">
-        <columns>
-            <TableColumn fx:id="colNom"       text="Nom"          prefWidth="180" sortable="true"/>
-            <TableColumn fx:id="colQuantite"  text="Quantité"     prefWidth="90"  sortable="true"/>
-            <TableColumn fx:id="colSeuil"     text="Seuil Alerte" prefWidth="105" sortable="true"/>
-            <TableColumn fx:id="colPrix"      text="Prix (TND)"   prefWidth="100" sortable="true"/>
-            <TableColumn fx:id="colDate"      text="Péremption"   prefWidth="110" sortable="true"/>
-            <TableColumn fx:id="colCategorie" text="Catégorie"    prefWidth="140" sortable="true"/>
-        </columns>
-        <placeholder><Label text="Aucun médicament. Cliquez sur ➕ Nouveau pour commencer."
-                            style="-fx-text-fill:#94a3b8;"/></placeholder>
-    </TableView>
+    <!-- ── BODY ─────────────────────────────────────────────────── -->
+    <VBox spacing="16" VBox.vgrow="ALWAYS" styleClass="back-page-body">
+        <padding><Insets top="20" right="22" bottom="16" left="22"/></padding>
 
-    <!-- STATUS -->
-    <Label fx:id="lblStatus" styleClass="status-label"/>
+        <!-- Stats -->
+        <HBox spacing="14">
+            <VBox styleClass="back-stats-card" alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                <Label text="💊" style="-fx-font-size:22px;"/>
+                <Label text="MÉDICAMENTS" styleClass="back-stats-label"/>
+                <Label fx:id="lblStatTotal" text="—" styleClass="back-stats-value"/>
+                <Label text="Total en base" styleClass="back-stats-sub"/>
+            </VBox>
+            <VBox styleClass="back-stats-card" alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                <Label text="💰" style="-fx-font-size:22px;"/>
+                <Label text="VALEUR DU STOCK" styleClass="back-stats-label"/>
+                <Label fx:id="lblStatValeur" text="—" styleClass="back-stats-value back-stats-value-blue"/>
+                <Label text="Estimation totale" styleClass="back-stats-sub"/>
+            </VBox>
+            <VBox styleClass="back-stats-card" alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                <Label text="🤖" style="-fx-font-size:22px;"/>
+                <Label text="INTELLIGENCE IA" styleClass="back-stats-label"/>
+                <Label text="Prédiction disponible" styleClass="back-stats-value back-stats-value-violet" style="-fx-font-size:13px;"/>
+                <Label text="Seuil de commande" styleClass="back-stats-sub"/>
+            </VBox>
+        </HBox>
+
+        <!-- Toolbar -->
+        <HBox styleClass="back-toolbar" spacing="10" alignment="CENTER_LEFT">
+            <Button text="➕  Nouveau" onAction="#handleShowAddDialog" styleClass="back-btn-add"/>
+            <Button text="📥  Export CSV" onAction="#handleExportCSV" styleClass="back-btn-export"/>
+            <Button text="🧠  Prédiction IA" onAction="#handlePrediction" styleClass="back-btn-ai"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <ComboBox fx:id="cbFilterCategorie" prefWidth="175" styleClass="back-combo" promptText="Catégorie..."/>
+            <ComboBox fx:id="cbSortMode" prefWidth="150" promptText="Trier par..." styleClass="back-combo"/>
+            <TextField fx:id="txtSearch" promptText="🔍  Rechercher..." prefWidth="200" styleClass="back-search-field"/>
+            <Button text="🔄" onAction="#handleRefresh" styleClass="back-btn-refresh"/>
+        </HBox>
+
+        <!-- Table -->
+        <VBox styleClass="back-table-card" VBox.vgrow="ALWAYS">
+            <TableView fx:id="medicamentTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
+                <columns>
+                    <TableColumn fx:id="colNom"       text="Nom"          prefWidth="200" sortable="true"/>
+                    <TableColumn fx:id="colQuantite"  text="Quantité"     prefWidth="90"  sortable="true"/>
+                    <TableColumn fx:id="colSeuil"     text="Seuil Alerte" prefWidth="110" sortable="true"/>
+                    <TableColumn fx:id="colPrix"      text="Prix (TND)"   prefWidth="110" sortable="true"/>
+                    <TableColumn fx:id="colDate"      text="Péremption"   prefWidth="120" sortable="true"/>
+                    <TableColumn fx:id="colCategorie" text="Catégorie"    prefWidth="160" sortable="true"/>
+                </columns>
+                <placeholder><Label text="Aucun médicament. Cliquez sur ➕ Nouveau pour commencer." style="-fx-text-fill:#94a3b8;"/></placeholder>
+            </TableView>
+        </VBox>
+
+        <Label fx:id="lblStatus" styleClass="back-status-bar"/>
+    </VBox>
 </VBox>

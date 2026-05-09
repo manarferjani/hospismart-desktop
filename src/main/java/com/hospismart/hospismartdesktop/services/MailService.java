@@ -39,7 +39,10 @@ public class MailService {
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.host", SMTP_HOST);
             props.put("mail.smtp.port", SMTP_PORT);
+            props.put("mail.smtp.ssl.protocols", "TLSv1.2");
             props.put("mail.smtp.ssl.trust", SMTP_HOST);
+            props.put("mail.smtp.connectiontimeout", "10000");
+            props.put("mail.smtp.timeout", "10000");
 
             // 2. Création de la session authentifiée
             Session session = Session.getInstance(props, new Authenticator() {

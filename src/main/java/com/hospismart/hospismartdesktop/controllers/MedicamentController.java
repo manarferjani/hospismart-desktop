@@ -119,32 +119,25 @@ public class MedicamentController {
 
         // Colonne Actions (✐ Modifier  ✕ Supprimer  🤖 IA  📱 QR)
         TableColumn<Medicament, Void> colActions = new TableColumn<>("Actions");
-        colActions.setPrefWidth(330);
+        colActions.setPrefWidth(240);
         colActions.setResizable(false);
         colActions.setCellFactory(col -> new TableCell<>() {
-            private final Button btnEdit   = new Button("✐  Modifier");
-            private final Button btnDelete = new Button("✕  Supprimer");
-            private final Button btnAI     = new Button("🤖 IA");
-            private final Button btnQR     = new Button("📱 QR");
-            private final javafx.scene.layout.HBox box =
-                new javafx.scene.layout.HBox(5, btnEdit, btnDelete, btnAI, btnQR);
+            private final Button btnEdit   = new Button("✏️");
+            private final Button btnDelete = new Button("🗑️");
+            private final Button btnAI     = new Button("🤖");
+            private final Button btnQR     = new Button("📱");
+            private final javafx.scene.layout.HBox box = new javafx.scene.layout.HBox(8, btnEdit, btnDelete, btnAI, btnQR);
 
             {
-                btnEdit.setStyle("-fx-background-color:#dbeafe;-fx-text-fill:#1d4ed8;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;");
-                btnEdit.setOnMouseEntered(e -> btnEdit.setStyle("-fx-background-color:#0d6efd;-fx-text-fill:white;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
-                btnEdit.setOnMouseExited (e -> btnEdit.setStyle("-fx-background-color:#dbeafe;-fx-text-fill:#1d4ed8;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
+                btnEdit.setStyle("-fx-background-color: #e0e7ff; -fx-text-fill: #4f46e5; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                btnDelete.setStyle("-fx-background-color: #fee2e2; -fx-text-fill: #dc2626; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                btnAI.setStyle("-fx-background-color: #fce7f3; -fx-text-fill: #db2777; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
+                btnQR.setStyle("-fx-background-color: #dbeafe; -fx-text-fill: #2563eb; -fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 10;");
 
-                btnDelete.setStyle("-fx-background-color:#fee2e2;-fx-text-fill:#dc3545;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;");
-                btnDelete.setOnMouseEntered(e -> btnDelete.setStyle("-fx-background-color:#dc3545;-fx-text-fill:white;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
-                btnDelete.setOnMouseExited (e -> btnDelete.setStyle("-fx-background-color:#fee2e2;-fx-text-fill:#dc3545;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 10;"));
-
-                btnAI.setStyle("-fx-background-color:#ede9fe;-fx-text-fill:#7c3aed;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;");
-                btnAI.setOnMouseEntered(e -> btnAI.setStyle("-fx-background-color:#7c3aed;-fx-text-fill:white;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;"));
-                btnAI.setOnMouseExited (e -> btnAI.setStyle("-fx-background-color:#ede9fe;-fx-text-fill:#7c3aed;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;"));
-
-                btnQR.setStyle("-fx-background-color:#d1fae5;-fx-text-fill:#065f46;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;");
-                btnQR.setOnMouseEntered(e -> btnQR.setStyle("-fx-background-color:#065f46;-fx-text-fill:white;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;"));
-                btnQR.setOnMouseExited (e -> btnQR.setStyle("-fx-background-color:#d1fae5;-fx-text-fill:#065f46;-fx-background-radius:6;-fx-border-radius:6;-fx-cursor:hand;-fx-padding:4 8;-fx-font-weight:bold;"));
+                btnEdit.setTooltip(new Tooltip("Modifier"));
+                btnDelete.setTooltip(new Tooltip("Supprimer"));
+                btnAI.setTooltip(new Tooltip("Générer Image IA"));
+                btnQR.setTooltip(new Tooltip("Générer QR Code"));
 
                 box.setAlignment(javafx.geometry.Pos.CENTER);
 

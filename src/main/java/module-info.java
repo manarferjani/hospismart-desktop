@@ -14,6 +14,7 @@ module com.hospismart.hospismartdesktop {
 
     // External Libraries (Declared in pom.xml)
     requires jakarta.mail;                      // Eclipse Angus (Automatic-Module-Name)
+    requires jakarta.activation;                 // Needed by Jakarta Mail for MIME handling
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires org.kordamp.ikonli.javafx;
@@ -34,6 +35,7 @@ module com.hospismart.hospismartdesktop {
     exports com.hospismart.hospismartdesktop.main;
     exports com.hospismart.hospismartdesktop.controllers;
     exports com.hospismart.hospismartdesktop.models;
+    exports com.hospismart.hospismartdesktop.services;
     exports com.hospismart.hospismartdesktop.util;
     exports com.hospismart.hospismartdesktop.utils;
     exports com.hospismart.hospismartdesktop.tests;
@@ -42,6 +44,7 @@ module com.hospismart.hospismartdesktop {
     opens com.hospismart.hospismartdesktop.main to javafx.fxml;
     opens com.hospismart.hospismartdesktop.controllers to javafx.fxml;
     opens com.hospismart.hospismartdesktop.models to javafx.base, javafx.fxml;
+    opens com.hospismart.hospismartdesktop.services to javafx.fxml, javafx.base;
     opens com.hospismart.hospismartdesktop.util to javafx.fxml;
     opens com.hospismart.hospismartdesktop.utils to javafx.fxml;
     opens com.hospismart.hospismartdesktop.tests to javafx.fxml;

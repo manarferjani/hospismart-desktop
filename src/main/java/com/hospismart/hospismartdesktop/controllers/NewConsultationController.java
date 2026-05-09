@@ -46,7 +46,24 @@ public class NewConsultationController {
     private final com.hospismart.hospismartdesktop.services.AIService aiService;
 
     public NewConsultationController() {
-        this.aiService = new com.hospismart.hospismartdesktop.services.AIService(com.hospismart.hospismartdesktop.utils.ApiConfig.GEMINI_API_KEY);
+        String geminiKey = loadApiKey();
+        this.aiService = new com.hospismart.hospismartdesktop.services.AIService(geminiKey);
+    }
+    private String loadApiKey() {
+        try {
+            java.util.Properties props = new java.util.Properties();
+            props.load(getClass().getResourceAsStream("/config.properties"));
+            String key = props.getProperty("gemini.api.key", "");
+            if (key.isEmpty()) {
+                System.err.println("[Config] ERREUR : clé vide dans config.properties !");
+            } else {
+                System.out.println("[Config] Clé chargée : " + key.substring(0, 8) + "...");
+            }
+            return key;
+        } catch (Exception e) {
+            System.err.println("[Config] Impossible de charger : " + e.getMessage());
+            return "";
+        }
     }
 
     public void setDashboardController(DashboardController dashboardController) {
@@ -94,7 +111,7 @@ public class NewConsultationController {
 
         if (diag.isEmpty() || trait.isEmpty()) {
             showAlert(Alert.AlertType.WARNING, "Champs manquants",
-                    "Veuillez remplir le diagnostic et le traitement avant l'analyse IA.");
+                "Veuillez remplir le diagnostic et le traitement avant l'analyse IA.");
             return;
         }
 
@@ -102,20 +119,20 @@ public class NewConsultationController {
 
         // Extraction des champs
         boolean estCorrect = jsonResult.contains("\"estCorrect\": true")
-                || jsonResult.contains("\"estCorrect\":true");
+            || jsonResult.contains("\"estCorrect\":true");
         boolean coherent = jsonResult.contains("\"coherent\": true")
-                || jsonResult.contains("\"coherent\":true");
+            || jsonResult.contains("\"coherent\":true");
         String suggestion = trait;
         String analyse = "Analyse terminée.";
 
         java.util.regex.Pattern pSugg = java.util.regex.Pattern.compile(
-                "\"suggestion\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"");
+            "\"suggestion\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"");
         java.util.regex.Matcher mSugg = pSugg.matcher(jsonResult);
         if (mSugg.find())
             suggestion = mSugg.group(1).replace("\\n", "\n").replace("\\\"", "\"").replace("\\'", "'");
 
         java.util.regex.Pattern pAnalyse = java.util.regex.Pattern.compile(
-                "\"analyse\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"");
+            "\"analyse\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"");
         java.util.regex.Matcher mAnalyse = pAnalyse.matcher(jsonResult);
         if (mAnalyse.find())
             analyse = mAnalyse.group(1).replace("\\n", "\n").replace("\\\"", "\"").replace("\\'", "'");
@@ -125,21 +142,21 @@ public class NewConsultationController {
         System.out.println("[AI-Check] analyse=" + analyse);
 
         com.hospismart.hospismartdesktop.utils.AICheckDialog dialog =
-                new com.hospismart.hospismartdesktop.utils.AICheckDialog();
+            new com.hospismart.hospismartdesktop.utils.AICheckDialog();
 
         // ── Cas 1 : erreur API — TOUJOURS vérifié en premier ─────────────────
         if (analyse.startsWith("Erreur API") || analyse.startsWith("Erreur technique")
-                || analyse.startsWith("Mode offline")
-                || jsonResult.contains("\"analyse\": \"Erreur API")
-                || jsonResult.contains("\"analyse\":\"Erreur API")) {
+            || analyse.startsWith("Mode offline")
+            || jsonResult.contains("\"analyse\": \"Erreur API")
+            || jsonResult.contains("\"analyse\":\"Erreur API")) {
 
             com.hospismart.hospismartdesktop.utils.AICheckDialog.Result r = dialog.show(
-                    com.hospismart.hospismartdesktop.utils.AICheckDialog.DialogType.ERROR,
-                    "Service IA indisponible",
-                    "L'analyse par l'IA n'a pas pu aboutir.",
-                    analyse, null,
-                    "Continuer sans IA", "Annuler",
-                    null, null
+                com.hospismart.hospismartdesktop.utils.AICheckDialog.DialogType.ERROR,
+                "Service IA indisponible",
+                "L'analyse par l'IA n'a pas pu aboutir.",
+                analyse, null,
+                "Continuer sans IA", "Annuler",
+                null, null
             );
             if (r == com.hospismart.hospismartdesktop.utils.AICheckDialog.Result.PRIMARY)
                 handleSave(event);
@@ -152,13 +169,13 @@ public class NewConsultationController {
             String detailCard = "Diagnostic  :  " + diag + "\nTraitement  :  " + trait;
 
             com.hospismart.hospismartdesktop.utils.AICheckDialog.Result r = dialog.show(
-                    com.hospismart.hospismartdesktop.utils.AICheckDialog.DialogType.INCOHERENCE,
-                    "Incohérence médicale détectée",
-                    "Le traitement prescrit ne semble pas adapté au diagnostic.",
-                    detailCard,  // ← carte avec diag + traitement
-                    analyse,     // ← explication IA en italique en dessous
-                    "Enregistrer quand même", "Corriger le traitement",
-                    null, null
+                com.hospismart.hospismartdesktop.utils.AICheckDialog.DialogType.INCOHERENCE,
+                "Incohérence médicale détectée",
+                "Le traitement prescrit ne semble pas adapté au diagnostic.",
+                detailCard,  // ← carte avec diag + traitement
+                analyse,     // ← explication IA en italique en dessous
+                "Enregistrer quand même", "Corriger le traitement",
+                null, null
             );
 
             if (r == com.hospismart.hospismartdesktop.utils.AICheckDialog.Result.PRIMARY) {
@@ -175,7 +192,7 @@ public class NewConsultationController {
                         -fx-faint-focus-color: rgba(226,75,74,0.15);
                         """);
                     javafx.scene.control.Tooltip tooltip = new javafx.scene.control.Tooltip(
-                            "Veuillez corriger le traitement prescrit");
+                        "Veuillez corriger le traitement prescrit");
                     tooltip.setStyle("""
                         -fx-background-color: #E24B4A;
                         -fx-text-fill: white;
@@ -186,11 +203,11 @@ public class NewConsultationController {
                     tooltip.setAutoHide(true);
                     javafx.scene.control.Tooltip.install(txtTraitement, tooltip);
                     javafx.geometry.Bounds bounds = txtTraitement
-                            .localToScreen(txtTraitement.getBoundsInLocal());
+                        .localToScreen(txtTraitement.getBoundsInLocal());
                     if (bounds != null) {
                         tooltip.show(txtTraitement,
-                                bounds.getMinX(),
-                                bounds.getMinY() - 36);
+                            bounds.getMinX(),
+                            bounds.getMinY() - 36);
                     }
                     new Thread(() -> {
                         try { Thread.sleep(4000); } catch (InterruptedException ignored) {}
@@ -205,18 +222,18 @@ public class NewConsultationController {
 
             // ── Cas 3 : faute d'orthographe ───────────────────────────────────────
         } else if (!estCorrect
-                && !suggestion.equalsIgnoreCase(trait.trim())
-                && !suggestion.isEmpty()
-                && !suggestion.contains("Veuillez fournir")) {
+            && !suggestion.equalsIgnoreCase(trait.trim())
+            && !suggestion.isEmpty()
+            && !suggestion.contains("Veuillez fournir")) {
 
             final String suggestionFinal = suggestion;
             com.hospismart.hospismartdesktop.utils.AICheckDialog.Result r = dialog.show(
-                    com.hospismart.hospismartdesktop.utils.AICheckDialog.DialogType.CORRECTION,
-                    "Correction orthographique",
-                    "L'IA a détecté une faute d'orthographe dans le traitement.",
-                    null, analyse,
-                    "Appliquer la correction", "Ignorer et continuer",
-                    trait, suggestionFinal
+                com.hospismart.hospismartdesktop.utils.AICheckDialog.DialogType.CORRECTION,
+                "Correction orthographique",
+                "L'IA a détecté une faute d'orthographe dans le traitement.",
+                null, analyse,
+                "Appliquer la correction", "Ignorer et continuer",
+                trait, suggestionFinal
             );
             if (r == com.hospismart.hospismartdesktop.utils.AICheckDialog.Result.PRIMARY)
                 txtTraitement.setText(suggestionFinal);
@@ -226,12 +243,12 @@ public class NewConsultationController {
         } else {
 
             dialog.show(
-                    com.hospismart.hospismartdesktop.utils.AICheckDialog.DialogType.SUCCESS,
-                    "Traitement validé par l'IA",
-                    "Aucune erreur d'orthographe ni incohérence détectée.",
-                    null, analyse,
-                    "Continuer", null,
-                    null, null
+                com.hospismart.hospismartdesktop.utils.AICheckDialog.DialogType.SUCCESS,
+                "Traitement validé par l'IA",
+                "Aucune erreur d'orthographe ni incohérence détectée.",
+                null, analyse,
+                "Continuer", null,
+                null, null
             );
             handleSave(event);
         }
@@ -278,7 +295,7 @@ public class NewConsultationController {
 
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Une erreur est survenue lors de l'enregistrement : " + e.getMessage());
+                "Une erreur est survenue lors de l'enregistrement : " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -299,3 +316,4 @@ public class NewConsultationController {
     }
 
 }
+

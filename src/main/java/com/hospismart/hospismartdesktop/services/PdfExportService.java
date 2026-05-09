@@ -32,13 +32,8 @@ public class PdfExportService {
      * Export a single event to a PDF file.
      * @return the generated File, or null on error
      */
-    public File exportEvent(Evenement event, List<Inscription> participants) {
+    public File exportEvent(Evenement event, List<Inscription> participants, File outputFile) {
         try {
-            // Save to user's Desktop
-            String desktopPath = System.getProperty("user.home") + File.separator + "Desktop";
-            String fileName = "Evenement_" + sanitize(event.getTitre()) + "_" + event.getId() + ".pdf";
-            File outputFile = new File(desktopPath, fileName);
-
             Document document = new Document(PageSize.A4, 40, 40, 50, 40);
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(outputFile));
             document.open();
